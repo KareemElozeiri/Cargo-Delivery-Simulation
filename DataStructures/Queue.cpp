@@ -29,5 +29,5 @@ template <typename T>
 bool Queue<T>::isEmpty() const {
 	T HeadValue;
 	this->Data.GetHead(&HeadValue);
-	return !(HeadValue == nullptr);
+	return (HeadValue == nullptr);
 }
