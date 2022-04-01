@@ -142,7 +142,6 @@
     <ClCompile Include="Company.cpp" />
     <ClCompile Include="DataStructures\Date.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SimulationAgents\Cargo.cpp" />
     <ClCompile Include="SimulationAgents\Truck.cpp" />
     <ClCompile Include="UI\UI.cpp" />
   </ItemGroup>
