@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SimulationAgents\CargoTypeTest1.cpp" />
     <ClCompile Include="Company.cpp" />
     <ClCompile Include="DataStructures\Date.cpp" />
     <ClCompile Include="main.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="UI\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SimulationAgents\CargoTypeTest1.h" />
     <ClInclude Include="Company.h" />
     <ClInclude Include="DataStructures\LinkedList.h" />
     <ClInclude Include="DataStructures\Node.h" />

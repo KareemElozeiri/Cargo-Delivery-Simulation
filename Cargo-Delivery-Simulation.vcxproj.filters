@@ -30,6 +30,9 @@
     <ClCompile Include="SimulationAgents\Truck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SimulationAgents\CargoTypeTest1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructures\LinkedList.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimulationAgents\CargoTypeTest1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
