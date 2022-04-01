@@ -24,6 +24,8 @@ private:
 	}
 
 public:
+	Time(): day(0),hour(0) {}
+
 	Time(int d, int h) {
 
 		try {
