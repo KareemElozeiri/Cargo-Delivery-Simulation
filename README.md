@@ -3,6 +3,6 @@
 
 ## Authors:
 - Kareem Elozeiri
-- Mohamed Ayman
+- Mohammed Ayman
 - Mohamed Ezzat
 - Mostafa Ashmawy 
