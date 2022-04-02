@@ -3,7 +3,6 @@
 
 #include "Node.h"
 #include <iostream>
-using namespace std;
 
 template <typename T>
 class LinkedList
@@ -12,214 +11,232 @@ private:
 	Node<T> *Head;	//Pointer to the head of the list
 	//You can add tail pointer too (depending on your problem)
 public:
+	LinkedList();
+	~LinkedList();
 
+	Node<T>* GetHead();
 
-	LinkedList()
-	{
-		Head = nullptr;
-	}
-
-	//List is being desturcted ==> delete all items in the list
-	~LinkedList()
-	{
-		DeleteAll();
-	}
+	void PrintList() const;
 	
-	/*
+	bool Find(T key) const;
+	
+
+	void InsertBeg(const T& data);
+	bool InsertSorted(T item);
+
+	void DeleteAll();
+	void DeleteFirst();
+	void DeleteLast();
+	bool DeleteNode(T value);
+	
+
+	bool ShiftLargest();
+	
+};
+
+#endif	
+
+////////////////////////// Implementation //////////////////////
+template <typename T>
+LinkedList<T>::LinkedList()
+{
+	Head = nullptr;
+}
+
+//List is being desturcted ==> delete all items in the list
+template <typename T>
+LinkedList<T>::~LinkedList()
+{
+	DeleteAll();
+}
+
+template<typename T>
+Node<T>* LinkedList<T>::GetHead()
+{
+	return this->Head;
+}
+
+/*
 	* Function: PrintList.
 	* prints the values of all nodes in a linked list.
 	*/
-	void PrintList()	const
-	{
-		cout<<"\nprinting list contents:\n\n";
-		Node<T> *p = Head;
+template <typename T>
+void LinkedList<T>:: PrintList()	const
+{
+	std::cout << "\nprinting list contents:\n\n";
+	Node<T>* p = Head;
 
-		while(p)
-		{
-			cout << "[ " << p->getItem() << " ]";
-			cout << "--->";
-			p = p->getNext();
-		}
-		cout << "*\n";
+	while (p)
+	{
+		std::cout << "[ " << p->getItem() << " ]";
+		std::cout << "--->";
+		p = p->getNext();
 	}
-	
-	/*
+	std::cout << "*\n";
+}
+
+
+/*
 	* Function: InsertBeg.
 	* Creates a new node and adds it to the beginning of a linked list.
-	* 
+	*
 	* Parameters:
 	*	- data : The value to be stored in the new node.
 	*/
-	void InsertBeg(const T &data)
+template <typename T>
+void LinkedList<T>::InsertBeg(const T& data)
+{
+	Node<T>* R = new Node<T>(data);
+	R->setNext(Head);
+	Head = R;
+}
+
+/*
+* Function: DeleteAll.
+* Deletes all nodes of the list.
+*/
+template <typename T>
+void LinkedList<T>::DeleteAll()
+{
+	Node<T>* P = Head;
+	while (Head)
 	{
-		Node<T> *R = new Node<T>(data);
-		R->setNext(Head);
-		Head = R;
+		P = Head->getNext();
+		delete Head;
+		Head = P;
 	}
-	
-	/*
-	* Function: DeleteAll.
-	* Deletes all nodes of the list.
-	*/
-	void DeleteAll()
-	{
-		Node<T> *P = Head;
-		while (Head)
-		{
-			P = Head->getNext();
-			delete Head;
-			Head = P;
-		}
-	}
+}
 
-	////////////////     Requirements   ///////////////////
-	//
-	// Implement the following member functions
+// Deletes the head of the linked list
+template<typename T>
+void LinkedList<T>::DeleteFirst()
+{
+	Node<T>* newHead = this->Head->getNext();
+	delete this->Head;
+	this->Head = nullptr;
+	this->Head = newHead;
+}
 
+//Deletes the tail of the linked list
+template<typename T>
+void LinkedList<T>::DeleteLast()
+{
+	Node<T>* curr = this->Head;
+	while (curr->getNext()->getNext() != nullptr)  curr = curr->getNext();
+	Node<T>* last = curr->getNext();
+	curr->setNext(nullptr);
+	delete last;
+}
 
-	//[1]InsertEnd 
-	//inserts a new node at end if the list
-
-	//[2]Find 
-	//searches for a given value in the list, returns true if found; false otherwise.
-	bool Find(T Key) const {
-		Node<T> *currentNode = this->Head;
-		while (currentNode.getNext() != nullptr) {
-			if (currentNode.getItem() == Key) {
-				return true;
-			}
-			currentNode = currentNode.getNext();
-		}
-		return false;
-	};
-
-
-	//[3]CountOccurance
-	//returns how many times a certain value appeared in the list
-
-	//[4] DeleteFirst
-	//Deletes the first node in the list
-
-	//[5] DeleteLast
-	//Deletes the last node in the list
-
-	//[6] DeleteNode
-	//deletes the first node with the given value (if found) and returns true
-	//if not found, returns false
-	//Note: List is not sorted
-	bool DeleteNode(T value) {
-
-		if (this->Head->getItem() == value) {
-			Node<T> *nextNode = this->Head->getNext();
-			delete this->Head;
-			this->Head = nullptr;
-			this->Head = nextNode;
+//searches for a given value in the list, returns true if found; false otherwise.
+template <typename T>
+bool LinkedList<T>::Find(T Key) const {
+	Node<T>* currentNode = this->Head;
+	while (currentNode.getNext() != nullptr) {
+		if (currentNode.getItem() == Key) {
 			return true;
 		}
-		Node<T>* prevNode = this->Head;
-		Node<T>* nextNode = this->Head->getNext()->getNext();
-		while (prevNode->getNext() != nullptr) {
-			if (prevNode->getNext()->getItem() == value) {
-				prevNode->setNext(nextNode);
-				return true;
-			}
-		}
-		return false;
-
-
+		currentNode = currentNode.getNext();
 	}
+	return false;
+};
 
-	//[7] DeleteNodes
-	//deletes ALL node with the given value (if found) and returns true
-	//if not found, returns false
-	//Note: List is not sorted
+//deletes the first node with the given value(if found) and returns true
+//if not found, returns false
+//Note: List is not sorted
+template <typename T>
+bool LinkedList<T>::DeleteNode(T value) {
 
-	//[8]Merge
-	//Merges the current list to another list L by making the last Node in the current list 
-	//point to the first Node in list L
-
-	//[9] Reverse
-	//Reverses the linked list (without allocating any new Nodes)
-
-	//insert in a sorted list
-	bool InsertSorted(T item) {
-		if (this->Head->getItem() > item) {
-			Node<T> *oldHead = this->Head;
-			Node<T> *newHead = new Node<T>(item);
-			delete this->Head;
-			this->Head = nullptr;
-			this->Head = newHead;
-			this->Head->setNext(oldHead);
+	if (this->Head->getItem() == value) {
+		Node<T>* nextNode = this->Head->getNext();
+		delete this->Head;
+		this->Head = nullptr;
+		this->Head = nextNode;
+		return true;
+	}
+	Node<T>* prevNode = this->Head;
+	Node<T>* nextNode = this->Head->getNext()->getNext();
+	while (prevNode->getNext() != nullptr) {
+		if (prevNode->getNext()->getItem() == value) {
+			prevNode->setNext(nextNode);
 			return true;
 		}
+	}
+	return false;
+}
 
-		Node<T> *prev = this->Head;
-		Node<T> *next = this->Head->getNext();
-		Node<T>* newNode = new Node<T>(item);
-		while (next != nullptr) {
-			if (item >= prev->getItem() && item <= next->getItem()) {
-				prev->setNext(newNode);
-				newNode->setNext(next);
-				return true;
-			}
-			prev = prev->getNext();
-			next = next->getNext();
-		}
-		next->setNext(newNode);
-
+//insert in a sorted list
+template <typename T>
+bool LinkedList<T>::InsertSorted(T item) {
+	if (this->Head->getItem() > item) {
+		Node<T>* oldHead = this->Head;
+		Node<T>* newHead = new Node<T>(item);
+		delete this->Head;
+		this->Head = nullptr;
+		this->Head = newHead;
+		this->Head->setNext(oldHead);
+		return true;
 	}
 
-
-	bool ShitLargest() {
-		Node<T> *prev = this->Head;
-		Node<T> *curr = prev->getNext();
-		Node<T>* next = curr->getNext();
-
-		if (prev->getItem() > curr->getItem()) {
-			this->Head = curr;
-			this->Head->setNext(prev);
-			prev->setNext(next);
+	Node<T>* prev = this->Head;
+	Node<T>* next = this->Head->getNext();
+	Node<T>* newNode = new Node<T>(item);
+	while (next != nullptr) {
+		if (item >= prev->getItem() && item <= next->getItem()) {
+			prev->setNext(newNode);
+			newNode->setNext(next);
+			return true;
 		}
-		this->PrintList();
+		prev = prev->getNext();
+		next = next->getNext();
+	}
+	next->setNext(newNode);
 
-		prev = this->Head;
-		curr = prev->getNext();
-		next = curr->getNext();
+}
+
+template <typename T>
+bool LinkedList<T>::ShiftLargest() {
+	Node<T>* prev = this->Head;
+	Node<T>* curr = prev->getNext();
+	Node<T>* next = curr->getNext();
+
+	if (prev->getItem() > curr->getItem()) {
+		this->Head = curr;
+		this->Head->setNext(prev);
+		prev->setNext(next);
+	}
+	this->PrintList();
+
+	prev = this->Head;
+	curr = prev->getNext();
+	next = curr->getNext();
 
 
-		Node<T> *nextOfNext = next->getNext();
-		while (nextOfNext != nullptr) {
-
-			if (curr->getItem() > next->getItem()) {
-				prev->setNext(next);
-				next->setNext(curr);
-				curr->setNext(nextOfNext);
-			}
-
-			this->PrintList();
-
-
-			prev = prev->getNext();
-			curr = prev->getNext();
-			next = curr->getNext();
-			nextOfNext = next->getNext();
-
-		}
+	Node<T>* nextOfNext = next->getNext();
+	while (nextOfNext != nullptr) {
 
 		if (curr->getItem() > next->getItem()) {
 			prev->setNext(next);
 			next->setNext(curr);
-			curr->setNext(nullptr);
-
+			curr->setNext(nextOfNext);
 		}
 
-		return true;
+		this->PrintList();
+
+
+		prev = prev->getNext();
+		curr = prev->getNext();
+		next = curr->getNext();
+		nextOfNext = next->getNext();
+
 	}
 
-	void Reorder_X(T x) {
-		
+	if (curr->getItem() > next->getItem()) {
+		prev->setNext(next);
+		next->setNext(curr);
+		curr->setNext(nullptr);
+
 	}
 
-};
-
-#endif	
+	return true;
+}

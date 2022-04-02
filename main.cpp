@@ -1,11 +1,25 @@
 #include <iostream>
 #include "Defs.h"
+#include "DataStructures/LinkedList.h"
 
 int main()
 {
-	Time t0(7, 6);
-	Time t1(6, 6);
-	Time t3 = t0 - t1;
-	std::cout << t3.getDay() << " " << t3.getHour();
+	LinkedList<int> L;	//create an object of class LinkedList
+	int val;
+
+	std::cout << "\nPlease enter int values to add to the list (-1 to stop):\n";
+	std::cin >> val;
+	while (val != -1)
+	{
+		L.InsertBeg(val);
+		std::cin >> val;
+	}
+	
+	L.PrintList();
+	L.DeleteFirst();
+	L.DeleteLast();
+	L.PrintList();
+
+	return 0;
 }
 
