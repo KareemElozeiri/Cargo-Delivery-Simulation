@@ -10,10 +10,20 @@ protected:
 	double cost;
 	
 public:
-	virtual Date getPrepTime() = 0;
-	virtual int getLoadTime() = 0;
-	virtual double getDeliveryDistance() = 0;
-	virtual double getCost() = 0;
-	virtual int getID() = 0;
+	//getters
+	Date getPrepTime();
+	int getLoadTime();
+	double getDeliveryDistance();
+	double getCost();
+	int getID();
+
+
+
+	//setters
+	void setPrepTime(Date p);
+	void setLoadTime(int p);
+	void setDeliveryDistance(double p);
+	void setCost(double p);
+	void setID(int p);
 
 };
