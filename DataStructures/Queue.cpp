@@ -14,7 +14,7 @@ Queue<T>::~Queue() {}
 
 template <typename T>
 void Queue<T>::enqueue(T value) {
-	this->DataList->InsertBeg(value);
+	this->DataList->Insert(value);
 }
 
 template <typename T>
