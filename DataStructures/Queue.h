@@ -1,4 +1,5 @@
-#pragma once
+#ifndef QUEUE_H
+#define QUEUE_H
 
 #include "LinkedList.h"
 
@@ -37,7 +38,7 @@ public:
 	* Parameters:
 	*	- value : This will hold the value of the first element in the queue.
 	*/
-	void dequeue(T& value);
+	bool dequeue(T& value);
 
 	/*
 	* Function: peek.
@@ -57,3 +58,6 @@ public:
 	bool isEmpty() const;
 };
 
+#include "Queue.cpp"
+
+#endif
