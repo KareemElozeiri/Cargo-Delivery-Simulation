@@ -1,5 +1,5 @@
-#ifndef _PQNODE
-#define _PQNODE
+#ifndef PQNODE_H
+#define PQNODE_H
 
 #include "Node.h"
 
