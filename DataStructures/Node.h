@@ -1,46 +1,76 @@
 #ifndef _NODE
 #define _NODE
 
-//First let's declare a single node in the list
 template<typename T>
 class Node
 {
 private :
-	T item;	// A data item (can be any complex sturcture)
-	Node<T>* next;	// Pointer to next node
+	T item;	// A data item (can be any complex structure)
+	Node<T>* next;	// Pointer to the next node
+
 public :
 
-	Node( ) //default constructor
+	/*
+	* Function: Node.
+	* Default Constructor.
+	*/
+	Node()
 	{
-		next= nullptr;
+		next = nullptr;
 	} 
 
-	Node( T newItem) //non-default constructor
+	/*
+	* Function: Node.
+	* Non-Default Constructor.
+	*/
+	Node(T newItem) // Non-default constructor
 	{
 		item = newItem;
-		next= nullptr;
-
+		next = nullptr;
+	}
+	
+	/*
+	* Function: setItem.
+	* Sets the value of the node.
+	*
+	* Parameters:
+	*	- newItem : The value to be stored in the node.
+	*/
+	void setItem(T newItem)
+	{
+		item = newItem;
 	}
 
-	void setItem( T newItem)
-	{
-		item = newItem;
-	} // end setItem
-
+	/*
+	* Function: setNext.
+	* Sets the next pointer of the node.
+	*
+	* Parameters:
+	*	- nextNodePtr : The pointer to be stored as the next pointer to the node.
+	*/
 	void setNext(Node<T>* nextNodePtr)
 	{
-	next = nextNodePtr;
-	} // end setNext
+		next = nextNodePtr;
+	} 
 
+	/*
+	* Function: getItem.
+	* Returns the value of the node item.
+	*/
 	T getItem() const
 	{
-		return item;
-	} // end getItem
+		return this->item;
+	}
 
+	/*
+	* Function: getNext.
+	* Returns the pointer to the next node.
+	*/
 	Node<T>* getNext() const
 	{
-		return next;
+		return this->next;
 	}
-}; // end Node
+
+};
 
 #endif	
