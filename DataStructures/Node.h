@@ -4,7 +4,7 @@
 template<typename T>
 class Node
 {
-private :
+protected :
 	T item;	// A data item (can be any complex structure)
 	Node<T>* next;	// Pointer to the next node
 
