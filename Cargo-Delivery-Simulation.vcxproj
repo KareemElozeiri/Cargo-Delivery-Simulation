@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DataStructures\PriorityQueue.cpp" />
     <ClCompile Include="DataStructures\Queue.cpp" />
     <ClCompile Include="SimulationAgents\Cargo.cpp" />
     <ClCompile Include="Company.cpp" />
@@ -149,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructures\PQNode.h" />
-    <ClInclude Include="DataStructures\PriorityQueue.h" />
+    <ClInclude Include="DataStructures\PQueue.h" />
     <ClInclude Include="DataStructures\Queue.h" />
     <ClInclude Include="Company.h" />
     <ClInclude Include="DataStructures\LinkedList.h" />

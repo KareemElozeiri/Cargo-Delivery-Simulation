@@ -112,10 +112,12 @@ void LinkedList<T>::DeleteAll()
 template<typename T>
 void LinkedList<T>::DeleteFirst()
 {
-	Node<T>* newHead = this->Head->getNext();
-	delete this->Head;
-	this->Head = nullptr;
-	this->Head = newHead;
+	if (this->Head != nullptr) {
+		Node<T>* newHead = this->Head->getNext();
+		delete this->Head;
+		this->Head = nullptr;
+		this->Head = newHead;
+	}
 }
 
 //Deletes the tail of the linked list
@@ -123,10 +125,18 @@ template<typename T>
 void LinkedList<T>::DeleteLast()
 {
 	Node<T>* curr = this->Head;
-	while (curr->getNext()->getNext() != nullptr)  curr = curr->getNext();
-	Node<T>* last = curr->getNext();
-	curr->setNext(nullptr);
-	delete last;
+	if (this->Head != nullptr) {
+		if (this->Head->getNext() != nullptr) {
+			while (curr->getNext()->getNext() != nullptr)  curr = curr->getNext();
+			Node<T>* last = curr->getNext();
+			curr->setNext(nullptr);
+			delete last;
+		}
+		else {
+			delete this->Head;
+			this->Head = nullptr;
+		}
+	}
 }
 
 //searches for a given value in the list, returns true if found; false otherwise.
