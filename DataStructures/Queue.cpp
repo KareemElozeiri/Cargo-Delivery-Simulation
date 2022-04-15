@@ -5,16 +5,32 @@
 
 template <typename T>
 Queue<T>::Queue() {
-	LinkedList<T>* DataList = new LinkedList<T>;
-	this->DataList = DataList;
+	this->Head = nullptr;
+	this->Tail = nullptr;
 }
 
 template <typename T>
-Queue<T>::~Queue() {}
+Queue<T>::~Queue() {
+	Node<T>* tempNode = Head;
+	while(this->Head) {
+		tempNode = Head->getNext();
+		delete Head;
+		Head = tempNode;
+	}
+}
 
 template <typename T>
 void Queue<T>::enqueue(T value) {
-	this->DataList->Insert(value);
+	Node<T>* newNode = new Node<T>(value);
+	
+	if (Tail == nullptr) {
+		this->Head = newNode;
+		this->Tail = newNode;
+		return;
+	}
+
+	Tail->setNext(newNode);
+	Tail = newNode;
 }
 
 template <typename T>
@@ -22,20 +38,24 @@ bool Queue<T>::dequeue(T& value) {
 	if (this->isEmpty())
 		return 0;
 
-	const Node<T>* Head = this->DataList->GetHead();
-	value = Head->getItem();
-	this->DataList->DeleteFirst();
+	value = this->Head->getItem();
+	Node<T>* tempNode = this->Head;
+	this->Head = this->Head->getNext();
+	delete tempNode;
+
 	return 1;
 }
 
 template <typename T>
 void Queue<T>::peek(T& value) const {
-	this->DataList->GetHead(value);
+	if (this->isEmpty())
+		return;
+	value = this->Head->getItem();
 }
 
 template <typename T>
 bool Queue<T>::isEmpty() const {
-	return (this->DataList->GetHead() == nullptr);
+	return (this->Head == nullptr);
 }
 
 #endif

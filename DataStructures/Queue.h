@@ -1,13 +1,14 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include "LinkedList.h"
+#include "Node.h"
 
 template <typename T>
 class Queue
 {
-private:
-	LinkedList<T>* DataList = nullptr;
+protected:
+	Node<T>* Head;
+	Node<T>* Tail;
 
 public:
 	/*
