@@ -6,6 +6,7 @@ class Node
 {
 protected :
 	T item;	// A data item (can be any complex structure)
+	double priority; // Item's Priority in case there is
 	Node<T>* next;	// Pointer to the next node
 
 public :
@@ -16,17 +17,18 @@ public :
 	*/
 	Node()
 	{
-		next = nullptr;
+		this->next = nullptr;
 	} 
 
 	/*
 	* Function: Node.
 	* Non-Default Constructor.
 	*/
-	Node(T newItem) // Non-default constructor
+	Node(T newItem, double priority = -1) // Non-default constructor
 	{
-		item = newItem;
-		next = nullptr;
+		this->item = newItem;
+		this->priority = priority;
+		this->next = nullptr;
 	}
 	
 	/*
@@ -39,6 +41,18 @@ public :
 	void setItem(T newItem)
 	{
 		item = newItem;
+	}
+
+	/*
+	* Function: setPriority.
+	* Sets the priority of the node.
+	*
+	* Parameters:
+	*	- priority : The priority value to be assigned to the node.
+	*/
+	void setPriority(double priority)
+	{
+		this->priority = priority;
 	}
 
 	/*
@@ -60,6 +74,15 @@ public :
 	T getItem() const
 	{
 		return this->item;
+	}
+	
+	/*
+	* Function: getPriority.
+	* Returns the priority value of the node.
+	*/
+	double getPriority() const
+	{
+		return this->priority;
 	}
 
 	/*
