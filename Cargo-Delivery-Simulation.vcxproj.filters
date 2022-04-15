@@ -24,9 +24,6 @@
     <ClCompile Include="UI\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DataStructures\Date.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SimulationAgents\Truck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,9 +51,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Events\Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DataStructures\Date.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SimulationAgents\Cargo.h">

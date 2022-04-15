@@ -143,7 +143,6 @@
     <ClCompile Include="DataStructures\Queue.cpp" />
     <ClCompile Include="SimulationAgents\Cargo.cpp" />
     <ClCompile Include="Company.cpp" />
-    <ClCompile Include="DataStructures\Date.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimulationAgents\Truck.cpp" />
     <ClCompile Include="UI\UI.cpp" />
@@ -155,7 +154,6 @@
     <ClInclude Include="Company.h" />
     <ClInclude Include="DataStructures\LinkedList.h" />
     <ClInclude Include="DataStructures\Node.h" />
-    <ClInclude Include="DataStructures\Date.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="SimulationAgents\Cargo.h" />

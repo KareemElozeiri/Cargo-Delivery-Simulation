@@ -2,19 +2,19 @@
 
 class Truck {
 private:
-	int Capacity;
-	Time CheckUpTime;
-	double Speed;
-	Time DeliveryInterval;
+	int capacity;
+	Time checkUpTime;
+	double speed;
+	Time deliveryInterval;
 
 public:
 	Truck(int capacity, Time checkUpTime, double speed);
 
 	//getters
-	Time getCheckUpTime() const;
-	int getCapacity() const;
-	double getSpeed() const;
-	Time getDeliveryInterval() const;
+	Time GetCheckUpTime() const;
+	int GetCapacity() const;
+	double GetSpeed() const;
+	Time GetDeliveryInterval() const;
 
 	void CalculateDeliveryInterval();
 

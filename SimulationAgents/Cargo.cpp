@@ -2,48 +2,48 @@
 
 //getters
 
-Date Cargo::getPrepTime()
+Time Cargo::GetPrepTime()
 {
-	return preparation_time;
+	return this->preparation_time;
 }
 
-int Cargo::getLoadTime()
+Time Cargo::GetLoadTime()
 {
-	return load_time;
+	return this->load_time;
 }
 
-double Cargo::getDeliveryDistance()
+double Cargo::GetDeliveryDistance()
 {
-	return delivery_distance;
+	return this->delivery_distance;
 }
 
-double Cargo::getCost()
+double Cargo::GetCost()
 {
-	return cost;
+	return this->cost;
 }
 
-int Cargo::getID()
+int Cargo::GetID()
 {
-	return CargoID;
+	return this->cargoID;
 }
 
 //setters
 
-void Cargo::setPrepTime(Date p) {
-	preparation_time = p;
+void Cargo::SetPrepTime(Time p) {
+	this->preparation_time = p;
 }
 
-void Cargo::setLoadTime(int p) {
-	load_time = p;
+void Cargo::SetLoadTime(Time p) {
+	this->load_time = p;
 }
 
-void Cargo::setDeliveryDistance(double p) {
-	delivery_distance = p;
+void Cargo::SetDeliveryDistance(double p) {
+	this->delivery_distance = p;
 }
 
-void Cargo::setCost(double p) {
-	cost = p;
+void Cargo::SetCost(double p) {
+	this->cost = p;
 }
-void Cargo::setID(int p) {
-	CargoID = p;
+void Cargo::SetID(int p) {
+	this->cargoID = p;
 }

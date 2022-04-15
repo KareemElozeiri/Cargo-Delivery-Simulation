@@ -1,29 +1,29 @@
 #include "Truck.h"
 
 Truck::Truck(int capacity, Time checkUpTime, double speed){
-	this->Capacity = capacity;
-	this->CheckUpTime = checkUpTime;
-	this->Speed = speed;
+	this->capacity = capacity;
+	this->checkUpTime = checkUpTime;
+	this->speed = speed;
 }
 
-Time Truck::getCheckUpTime() const
+Time Truck::GetCheckUpTime() const
 {
-	return this->CheckUpTime;
+	return this->checkUpTime;
 }
 
-int Truck::getCapacity() const
+int Truck::GetCapacity() const
 {
-	return this->Capacity;
+	return this->capacity;
 }
 
-double Truck::getSpeed() const
+double Truck::GetSpeed() const
 {
-	return this->Speed;
+	return this->speed;
 }
 
-Time Truck::getDeliveryInterval() const
+Time Truck::GetDeliveryInterval() const
 {
-	return this->DeliveryInterval;
+	return this->deliveryInterval;
 }
 
 void Truck::CalculateDeliveryInterval()

@@ -1,29 +1,29 @@
 #pragma once
-#include "../DataStructures/Date.h"
+#include "../Defs.h"
 
 class Cargo {
 protected:
-	int CargoID;
-	Date preparation_time;
-	int load_time;
+	int cargoID;
+	Time preparation_time;
+	Time load_time;
 	double delivery_distance;
 	double cost;
 	
 public:
 	//getters
-	Date getPrepTime();
-	int getLoadTime();
-	double getDeliveryDistance();
-	double getCost();
-	int getID();
+	Time GetPrepTime();
+	Time GetLoadTime();
+	double GetDeliveryDistance();
+	double GetCost();
+	int GetID();
 
 
 
 	//setters
-	void setPrepTime(Date p);
-	void setLoadTime(int p);
-	void setDeliveryDistance(double p);
-	void setCost(double p);
-	void setID(int p);
+	void SetPrepTime(Time p);
+	void SetLoadTime(Time p);
+	void SetDeliveryDistance(double p);
+	void SetCost(double p);
+	void SetID(int p);
 
 };

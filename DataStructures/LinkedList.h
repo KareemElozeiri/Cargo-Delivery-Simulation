@@ -37,6 +37,7 @@ public:
 #endif	
 
 ////////////////////////// Implementation //////////////////////
+
 template <typename T>
 LinkedList<T>::LinkedList()
 {
