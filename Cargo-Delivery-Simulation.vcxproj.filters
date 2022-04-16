@@ -96,5 +96,6 @@
   <ItemGroup>
     <None Include="README.md" />
     <None Include="DataStructures\README.md" />
+    <None Include="Makefile" />
   </ItemGroup>
 </Project>

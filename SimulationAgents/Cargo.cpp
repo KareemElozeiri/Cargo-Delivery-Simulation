@@ -2,6 +2,25 @@
 
 //getters
 
+Cargo::Cargo(CARGOTYPE type)
+{
+	this->Cargo_type = type;
+}
+
+Cargo::Cargo(CARGOTYPE type, int cargoID, Time preparation_time, Time load_time, double delivery_distance, double cost)
+{
+	////////////////////////////////
+	/////////////the cargoID will be automatically generated as per our agreement
+	this->Cargo_type = type;
+	this->cargoID = cargoID;
+	this->preparation_time = preparation_time;
+	this->load_time = load_time;
+	this->delivery_distance = delivery_distance;
+	this->cost = cost;
+}
+
+
+
 Time Cargo::GetPrepTime()
 {
 	return this->preparation_time;
@@ -25,6 +44,11 @@ double Cargo::GetCost()
 int Cargo::GetID()
 {
 	return this->cargoID;
+}
+
+CARGOTYPE Cargo::GetType()
+{
+	return Cargo_type;
 }
 
 //setters
