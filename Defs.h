@@ -26,9 +26,3 @@ enum TRUCKTYPE {
 };
 
 
-
-class Time {
-private:
-	int day;
-	int hour;
-};

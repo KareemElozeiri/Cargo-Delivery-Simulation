@@ -45,6 +45,9 @@
     <ClCompile Include="SimulationAgents\Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DataStructures\PQueue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructures\LinkedList.h">
@@ -97,5 +100,7 @@
     <None Include="README.md" />
     <None Include="DataStructures\README.md" />
     <None Include="Makefile" />
+    <None Include=".gitignore" />
+    <None Include="Defs.h.bak" />
   </ItemGroup>
 </Project>

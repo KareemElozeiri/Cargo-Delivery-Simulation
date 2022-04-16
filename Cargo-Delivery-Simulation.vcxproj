@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataStructures\PQueue.cpp" />
     <ClCompile Include="Events\CancellationEvent.cpp" />
     <ClCompile Include="DataStructures\Queue.cpp" />
     <ClCompile Include="Company.cpp" />
@@ -168,7 +169,9 @@
     <ClInclude Include="UI\UI.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="DataStructures\README.md" />
+    <None Include="Defs.h.bak" />
     <None Include="Makefile" />
     <None Include="README.md" />
   </ItemGroup>
