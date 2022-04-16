@@ -14,12 +14,12 @@ private:
 
 	UI* pUI; // UI object
 
-	//Queue<Event> EventList; // Can not create queue of abstract Event type <<<<<<<<<<<<<<<<<<<<<<<<
-	Queue<Cargo> NormalCargoList;
-	Queue<Cargo> SpecialCargoList;
-	PQueue<Cargo> VIPCargoList;
-	Queue<Cargo> CargoWaitList;
-	Queue<Truck> TruckList;
+	Queue<Event>* EventList; // Can not create queue of abstract Event type <<<<<<<<<<<<<<<<<<<<<<<<
+	Queue<Cargo>* NormalCargoList;
+	Queue<Cargo>* SpecialCargoList;
+	PQueue<Cargo>* VIPCargoList;
+	Queue<Cargo>* CargoWaitList;
+	Queue<Truck>* TruckList;
 
 public:
 	Company();
