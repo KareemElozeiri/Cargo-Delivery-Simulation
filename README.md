@@ -8,7 +8,7 @@
 ### Steps
 Clone the project, open the terminal in its directory, and build with this command
 ```
-make build
+make main.run
 ```
 You can then run the project using the following command
 ```
