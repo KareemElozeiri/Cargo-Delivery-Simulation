@@ -167,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DataStructures\README.md" />
+    <None Include="Makefile" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
