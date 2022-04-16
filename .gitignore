@@ -2,4 +2,5 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/Cargo-Delivery-Simulation/v17
+/.vs
+/x64
