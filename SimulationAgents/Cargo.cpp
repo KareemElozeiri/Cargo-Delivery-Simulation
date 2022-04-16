@@ -21,32 +21,32 @@ Cargo::Cargo(CARGOTYPE type, int cargoID, Time preparation_time, Time load_time,
 
 
 
-Time Cargo::GetPrepTime()
+Time Cargo::GetPrepTime() const
 {
 	return this->preparation_time;
 }
 
-Time Cargo::GetLoadTime()
+Time Cargo::GetLoadTime() const
 {
 	return this->load_time;
 }
 
-double Cargo::GetDeliveryDistance()
+double Cargo::GetDeliveryDistance() const
 {
 	return this->delivery_distance;
 }
 
-double Cargo::GetCost()
+double Cargo::GetCost() const
 {
 	return this->cost;
 }
 
-int Cargo::GetID()
+int Cargo::GetID() const
 {
 	return this->cargoID;
 }
 
-CARGOTYPE Cargo::GetType()
+CARGOTYPE Cargo::GetType() const
 {
 	return Cargo_type;
 }

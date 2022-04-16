@@ -19,6 +19,13 @@ enum CARGOTYPE {
 	V	// VIP Cargo
 };
 
+enum TRUCKTYPE {
+	NT,	// Normal Truck
+	ST,	// Special Truck
+	VT	// VIP Truck
+};
+
+
 class Time {
 private:
 	int day;
