@@ -1,0 +1,12 @@
+﻿  CancellationEvent.cpp
+  Queue.cpp
+  Company.cpp
+  PromotionEvent.cpp
+  ReadyEvent.cpp
+  Cargo.cpp
+  main.cpp
+  Truck.cpp
+  Time.cpp
+  UI.cpp
+  Generating Code...
+  Cargo-Delivery-Simulation.vcxproj -> C:\kareem\repos\Cargo-Delivery-Simulation\x64\Debug\Cargo-Delivery-Simulation.exe
