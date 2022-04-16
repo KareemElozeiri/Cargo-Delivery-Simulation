@@ -1,20 +1,25 @@
 # CIE 205 Course Project: Cargo-Delivery-Simulation :
   This projects aims to use data structures and algorithms to simulate the most efficient way for a company to do cargo delivery.
 
-# Setup
-## Requirements
-  1. Bash-based Shell
-Clone the project and open the terminal in the project's directory and run the following commands
+# Setup & Run
+### Requirements
+* Bash-based Shell
+
+### Steps
+Clone the project, open the terminal in the its directory, and build with this command
 ```
 make build
+```
+You can then run the project using the following command
+```
 ./main.run
 ```
-Alternatively, you can build and run at the same time with the following commands
+Alternatively, you can build and run at the same time with the following command
 ```
 make run
 ```
 
-## Authors:
+## Contributers:
 - Kareem Elozeiri
 - Mohammed Ayman
 - Mohamed Ezzat
