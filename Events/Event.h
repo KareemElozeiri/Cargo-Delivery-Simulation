@@ -1,16 +1,12 @@
 #pragma once
-#include "../DataStructures/Date.h"
+#include "../Defs.h"
 
 class Event {
 protected:
-	Date event_time;
+	Time event_time;
 	int ID;
 
 public:
 	virtual void Excute() = 0;
-	virtual Date event_time() =0;
-
-
-
-
+	//virtual Time event_time() = 0;
 };

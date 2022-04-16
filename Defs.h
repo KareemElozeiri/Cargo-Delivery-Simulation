@@ -1,16 +1,16 @@
 #pragma once
 #include <iostream>
 
-enum App_Modes {
+enum MODE {
 	INTER,	// Interactive mode
 	STEP,	// Step-by-step mode
-	SILENT, // Silent mode
+	SILENT // Silent mode
 };
 
-enum Event {
+enum EVENT {
 	R,	// Ready Event
 	P,	// Promotion Event
-	X,	// Cancellation Event
+	X	// Cancellation Event
 };
 
 

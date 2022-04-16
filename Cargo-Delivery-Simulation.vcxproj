@@ -140,8 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DataStructures\Queue.cpp" />
-    <ClCompile Include="SimulationAgents\Cargo.cpp" />
     <ClCompile Include="Company.cpp" />
+    <ClCompile Include="SimulationAgents\Cargo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimulationAgents\Truck.cpp" />
     <ClCompile Include="UI\UI.cpp" />
@@ -150,11 +150,11 @@
     <ClInclude Include="DataStructures\PQNode.h" />
     <ClInclude Include="DataStructures\PQueue.h" />
     <ClInclude Include="DataStructures\Queue.h" />
-    <ClInclude Include="Company.h" />
     <ClInclude Include="DataStructures\LinkedList.h" />
     <ClInclude Include="DataStructures\Node.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="Events\Event.h" />
+    <ClInclude Include="Company.h" />
     <ClInclude Include="SimulationAgents\Cargo.h" />
     <ClInclude Include="SimulationAgents\Truck.h" />
     <ClInclude Include="UI\UI.h" />
