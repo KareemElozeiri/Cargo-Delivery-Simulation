@@ -9,12 +9,14 @@
 class Company
 {
 
+
+
 private:
 	int TimestepNum; // increment on each step (check on 5 and reset)
 
 	UI* pUI; // UI object
 
-	Queue<Event>* EventList; // Can not create queue of abstract Event type <<<<<<<<<<<<<<<<<<<<<<<<
+	Queue<Event>* EventList; 
 	Queue<Cargo>* NormalCargoList;
 	Queue<Cargo>* SpecialCargoList;
 	PQueue<Cargo>* VIPCargoList;
@@ -30,5 +32,6 @@ public:
 	void UpdateInterface(); // based on the selected display type
 	void LoadInputs(); // executes the load class to load all the info into the lists
 	void SaveOutputs(); // saves output on exit
+
 };
 

@@ -147,6 +147,7 @@
     <ClCompile Include="SimulationAgents\Cargo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimulationAgents\Truck.cpp" />
+    <ClCompile Include="SimulationAgents\Time.cpp" />
     <ClCompile Include="UI\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,7 @@
     <ClInclude Include="Events\ReadyEvent.h" />
     <ClInclude Include="SimulationAgents\Cargo.h" />
     <ClInclude Include="SimulationAgents\Truck.h" />
+    <ClInclude Include="SimulationAgents\Time.h" />
     <ClInclude Include="UI\UI.h" />
   </ItemGroup>
   <ItemGroup>

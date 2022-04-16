@@ -1,5 +1,5 @@
 #pragma once
-#include "../Defs.h"
+#include "../SimulationAgents/Time.h"
 
 class Event {
 protected:

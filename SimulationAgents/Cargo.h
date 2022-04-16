@@ -1,4 +1,5 @@
 #pragma once
+#include "Time.h"
 #include "../Defs.h"
 
 class Cargo {
