@@ -1,5 +1,5 @@
 #pragma once
-#include "../Defs.h"
+#include "Time.h"
 
 class Cargo {
 protected:
@@ -16,8 +16,6 @@ public:
 	double GetDeliveryDistance();
 	double GetCost();
 	int GetID();
-
-
 
 	//setters
 	void SetPrepTime(Time p);
