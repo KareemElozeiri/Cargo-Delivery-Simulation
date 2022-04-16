@@ -139,14 +139,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Events\CancellationEvent.cpp" />
     <ClCompile Include="DataStructures\Queue.cpp" />
     <ClCompile Include="Company.cpp" />
+    <ClCompile Include="Events\PromotionEvent.cpp" />
+    <ClCompile Include="Events\ReadyEvent.cpp" />
     <ClCompile Include="SimulationAgents\Cargo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimulationAgents\Truck.cpp" />
     <ClCompile Include="UI\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Events\CancellationEvent.h" />
     <ClInclude Include="DataStructures\PQNode.h" />
     <ClInclude Include="DataStructures\PQueue.h" />
     <ClInclude Include="DataStructures\Queue.h" />
@@ -155,6 +159,8 @@
     <ClInclude Include="Defs.h" />
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Company.h" />
+    <ClInclude Include="Events\PromotionEvent.h" />
+    <ClInclude Include="Events\ReadyEvent.h" />
     <ClInclude Include="SimulationAgents\Cargo.h" />
     <ClInclude Include="SimulationAgents\Truck.h" />
     <ClInclude Include="UI\UI.h" />

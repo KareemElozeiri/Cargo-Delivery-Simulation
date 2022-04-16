@@ -10,11 +10,11 @@ class Company
 {
 
 private:
-	int Timestep_Num; // increment on each step (check on 5 and reset)
+	int TimestepNum; // increment on each step (check on 5 and reset)
 
 	UI* pUI; // UI object
 
-	Queue<Event> EventList;
+	//Queue<Event> EventList; // Can not create queue of abstract Event type <<<<<<<<<<<<<<<<<<<<<<<<
 	Queue<Cargo> NormalCargoList;
 	Queue<Cargo> SpecialCargoList;
 	PQueue<Cargo> VIPCargoList;

@@ -2,7 +2,7 @@
 
 
 Company::Company() {
-	this->Timestep_Num = 0;
+	this->TimestepNum = 0;
 
 	this->pUI = new UI;
 
@@ -37,12 +37,12 @@ void Company::Simulate() {
 	Print all applicable info to the interface as described in “Program Interface” section without truck info.
 	Notes:The simulation function stops when there are no more events and all cargos are in delivered list(s)*/
 
-	this->Timestep_Num += 1;
+	this->TimestepNum += 1;
 
 	// Check Eventlist for any occuring ones
 
-	if (this->Timestep_Num == 5) {
-		this->Timestep_Num = 0;
+	if (this->TimestepNum == 5) {
+		this->TimestepNum = 0;
 		// 4-b waiting cargo list operation
 	}
 }

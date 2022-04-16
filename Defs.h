@@ -13,6 +13,11 @@ enum EVENT {
 	X	// Cancellation Event
 };
 
+enum CARGOTYPE {
+	N,	// Normal Cargo
+	S,	// Special Cargo
+	V	// VIP Cargo
+};
 
 class Time {
 private:

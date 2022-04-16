@@ -17,8 +17,6 @@ public:
 	double GetCost();
 	int GetID();
 
-
-
 	//setters
 	void SetPrepTime(Time p);
 	void SetLoadTime(Time p);
