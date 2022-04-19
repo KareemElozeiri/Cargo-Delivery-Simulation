@@ -87,6 +87,8 @@ void Company::LoadInputs() {
 	for (int i = 0; i < sTrucksNum; i++)
 		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed);
 
+	inputFile.close();
+
 }
 
 void Company::SaveOutputs() {
