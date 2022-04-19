@@ -43,11 +43,6 @@ public:
 	*/
     void SaveOutput() const;
 
-	/*
-	* Function: PrintMsg
-	* Prints a given string to the CLI 
-	*/
-	void PrintMsg(string msg) const;
 };
 
 #endif
