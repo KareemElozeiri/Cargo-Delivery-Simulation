@@ -4,14 +4,14 @@
 
 class Time {
 private:
-	int day;
-	int hour;
+	int days;
+	int hours;
 
 
 public:
 	Time();
 	Time(int d, int h);
-
+	Time(int h);
 	
 	int GetDay() const;
 	int GetHour() const;

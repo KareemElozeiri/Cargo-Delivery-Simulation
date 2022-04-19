@@ -9,13 +9,18 @@ Truck::Truck(int capacity, Time checkUpTime, double speed){
 
 
 
-Truck::Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, double speed, Time deliveryInterval)
+Truck::Truck()
+{
+}
+
+Truck::Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
 {
 	this->truck_type = truck_type;
 	this->capacity = capacity;
 	this->checkUpTime = checkUpTime;
 	this->speed = speed;
-	this->deliveryInterval = deliveryInterval;
+	//this->deliveryInterval = deliveryInterval;
+	this->jounrneysBeforeCheckUp = journeysBeforeCheckUp;
 }
 
 Time Truck::GetCheckUpTime() const
@@ -41,6 +46,11 @@ double Truck::GetSpeed() const
 Time Truck::GetDeliveryInterval() const
 {
 	return this->deliveryInterval;
+}
+
+int Truck::GetJourneysBeforeCheckUp() const
+{
+	return this->jounrneysBeforeCheckUp;
 }
 
 void Truck::CalculateDeliveryInterval()

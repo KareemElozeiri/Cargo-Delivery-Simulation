@@ -48,11 +48,67 @@ void Company::Simulate() {
 }
 
 void Company::LoadInputs() {
-	// add data loaded to the created lists
+	using std::ifstream;
+	ifstream inputFile(this->inputFileName);
+
+	//checking that the stream open successfully 
+	if (!inputFile.is_open()) {
+		this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
+		exit(1);
+	}
+
+	/////////////////// Loading Trucks //////////////////////////
+
+	int nTrucksNum, sTrucksNum, vTrucksNum;
+	double nTruckSpeed, sTruckSpeed, vTruckSpeed;
+	int nCapacity, sCapacity, vCapacity;
+	int JourNum;
+	int nCheckUpHours, sCheckUpHours, vCheckUpHours;
+
+	//reading parameters from the file 
+	inputFile >> nTrucksNum >> sTrucksNum >> vTrucksNum;
+	inputFile >> nTruckSpeed >> sTruckSpeed >> vTruckSpeed;
+	inputFile >> nCapacity >> sCapacity >> vCapacity;
+
+	inputFile >> JourNum;
+	inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
+
+	
+
+	//adding VIP trucks
+	for (int i = 0; i < vTrucksNum; i++)
+		this->AddTruck(VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed);
+
+	//adding special trucks
+	for (int i = 0; i < sTrucksNum; i++)
+		this->AddTruck(ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed);
+
+	//adding normal trucks
+	for (int i = 0; i < sTrucksNum; i++)
+		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed);
+
 }
 
 void Company::SaveOutputs() {
 	// called on exit
+}
+
+void Company::AddReadyEvent()
+{
+}
+
+void Company::AddPromotionEvent()
+{
+}
+
+void Company::AddCancellationEvent()
+{
+}
+
+void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
+{
+	Truck truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
+	this->TruckList->enqueue(truck);
 }
 
 void Company::UpdateInterface() {

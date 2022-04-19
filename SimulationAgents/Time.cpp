@@ -1,14 +1,15 @@
 #include "Time.h"
 
-Time::Time() : day(0), hour(0) {}
+Time::Time() : days(0), hours(0) {}
 
 Time::Time(int d, int h) {
 
-	try {
+	try 
+	{
 		if (d < 0) throw std::string("Days cannot be negative");
 		if (h < 0 || h >= 24) throw std::string("Invalid Hour");
-		this->day = d;
-		this->hour = h;
+		this->days = d;
+		this->hours = h;
 	}
 	catch (std::string e)
 	{
@@ -18,13 +19,32 @@ Time::Time(int d, int h) {
 
 }
 
-int Time::GetDay() const { return this->day; }
-int Time::GetHour() const { return this->hour; }
+Time::Time(int h)
+{
+	try 
+	{
+		if (h < 0) throw std::string("Hours Number cannot be negative!");
+
+		this->hours = h % 24;
+		this->days = (h - this->hours) / 24;
+
+
+	}
+	catch (std::string e)
+	{
+		std::cout << "Value Error: " << e << std::endl;
+		exit(1);
+	}
+}
+
+int Time::GetDay() const { return this->days; }
+int Time::GetHour() const { return this->hours; }
 
 void Time::SetDay(int d) {
-	try {
+	try 
+	{
 		if (d < 0) throw std::string("Days cannot be negative");
-		this->day = d;
+		this->days = d;
 	}
 	catch (std::string e)
 	{
@@ -34,9 +54,10 @@ void Time::SetDay(int d) {
 }
 
 void Time::SetHour(int h) {
-	try {
+	try 
+	{
 		if (h < 0 || h >= 24) throw std::string("Invalid Hour");
-		this->hour = h;
+		this->hours = h;
 	}
 	catch (std::string e)
 	{
@@ -49,16 +70,16 @@ void Time::SetHour(int h) {
 Time Time::operator-(Time other) {
 
 	try {
-		if ((this->day < other.day) || (this->day == other.day && this->hour < other.hour)) { throw std::string("Invalid operands!"); }
+		if ((this->days < other.days) || (this->days == other.days && this->hours < other.hours)) { throw std::string("Invalid operands!"); }
 
 		int newDay, newHour;
-		if (this->hour < other.hour) {
-			newDay = this->day - other.day - 1;
-			newHour = 24 - (other.hour - this->hour);
+		if (this->hours < other.hours) {
+			newDay = this->days - other.days - 1;
+			newHour = 24 - (other.hours - this->hours);
 		}
 		else {
-			newDay = this->day - other.day;
-			newHour = this->hour - other.hour;
+			newDay = this->days - other.days;
+			newHour = this->hours - other.hours;
 		}
 		Time t(newDay, newHour);
 		return t;
@@ -72,13 +93,13 @@ Time Time::operator-(Time other) {
 
 Time Time::operator+(Time other) {
 	int newDay, newHour;
-	if (this->hour + other.hour >= 24) {
-		newDay = this->day + other.day + 1;
-		newHour = this->hour + other.hour - 24;
+	if (this->hours + other.hours >= 24) {
+		newDay = this->days + other.days + 1;
+		newHour = this->hours + other.hours - 24;
 	}
 	else {
-		newDay = this->day + other.day;
-		newHour = this->hour + other.hour;
+		newDay = this->days + other.days;
+		newHour = this->hours + other.hours;
 	}
 
 	Time t(newDay, newHour);

@@ -5,6 +5,10 @@
 #include "SimulationAgents/Cargo.h"
 #include "SimulationAgents/Truck.h"
 #include "UI/UI.h"
+#include "SimulationAgents/Time.h"
+
+#include <iostream>
+#include <fstream>
 
 class Company
 {
@@ -16,12 +20,14 @@ private:
 
 	UI* pUI; // UI object
 
-	Queue<Event>* EventList; 
-	Queue<Cargo>* NormalCargoList;
-	Queue<Cargo>* SpecialCargoList;
-	PQueue<Cargo>* VIPCargoList;
-	Queue<Cargo>* CargoWaitList;
-	Queue<Truck>* TruckList;
+	Queue<Event>* EventList = new Queue<Event>; 
+	Queue<Cargo>* NormalCargoList = new Queue<Cargo>;
+	Queue<Cargo>* SpecialCargoList = new Queue<Cargo>;
+	PQueue<Cargo>* VIPCargoList = new PQueue<Cargo>;
+	Queue<Cargo>* CargoWaitList = new Queue<Cargo>;
+	Queue<Truck>* TruckList = new Queue<Truck>;
+
+	string inputFileName = "input.txt";
 
 public:
 	Company();
@@ -32,6 +38,13 @@ public:
 	void UpdateInterface(); // based on the selected display type
 	void LoadInputs(); // executes the load class to load all the info into the lists
 	void SaveOutputs(); // saves output on exit
+
+	void AddReadyEvent();			// adds read event to the event queue 
+	void AddPromotionEvent();		// adds promotion event to the event queue
+	void AddCancellationEvent();	// adds cargo cancellation to the event queue 
+	void AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp,double speed); // adds a truck to the truck list
+
+	
 
 };
 

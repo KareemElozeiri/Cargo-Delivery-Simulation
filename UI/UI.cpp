@@ -40,4 +40,9 @@ MODE UI::GetAppMode() const {
     return this->AppMode;
 }
 
+void UI::PrintMsg(string msg) const
+{
+    std::cout << msg << std::endl;
+}
+
 #endif

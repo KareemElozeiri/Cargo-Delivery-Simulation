@@ -42,6 +42,12 @@ public:
 	* Produces the simulation output file.
 	*/
     void SaveOutput() const;
+
+	/*
+	* Function: PrintMsg
+	* Prints a given string to the CLI 
+	*/
+	void PrintMsg(string msg) const;
 };
 
 #endif
