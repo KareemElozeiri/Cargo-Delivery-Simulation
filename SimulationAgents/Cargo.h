@@ -6,8 +6,8 @@ class Cargo {
 protected:
 	CARGOTYPE Cargo_type;
 	int cargoID;
-	Time preparation_time;
-	Time load_time;
+	Time* preparation_time;
+	Time* load_time;
 	double delivery_distance;
 	double cost;
 	

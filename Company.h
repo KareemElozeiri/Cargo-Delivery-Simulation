@@ -9,19 +9,16 @@
 class Company
 {
 
-
-
 private:
 	int TimestepNum; // increment on each step (check on 5 and reset)
 
 	UI* pUI; // UI object
-
-	Queue<Event>* EventList; 
-	Queue<Cargo>* NormalCargoList;
-	Queue<Cargo>* SpecialCargoList;
-	PQueue<Cargo>* VIPCargoList;
-	Queue<Cargo>* CargoWaitList;
-	Queue<Truck>* TruckList;
+	Queue<Event*>* EventList; 
+	Queue<Cargo*>* NormalCargoList;
+	Queue<Cargo*>* CargoWaitList;
+	Queue<Cargo*>* SpecialCargoList;
+	PQueue<Cargo*>* VIPCargoList;
+	Queue<Truck*>* TruckList;
 
 public:
 	Company();
@@ -32,6 +29,7 @@ public:
 	void UpdateInterface(); // based on the selected display type
 	void LoadInputs(); // executes the load class to load all the info into the lists
 	void SaveOutputs(); // saves output on exit
-
+	void AddEvent(Event* pEvent); // adds new event to the events list
+	void AddWaitCargo(Cargo* pCargo);
 };
 
