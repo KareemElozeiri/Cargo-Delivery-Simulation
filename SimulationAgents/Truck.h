@@ -1,4 +1,5 @@
 #include "Time.h"
+#include "../Defs.h"
 
 class Truck {
 private:
