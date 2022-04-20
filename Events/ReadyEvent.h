@@ -1,4 +1,6 @@
-#pragma once
+#ifndef READY_EVENT_H
+#define READY_EVENT_H
+
 #include "Event.h"
 #include "../Defs.h"
 
@@ -14,3 +16,4 @@ public:
 	virtual void Execute();
 };
 
+#endif

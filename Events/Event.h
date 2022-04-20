@@ -1,4 +1,6 @@
-#pragma once
+#ifndef EVENT_H
+#define EVENT_H
+
 #include "../SimulationAgents/Time.h"
 
 class Event {
@@ -9,3 +11,5 @@ protected:
 public:
 	virtual void Execute() = 0;
 };
+
+#endif

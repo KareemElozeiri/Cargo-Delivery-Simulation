@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PROMOTION_EVENT_H
+#define PROMOTION_EVENT_H
+
 #include "Event.h"
 class PromotionEvent: public Event
 {
@@ -9,3 +11,4 @@ public:
 	virtual void Execute();
 };
 
+#endif
