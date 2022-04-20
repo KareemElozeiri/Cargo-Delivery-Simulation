@@ -1,14 +1,15 @@
 #include "Time.h"
 
-Time::Time() : day(0), hour(0) {}
+Time::Time() : days(0), hours(0) {}
 
 Time::Time(int d, int h) {
 
-	try {
+	try 
+	{
 		if (d < 0) throw std::string("Days cannot be negative");
 		if (h < 0 || h >= 24) throw std::string("Invalid Hour");
-		this->day = d;
-		this->hour = h;
+		this->days = d;
+		this->hours = h;
 	}
 	catch (std::string e)
 	{
@@ -18,13 +19,32 @@ Time::Time(int d, int h) {
 
 }
 
-int Time::GetDay() const { return this->day; }
-int Time::GetHour() const { return this->hour; }
+Time::Time(int h)
+{
+	try 
+	{
+		if (h < 0) throw std::string("Hours Number cannot be negative!");
+
+		this->hours = h % 24;
+		this->days = (h - this->hours) / 24;
+
+
+	}
+	catch (std::string e)
+	{
+		std::cout << "Value Error: " << e << std::endl;
+		exit(1);
+	}
+}
+
+int Time::GetDay() const { return this->days; }
+int Time::GetHour() const { return this->hours; }
 
 void Time::SetDay(int d) {
-	try {
+	try 
+	{
 		if (d < 0) throw std::string("Days cannot be negative");
-		this->day = d;
+		this->days = d;
 	}
 	catch (std::string e)
 	{
@@ -34,9 +54,10 @@ void Time::SetDay(int d) {
 }
 
 void Time::SetHour(int h) {
-	try {
+	try 
+	{
 		if (h < 0 || h >= 24) throw std::string("Invalid Hour");
-		this->hour = h;
+		this->hours = h;
 	}
 	catch (std::string e)
 	{
@@ -49,16 +70,16 @@ void Time::SetHour(int h) {
 Time Time::operator-(Time other) {
 
 	try {
-		if ((this->day < other.day) || (this->day == other.day && this->hour < other.hour)) { throw std::string("Invalid operands!"); }
+		if ((this->days < other.days) || (this->days == other.days && this->hours < other.hours)) { throw std::string("Invalid operands!"); }
 
 		int newDay, newHour;
-		if (this->hour < other.hour) {
-			newDay = this->day - other.day - 1;
-			newHour = 24 - (other.hour - this->hour);
+		if (this->hours < other.hours) {
+			newDay = this->days - other.days - 1;
+			newHour = 24 - (other.hours - this->hours);
 		}
 		else {
-			newDay = this->day - other.day;
-			newHour = this->hour - other.hour;
+			newDay = this->days - other.days;
+			newHour = this->hours - other.hours;
 		}
 		Time t(newDay, newHour);
 		return t;
@@ -72,15 +93,72 @@ Time Time::operator-(Time other) {
 
 Time Time::operator+(Time other) {
 	int newDay, newHour;
-	if (this->hour + other.hour >= 24) {
-		newDay = this->day + other.day + 1;
-		newHour = this->hour + other.hour - 24;
+	if (this->hours + other.hours >= 24) {
+		newDay = this->days + other.days + 1;
+		newHour = this->hours + other.hours - 24;
 	}
 	else {
-		newDay = this->day + other.day;
-		newHour = this->hour + other.hour;
+		newDay = this->days + other.days;
+		newHour = this->hours + other.hours;
 	}
 
 	Time t(newDay, newHour);
 	return t;
+}
+
+
+
+/// <summary>
+/// adding hours to the time
+/// </summary>
+Time Time::operator+(int added_hours) {
+	int newDay, newHour;
+
+	/////////to make sure that these hours smaller than 24 hours
+	//////// if not so it will be divided into days and hours
+	int added_days = added_hours / 24;
+	added_hours = added_hours%24;
+
+	if (this->hours + added_hours >= 24) {
+		newDay = this->days + 1 + added_days;
+		newHour = this->hours + added_hours - 24;
+	}
+	else {
+		newDay = this->days + added_days;
+		newHour = this->hours + added_hours;
+	}
+
+	Time t(newDay, newHour);
+	return t;
+}
+
+Time Time::operator-(int subtracted_hours){
+	////////This overloading has different logic than the preceding one
+
+	int subtracted_days = subtracted_hours / 24; /////to make sure that hours are divded if more than 24 hours.
+	subtracted_hours = subtracted_hours % 24;
+	Time other(subtracted_days, subtracted_hours);
+
+	try {
+
+		int All_hours_in_time = this->days * 24 + this->hours;
+
+		if (All_hours_in_time < subtracted_hours) { throw std::string("Invalid operands!"); }
+
+		int newDay, newHour;
+		if (this->hours < subtracted_hours) {
+			newDay = this->days - other.days - 1;
+			newHour = 24 - (other.hours - this->hours);
+		}
+		else {
+			newDay = this->days - other.days;
+			newHour = this->hours - other.hours;
+		}
+		Time t(newDay, newHour);
+		return t;
+	}
+	catch (std::string e) {
+		std::cout << e << std::endl;
+		exit(1);
+	}
 }
