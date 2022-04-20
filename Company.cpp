@@ -58,7 +58,7 @@ void Company::LoadInputs() {
 
 	//checking that the stream open successfully 
 	if (!inputFile.is_open()) {
-		this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
+		//this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
 		exit(1);
 	}
 
@@ -93,11 +93,11 @@ void Company::LoadInputs() {
 		inputFile >> EventChar;
 
 		if (EventChar == 'R')
-			ReadReadyEvent();
+			ReadReadyEvent(inputFile);
 		else if (EventChar == 'P')
-			ReadPromotionEvent();
+			ReadPromotionEvent(inputFile);
 		else if (EventChar == 'C')
-			ReadCancellationEvent();
+			ReadCancellationEvent(inputFile);
 	}
 
 
@@ -120,60 +120,66 @@ void Company::LoadInputs() {
 
 /// These function will continue reading from the file
 
-void Company::ReadReadyEvent(std::ifstream &inputFile)
+void Company::ReadReadyEvent(std::ifstream& inputFile)
 {
-	char s_Cargo_type;
-	inputFile >> s_Cargo_type;
-	CARGOTYPE Cargo_type;
-	if (s_Cargo_type == 'N')
-		Cargo_type = N;
-	else if (s_Cargo_type == 'V')
-		Cargo_type = V;
-	else if (s_Cargo_type == 'S')
-		Cargo_type = S;
+	char sCType;
+	inputFile >> sCType;
+	CARGOTYPE CType;
+	if (sCType == 'N')
+		CType = CARGOTYPE::N;
+	else if (sCType == 'V')
+		CType = CARGOTYPE::V;
+	else if (sCType == 'S')
+		CType = CARGOTYPE::S;
 
-	string s_time;
-	inputFile >> s_time;
-	string time_list[2];
+	string sEventTime;
+	inputFile >> sEventTime;
+	string TimeList[2];
 	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time time(stoi(time_list[0]), stoi(time_list[1]));
+	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
 	
-
 	int ID;
 	inputFile >> ID;
-	int DIST;
-	inputFile >> DIST;
+	int Distance;
+	inputFile >> Distance;
 	int LT;
 	inputFile >> LT;
-	int cost;
-	inputFile >> cost;
+	int Cost;
+	inputFile >> Cost;
 
+
+	Event* pEvent = new ReadyEvent(this, EventTime, ID, CType, Distance, LT, Cost);
+	this->AddEvent(pEvent);
 }
 
 void Company::ReadCancellationEvent(std::ifstream& inputFile)
 {
-	string s_time;
-	inputFile >> s_time;
-	string time_list[2];
+	string sEventTime;
+	inputFile >> sEventTime;
+	string TimeList[2];
 	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time time(stoi(time_list[0]), stoi(time_list[1]));
+	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
 
 	int ID;
 	inputFile >> ID;
+	Event* pEvent = new CancellationEvent(this, EventTime, ID);
+	this->AddEvent(pEvent);
 }
 
 void Company::ReadPromotionEvent(std::ifstream& inputFile)
 {
-	string s_time;
-	inputFile >> s_time;
-	string time_list[2];
+	string sEventTime;
+	inputFile >> sEventTime;
+	string TimeList[2];
 	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time time(stoi(time_list[0]), stoi(time_list[1]));
+	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
 	
 	int ID;
 	inputFile >> ID;
-	float ExtraCost;
-	inputFile >> ExtraCost;
+	float ExtraMoney;
+	inputFile >> ExtraMoney;
+	Event* pEvent = new PromotionEvent(this, EventTime, ID, ExtraMoney);
+	this->AddEvent(pEvent);
 }
 
 
@@ -188,11 +194,9 @@ void Company::SaveOutputs() {
 	// called on exit
 }
 
-
-
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
 {
-	Truck truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
+	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
 	this->TruckList->enqueue(truck);
 }
 
@@ -206,4 +210,41 @@ void Company::AddEvent(Event* pEvent) {
 
 void Company::AddWaitCargo(Cargo* pCargo) {
 	this->CargoWaitList->enqueue(pCargo);
+}
+
+Cargo* Company::FindNormalCargo(int ID) {
+	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
+	
+	while (Head != nullptr) {
+		if (Head->getItem()->GetID() == ID) {
+			return Head->getItem();
+		}
+		Head = Head->getNext();
+	}
+}
+
+void Company::DeleteNormalCargo(int ID) {
+	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
+	Node<Cargo*>* Prev = nullptr;
+
+	while (Head != nullptr) {
+		if (Head->getItem()->GetID() == ID) {
+			if (this->NormalCargoList->GetHead() == Head) {
+				this->NormalCargoList->SetHead(Head->getNext());
+			}
+			else {
+				Prev->setNext(Head->getNext());
+			}
+			delete Head->getItem();
+			delete Head;
+			break;
+		}
+		Prev = Head;
+		Head = Head->getNext();
+	}
+	
+}
+
+void Company::AddVIPCargo(Cargo* pCargo) {
+	this->VIPCargoList->enqueue(pCargo, pCargo->GetCost());
 }
