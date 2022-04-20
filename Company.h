@@ -40,9 +40,10 @@ public:
 	void LoadInputs(); // executes the load class to load all the info into the lists
 	void SaveOutputs(); // saves output on exit
 
-	void ReadReadyEvent();			// adds read event to the event queue 
-	void ReadPromotionEvent();		// adds promotion event to the event queue
-	void ReadCancellationEvent();	// adds cargo cancellation to the event queue 
+
+	void ReadReadyEvent(std::ifstream& inputFile);// adds read event to the event queue 
+	void ReadPromotionEvent(std::ifstream& inputFile);		// adds promotion event to the event queue
+	void ReadCancellationEvent(std::ifstream& inputFile);	// adds cargo cancellation to the event queue 
 	void AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp,double speed); // adds a truck to the truck list
 
 	
