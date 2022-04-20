@@ -8,13 +8,15 @@ template <typename T>
 class LinkedList
 {
 private:
-	Node<T> *Head;	//Pointer to the head of the list
+	Node<T>* Head;	//Pointer to the head of the list
 	//You can add tail pointer too (depending on your problem)
+
 public:
 	LinkedList();
 	~LinkedList();
 
 	Node<T>* GetHead();
+	void SetHead(Node<T>* Head);
 
 	void PrintList() const;
 	
@@ -55,6 +57,11 @@ template<typename T>
 Node<T>* LinkedList<T>::GetHead()
 {
 	return this->Head;
+}
+
+template<typename T>
+void LinkedList<T>::SetHead(Node<T>* Head) {
+	this->Head = Head;
 }
 
 /*
@@ -160,6 +167,8 @@ bool LinkedList<T>::DeleteNode(T value) {
 
 	if (this->Head->getItem() == value) {
 		Node<T>* nextNode = this->Head->getNext();
+		// TODO
+		// add delete head values
 		delete this->Head;
 		this->Head = nullptr;
 		this->Head = nextNode;

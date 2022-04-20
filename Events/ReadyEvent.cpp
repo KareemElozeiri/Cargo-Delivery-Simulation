@@ -4,6 +4,6 @@
 void ReadyEvent::Execute() {
 
 	// preperation time is missing
-	//Cargo* pCargo = new Cargo(CType, ID, EventTime, Distance, Cost);
-	//AppMngr->AddWaitCargo(pCargo);
+	Cargo* pCargo = new Cargo(CType, ID, EventTime, LT, Distance, Cost);
+	AppMngr->AddWaitCargo(pCargo);
 }

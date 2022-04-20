@@ -1,6 +1,7 @@
 #pragma once
 #include "Defs.h"
 #include "DataStructures/PQueue.h"
+#include "DataStructures/LinkedList.h"
 #include "Events/Event.h"
 #include "SimulationAgents/Cargo.h"
 #include "SimulationAgents/Truck.h"
@@ -18,12 +19,12 @@ private:
 
 	UI* pUI; // UI object
 
-	Queue<Event>* EventList = new Queue<Event>; 
-	Queue<Cargo>* NormalCargoList = new Queue<Cargo>;
-	Queue<Cargo>* SpecialCargoList = new Queue<Cargo>;
-	PQueue<Cargo>* VIPCargoList = new PQueue<Cargo>;
-	Queue<Cargo>* CargoWaitList = new Queue<Cargo>;
-	Queue<Truck>* TruckList = new Queue<Truck>;
+	Queue<Event*>* EventList = new Queue<Event*>; 
+	LinkedList<Cargo*>* NormalCargoList = new LinkedList<Cargo*>; // move cargo if found (using id of cargo) 
+	Queue<Cargo*>* SpecialCargoList = new Queue<Cargo*>;
+	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>; //
+	Queue<Cargo*>* CargoWaitList = new Queue<Cargo*>;
+	Queue<Truck*>* TruckList = new Queue<Truck*>;
 
 	string inputFileName = "input.txt";
 	int NumOfEvents;
@@ -44,6 +45,7 @@ public:
 	void ReadCancellationEvent(std::ifstream& inputFile);	// adds cargo cancellation to the event queue 
 	void AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp,double speed); // adds a truck to the truck list
 
-	
-
+	Cargo* FindNormalCargo(int ID);
+	void DeleteNormalCargo(int ID);
+	void AddVIPCargo(Cargo* pCargo);
 };
