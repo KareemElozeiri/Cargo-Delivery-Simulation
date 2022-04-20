@@ -23,6 +23,10 @@ public:
 	Time operator-(Time other);
 	Time operator+(Time other);
 
+
+	Time operator+(int added_hours);
+	Time operator-(int subtracted_hours);
+
 };
 
 #endif
