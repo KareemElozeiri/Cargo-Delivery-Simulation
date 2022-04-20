@@ -74,6 +74,30 @@ void Company::LoadInputs() {
 	inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
 
 	
+	//reading events from the file
+	inputFile >> NumOfEvents;
+	/// <summary>
+	/// loops on each event and takes the letter to check which event function to call.
+	/// based on this the event function will take the right number of params for it
+	/// Ready : 6 params
+	/// Cancellation: 2 params
+	/// Promotional: 3 params
+	/// </summary>
+	for (int i = 0; i < NumOfEvents; i++) {
+		char EventChar;
+		inputFile >> EventChar;
+
+		if (EventChar == 'R')
+			ReadReadyEvent();
+		else if (EventChar == 'P')
+			ReadPromotionEvent();
+		else if (EventChar == 'C')
+			ReadCancellationEvent();
+	}
+
+
+
+
 
 	//adding VIP trucks
 	for (int i = 0; i < vTrucksNum; i++)
@@ -91,21 +115,31 @@ void Company::LoadInputs() {
 
 }
 
+
+/// These function will continue reading from the file
+
+void Company::ReadReadyEvent()
+{
+}
+
+void Company::ReadPromotionEvent()
+{
+}
+
+void Company::ReadCancellationEvent()
+{
+}
+
+
+
+
+
+
 void Company::SaveOutputs() {
 	// called on exit
 }
 
-void Company::AddReadyEvent()
-{
-}
 
-void Company::AddPromotionEvent()
-{
-}
-
-void Company::AddCancellationEvent()
-{
-}
 
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
 {

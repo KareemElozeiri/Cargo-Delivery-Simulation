@@ -28,6 +28,7 @@ private:
 	Queue<Truck>* TruckList = new Queue<Truck>;
 
 	string inputFileName = "input.txt";
+	int NumOfEvents;
 
 public:
 	Company();
@@ -39,12 +40,11 @@ public:
 	void LoadInputs(); // executes the load class to load all the info into the lists
 	void SaveOutputs(); // saves output on exit
 
-	void AddReadyEvent();			// adds read event to the event queue 
-	void AddPromotionEvent();		// adds promotion event to the event queue
-	void AddCancellationEvent();	// adds cargo cancellation to the event queue 
+	void ReadReadyEvent();			// adds read event to the event queue 
+	void ReadPromotionEvent();		// adds promotion event to the event queue
+	void ReadCancellationEvent();	// adds cargo cancellation to the event queue 
 	void AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp,double speed); // adds a truck to the truck list
 
 	
 
 };
-
