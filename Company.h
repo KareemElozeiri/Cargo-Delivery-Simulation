@@ -13,8 +13,6 @@
 class Company
 {
 
-
-
 private:
 	int TimestepNum; // increment on each step (check on 5 and reset)
 
@@ -39,8 +37,8 @@ public:
 	void UpdateInterface(); // based on the selected display type
 	void LoadInputs(); // executes the load class to load all the info into the lists
 	void SaveOutputs(); // saves output on exit
-
-
+	void AddEvent(Event* pEvent); // adds new event to the events list
+	void AddWaitCargo(Cargo* pCargo);
 	void ReadReadyEvent(std::ifstream& inputFile);// adds read event to the event queue 
 	void ReadPromotionEvent(std::ifstream& inputFile);		// adds promotion event to the event queue
 	void ReadCancellationEvent(std::ifstream& inputFile);	// adds cargo cancellation to the event queue 

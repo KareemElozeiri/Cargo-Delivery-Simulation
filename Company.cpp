@@ -1,5 +1,10 @@
 #include "Company.h"
 
+#include "Events/CancellationEvent.h"
+#include "Events/PromotionEvent.h"
+#include "Events/ReadyEvent.h"
+
+
 
 Company::Company() {
 	this->TimestepNum = 0;
@@ -195,3 +200,10 @@ void Company::UpdateInterface() {
 	//pUI->Step(this);
 }
 
+void Company::AddEvent(Event* pEvent) {
+	this->EventList->enqueue(pEvent);
+}
+
+void Company::AddWaitCargo(Cargo* pCargo) {
+	this->CargoWaitList->enqueue(pCargo);
+}

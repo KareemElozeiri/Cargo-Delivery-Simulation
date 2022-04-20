@@ -1,5 +1,6 @@
 #pragma once
 #include "Event.h"
+#include "../Company.h"
 
 class PromotionEvent: public Event
 {
@@ -8,10 +9,8 @@ private:
 	Time ED;
 	int ID_normal_cargo;
 
-
 public:
-
-	PromotionEvent(Time ED, int ID_normal_cargo, float ExtraMoney=0);
+	PromotionEvent(Company* AppMngr, Time* EventTime, int ID, double ExtraMoney) : Event(AppMngr, EventTime, ID), ExtraMoney(ExtraMoney) {};
 	virtual void Execute();
 };
 

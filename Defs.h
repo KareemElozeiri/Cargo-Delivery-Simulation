@@ -13,7 +13,9 @@ enum EVENT {
 	X	// Cancellation Event
 };
 
-enum CARGOTYPE {
+// enum class to prevent conversions to int values
+// Each memeber is treated as an object type
+enum class CARGOTYPE {
 	N,	// Normal Cargo
 	S,	// Special Cargo
 	V	// VIP Cargo
