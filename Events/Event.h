@@ -1,16 +1,11 @@
 #pragma once
-#include "../DataStructures/Date.h"
+#include "../SimulationAgents/Time.h"
 
 class Event {
 protected:
-	Date event_time;
+	Time EventTime;
 	int ID;
 
 public:
-	virtual void Excute() = 0;
-	virtual Date event_time() =0;
-
-
-
-
+	virtual void Execute() = 0;
 };
