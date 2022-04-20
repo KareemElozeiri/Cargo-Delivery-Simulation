@@ -2,6 +2,8 @@
 #define UI_H
 
 #include <iostream>
+#include <string>
+#include <unistd.h>
 #include "../Defs.h"
 using namespace std;
 
@@ -10,6 +12,8 @@ class UI
 private:
 
     MODE AppMode;
+	string InputFileName;
+	string OutputFileName;
 
 public:
 
@@ -31,6 +35,18 @@ public:
 	*/
     void SetAppMode();
 
+	/*
+	* Function: GetIOFiles.
+	* Reads the Input & Output Files Names.
+	*/
+    void GetIOFiles();
+
+	/*
+	* Function: FileExists.
+	* Checks if a file exists (Needed for the Input & Output Files).
+	*/
+	bool FileExists(string fileName) const;
+
     /*
 	* Function: GetAppMode.
 	* Returns the current Application Mode.
@@ -42,7 +58,6 @@ public:
 	* Produces the simulation output file.
 	*/
     void SaveOutput() const;
-
 };
 
 #endif
