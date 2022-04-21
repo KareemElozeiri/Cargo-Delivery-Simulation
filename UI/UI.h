@@ -3,14 +3,7 @@
 
 #include <iostream>
 #include <string>
-
-// Conditional Include for the direct/stat.h depending on the OS
-#ifdef _WIN32
-#include <direct.h>
-#elif defined __linux__
-#include <sys/stat.h>
-#endif
-
+#include <filesystem>
 #include "../Defs.h"
 using namespace std;
 
@@ -47,12 +40,6 @@ public:
 	* Reads the Input & Output Files Names.
 	*/
     void GetIOFiles();
-
-	/*
-	* Function: FileExists.
-	* Checks if a file exists (Needed for the Input & Output Files).
-	*/
-	bool FileExists(string fileName) const;
 
     /*
 	* Function: GetAppMode.
