@@ -39,7 +39,7 @@ void Company::Simulate() {
 	For promotion event, move cargo (if found) from normal to VIP.
 	Each 5 timesteps, move a cargo of each type from waiting-cargo list(s) to delivered list(s) 
 	(The cargo you choose to delete from each type must be the first cargo that should be assigned to an available truck in phase 2.)
-	Print all applicable info to the interface as described in “Program Interface” section without truck info.
+	Print all applicable info to the interface as described in ï¿½Program Interfaceï¿½ section without truck info.
 	Notes:The simulation function stops when there are no more events and all cargos are in delivered list(s)*/
 
 	this->TimestepNum += 1;
@@ -221,6 +221,8 @@ Cargo* Company::FindNormalCargo(int ID) {
 		}
 		Head = Head->getNext();
 	}
+
+	return nullptr;
 }
 
 void Company::DeleteNormalCargo(int ID) {
