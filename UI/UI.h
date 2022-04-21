@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <unistd.h>
 #include "../Defs.h"
 using namespace std;
 
@@ -51,6 +52,18 @@ public:
 	* Returns the current Application Mode.
 	*/
     MODE GetAppMode() const;
+
+	/*
+	* Function: GetInputFilePath.
+	* Returns the path of the input file.
+	*/
+    string GetInputFilePath() const;
+
+	/*
+	* Function: GetOutputFilePath.
+	* Returns the path of the output file.
+	*/
+    string GetOutputFilePath() const;
     
     /*
 	* Function: SaveOutput.

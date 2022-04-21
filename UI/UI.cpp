@@ -65,6 +65,14 @@ void UI::GetIOFiles() {
     this->OutputFileName = "Outputs/" + OutputFile;
 }
 
+string UI::GetInputFilePath() const {
+    return this->InputFileName;
+}
+
+string UI::GetOutputFilePath() const {
+    return this->OutputFileName;
+}
+
 bool UI::FileExists(const string fileName) const {
     return (access(fileName.c_str(), F_OK) != -1);
 }
