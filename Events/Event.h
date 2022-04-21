@@ -1,4 +1,6 @@
-#pragma once
+#ifndef EVENT_H
+#define EVENT_H
+
 #include "../SimulationAgents/Time.h"
 
 class Company; //forward class declaration
@@ -13,3 +15,5 @@ public:
 	Event(Company* AppMngr, Time* EventTime, int ID) : AppMngr(AppMngr), EventTime(EventTime), ID(ID){}
 	virtual void Execute() = 0;
 };
+
+#endif

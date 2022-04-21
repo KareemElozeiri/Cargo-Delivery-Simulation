@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PROMOTION_EVENT_H
+#define PROMOTION_EVENT_H
+
 #include "Event.h"
 #include "../Company.h"
 
@@ -12,3 +14,4 @@ public:
 	virtual void Execute();
 };
 
+#endif

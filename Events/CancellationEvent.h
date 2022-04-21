@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CANCELLATION_EVENT_H
+#define CANCELLATION_EVENT_H
+
 #include "Event.h"
 #include "../Company.h"
 
@@ -9,3 +11,4 @@ public:
 	virtual void Execute();
 };
 
+#endif
