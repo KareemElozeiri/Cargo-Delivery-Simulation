@@ -10,3 +10,5 @@ void ReadyEvent::Execute() {
 	Cargo* pCargo = new Cargo(CType, ID, EventTime, LT, Distance, Cost);
 	AppMngr->AddWaitCargo(pCargo);
 }
+
+#endif

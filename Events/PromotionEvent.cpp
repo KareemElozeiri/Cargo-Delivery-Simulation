@@ -13,3 +13,5 @@ void PromotionEvent::Execute()
 		AppMngr->AddVIPCargo(pCargo);
 	}
 }
+
+#endif
