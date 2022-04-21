@@ -152,4 +152,10 @@ bool LinkedList<T>::DeleteNode(T value) {
 	return false;
 }
 
+template<typename T>
+bool LinkedList<T>::isEmpty() const
+{
+	return (this->Head==nullptr);
+}
+
 #endif

@@ -20,7 +20,7 @@ bool Company::CheckExitStatus() {
 	// check for application status 
 	// The simulation function stops when there are no more events and all cargos are in delivered list
 
-	return false;
+	return (this->NormalCargoList->isEmpty() && this->SpecialCargoList->isEmpty() && this->VIPCargoList->isEmpty() && this->EventList->isEmpty());
 }
 
 void Company::Simulate() {
@@ -43,17 +43,22 @@ void Company::Simulate() {
 		this->TimestepNum = this->TimestepNum + 1;
 
 		// Execute the upcoming event
-		if (this->ExecuteUpcomingEvent()) {
-			break;
-		}
+		this->ExecuteUpcomingEvent();
+		
 		// if (this->TimestepNum.GetTotalHours() % 5 == 0) {
 		// 	//move cargo
 
 		// }
 
 		// print current info
+		
 
 		//check break conditions
+		if (this->CheckExitStatus())
+		{
+			this->pUI->PrintMsg("Simulation is done.");
+			break;
+		}
 	}
 
 	
@@ -146,10 +151,6 @@ void Company::LoadInputs() {
 		}
 	
 	}
-
-	Truck* t = new Truck();
-	this->NormalTrucksList->dequeue(t);
-	std::cout << t->GetSpeed();
 
 	inputFile.close();
 
