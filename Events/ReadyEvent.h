@@ -3,6 +3,7 @@
 
 #include "Event.h"
 #include "../Defs.h"
+#include "../Company.h"
 
 class ReadyEvent: public Event
 {
@@ -13,6 +14,8 @@ private:
 	int Cost; // Cargo cost
 
 public:
+	ReadyEvent(Company* AppMngr, Time* EventTime, int ID, CARGOTYPE CType, int Distance, int LT, int Cost) : Event(AppMngr, EventTime, ID), 
+		CType(CType), Distance(Distance), LT(LT), Cost(Cost) {};
 	virtual void Execute();
 };
 

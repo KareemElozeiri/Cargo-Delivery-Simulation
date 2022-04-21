@@ -3,12 +3,16 @@
 
 #include "../SimulationAgents/Time.h"
 
+class Company; //forward class declaration
+
 class Event {
 protected:
-	Time EventTime;
+	Company* AppMngr;
+	Time* EventTime;
 	int ID;
 
 public:
+	Event(Company* AppMngr, Time* EventTime, int ID) : AppMngr(AppMngr), EventTime(EventTime), ID(ID){}
 	virtual void Execute() = 0;
 };
 

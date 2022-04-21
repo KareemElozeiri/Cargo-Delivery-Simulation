@@ -1,5 +1,10 @@
 #include "Company.h"
 
+#include "Events/CancellationEvent.h"
+#include "Events/PromotionEvent.h"
+#include "Events/ReadyEvent.h"
+
+
 
 Company::Company() {
 	this->TimestepNum = 0;
@@ -53,7 +58,7 @@ void Company::LoadInputs() {
 
 	//checking that the stream open successfully 
 	if (!inputFile.is_open()) {
-		this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
+		//this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
 		exit(1);
 	}
 
@@ -73,7 +78,28 @@ void Company::LoadInputs() {
 	inputFile >> JourNum;
 	inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
 
+	//reading events from the file
 	
+	/// loops on each event and takes the letter to check which event function to call.
+	/// based on this the event function will take the right number of params for it
+	/// Ready : 6 params
+	/// Cancellation: 2 params
+	/// Promotional: 3 params
+	
+	inputFile >> NumOfEvents;
+
+	for (int i = 0; i < NumOfEvents; i++) {
+		char EventChar;
+		inputFile >> EventChar;
+
+		if (EventChar == 'R')
+			ReadReadyEvent(inputFile);
+		else if (EventChar == 'P')
+			ReadPromotionEvent(inputFile);
+		else if (EventChar == 'C')
+			ReadCancellationEvent(inputFile);
+	}
+
 
 	//adding VIP trucks
 	for (int i = 0; i < vTrucksNum; i++)
@@ -91,25 +117,86 @@ void Company::LoadInputs() {
 
 }
 
+
+/// These function will continue reading from the file
+
+void Company::ReadReadyEvent(std::ifstream& inputFile)
+{
+	char sCType;
+	inputFile >> sCType;
+	CARGOTYPE CType;
+	if (sCType == 'N')
+		CType = CARGOTYPE::N;
+	else if (sCType == 'V')
+		CType = CARGOTYPE::V;
+	else if (sCType == 'S')
+		CType = CARGOTYPE::S;
+
+	string sEventTime;
+	inputFile >> sEventTime;
+	string TimeList[2];
+	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
+	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+	
+	int ID;
+	inputFile >> ID;
+	int Distance;
+	inputFile >> Distance;
+	int LT;
+	inputFile >> LT;
+	int Cost;
+	inputFile >> Cost;
+
+
+	Event* pEvent = new ReadyEvent(this, EventTime, ID, CType, Distance, LT, Cost);
+	this->AddEvent(pEvent);
+}
+
+void Company::ReadCancellationEvent(std::ifstream& inputFile)
+{
+	string sEventTime;
+	inputFile >> sEventTime;
+	string TimeList[2];
+	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
+	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+
+	int ID;
+	inputFile >> ID;
+	Event* pEvent = new CancellationEvent(this, EventTime, ID);
+	this->AddEvent(pEvent);
+}
+
+void Company::ReadPromotionEvent(std::ifstream& inputFile)
+{
+	string sEventTime;
+	inputFile >> sEventTime;
+	string TimeList[2];
+	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
+	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+	
+	int ID;
+	inputFile >> ID;
+	float ExtraMoney;
+	inputFile >> ExtraMoney;
+	Event* pEvent = new PromotionEvent(this, EventTime, ID, ExtraMoney);
+	this->AddEvent(pEvent);
+}
+
+
+
+
+/// There was AddEvents function here and I replaced it with ReadEvents
+/// purpose: to read from files and then call the Event class
+/// if it has different purpose, add it again 
+
+
 void Company::SaveOutputs() {
 	// called on exit
 }
 
-void Company::AddReadyEvent()
-{
-}
-
-void Company::AddPromotionEvent()
-{
-}
-
-void Company::AddCancellationEvent()
-{
-}
-
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
 {
-	Truck truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
+	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
 	this->TruckList->enqueue(truck);
 }
 
@@ -117,3 +204,47 @@ void Company::UpdateInterface() {
 	//pUI->Step(this);
 }
 
+void Company::AddEvent(Event* pEvent) {
+	this->EventList->enqueue(pEvent);
+}
+
+void Company::AddWaitCargo(Cargo* pCargo) {
+	this->CargoWaitList->enqueue(pCargo);
+}
+
+Cargo* Company::FindNormalCargo(int ID) {
+	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
+	
+	while (Head != nullptr) {
+		if (Head->getItem()->GetID() == ID) {
+			return Head->getItem();
+		}
+		Head = Head->getNext();
+	}
+}
+
+void Company::DeleteNormalCargo(int ID) {
+	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
+	Node<Cargo*>* Prev = nullptr;
+
+	while (Head != nullptr) {
+		if (Head->getItem()->GetID() == ID) {
+			if (this->NormalCargoList->GetHead() == Head) {
+				this->NormalCargoList->SetHead(Head->getNext());
+			}
+			else {
+				Prev->setNext(Head->getNext());
+			}
+			delete Head->getItem();
+			delete Head;
+			break;
+		}
+		Prev = Head;
+		Head = Head->getNext();
+	}
+	
+}
+
+void Company::AddVIPCargo(Cargo* pCargo) {
+	this->VIPCargoList->enqueue(pCargo, pCargo->GetCost());
+}
