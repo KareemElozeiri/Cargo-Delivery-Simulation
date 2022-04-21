@@ -102,12 +102,20 @@ void Company::LoadInputs() {
 	/// Cancellation: 2 params
 	/// Promotional: 3 params
 	
+	/// <summary>
+	/// This reads Line 8 in input file
+	/// Based on the number of file there will be number of loops below
+	/// </summary>
 	inputFile >> NumOfEvents;
 
 	for (int i = 0; i < NumOfEvents; i++) {
 		char EventChar;
 		inputFile >> EventChar;
 
+		/// <summary>
+		/// based on the the first letter in the line, it will go on the corresponding function.
+		/// it will continue reading the file by passing the file by reference.
+		/// </summary>
 		if (EventChar == 'R')
 			ReadReadyEvent(inputFile);
 		else if (EventChar == 'P')
@@ -115,7 +123,6 @@ void Company::LoadInputs() {
 		else if (EventChar == 'C')
 			ReadCancellationEvent(inputFile);
 	}
-
 
 	inputFile.close();
 
