@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include<fstream>
+#include <filesystem>
 #include "../Defs.h"
 using namespace std;
 
@@ -40,12 +40,6 @@ public:
 	* Reads the Input & Output Files Names.
 	*/
     void GetIOFiles();
-
-	/*
-	* Function: FileExists.
-	* Checks if a file exists (Needed for the Input & Output Files).
-	*/
-	bool FileExists(string fileName) const;
 
     /*
 	* Function: GetAppMode.
