@@ -1,9 +1,7 @@
+#ifndef  Comapny_CPP
+#define Comapny_CPP
+
 #include "Company.h"
-
-#include "Events/CancellationEvent.h"
-#include "Events/PromotionEvent.h"
-#include "Events/ReadyEvent.h"
-
 
 
 Company::Company() {
@@ -58,7 +56,7 @@ void Company::LoadInputs() {
 
 	//checking that the stream open successfully 
 	if (!inputFile.is_open()) {
-		//this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
+		this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
 		exit(1);
 	}
 
@@ -78,28 +76,6 @@ void Company::LoadInputs() {
 	inputFile >> JourNum;
 	inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
 
-	//reading events from the file
-	
-	/// loops on each event and takes the letter to check which event function to call.
-	/// based on this the event function will take the right number of params for it
-	/// Ready : 6 params
-	/// Cancellation: 2 params
-	/// Promotional: 3 params
-	
-	inputFile >> NumOfEvents;
-
-	for (int i = 0; i < NumOfEvents; i++) {
-		char EventChar;
-		inputFile >> EventChar;
-
-		if (EventChar == 'R')
-			ReadReadyEvent(inputFile);
-		else if (EventChar == 'P')
-			ReadPromotionEvent(inputFile);
-		else if (EventChar == 'C')
-			ReadCancellationEvent(inputFile);
-	}
-
 
 	//adding VIP trucks
 	for (int i = 0; i < vTrucksNum; i++)
@@ -112,6 +88,58 @@ void Company::LoadInputs() {
 	//adding normal trucks
 	for (int i = 0; i < sTrucksNum; i++)
 		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed);
+
+
+	////////////////// Reading Auto Promotion Limit & Maximum waiting hours ////////////////
+	int Apl, MaxW;
+	inputFile >> Apl >> MaxW;
+
+	this->AutoPromotionLimit = Time(Apl, 0);
+	this->MaxWaitingTime = Time(MaxW);
+
+
+	///////////////// Loading events ///////////////////
+
+	//reading events from the file
+	
+	/// loops on each event and takes the letter to check which event function to call.
+	/// based on this the event function will take the right number of params for it
+	/// Ready : 6 params
+	/// Cancellation: 2 params
+	/// Promotional: 3 params
+	
+	/// <summary>
+	/// This reads Line 8 in input file
+	/// Based on the number of file there will be number of loops below
+	/// </summary>
+	inputFile >> NumOfEvents;
+
+	for (int i = 0; i < NumOfEvents; i++) {
+		char EventChar;
+		inputFile >> EventChar;
+
+		/// <summary>
+		/// based on the the first letter in the line, it will go on the corresponding function.
+		/// it will continue reading the file by passing the file by reference.
+		/// </summary>
+		switch (EventChar) 
+		{
+			case 'R':
+				ReadReadyEvent(inputFile);
+				break;
+			case 'P':
+				ReadPromotionEvent(inputFile);
+				break;
+			case 'C':
+				ReadCancellationEvent(inputFile);
+				break;
+		}
+	
+	}
+
+	Truck* t = new Truck();
+	this->NormalTrucksList->dequeue(t);
+	std::cout << t->GetSpeed();
 
 	inputFile.close();
 
@@ -134,10 +162,8 @@ void Company::ReadReadyEvent(std::ifstream& inputFile)
 
 	string sEventTime;
 	inputFile >> sEventTime;
-	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
-	
+	Time* EventTime = splitTime(sEventTime);
+
 	int ID;
 	inputFile >> ID;
 	int Distance;
@@ -157,8 +183,8 @@ void Company::ReadCancellationEvent(std::ifstream& inputFile)
 	string sEventTime;
 	inputFile >> sEventTime;
 	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+
+	Time* EventTime = splitTime(sEventTime);
 
 	int ID;
 	inputFile >> ID;
@@ -171,8 +197,8 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 	string sEventTime;
 	inputFile >> sEventTime;
 	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+	
+	Time* EventTime = splitTime(sEventTime);
 	
 	int ID;
 	inputFile >> ID;
@@ -197,7 +223,18 @@ void Company::SaveOutputs() {
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
 {
 	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
-	this->TruckList->enqueue(truck);
+	switch (truck_type) 
+	{
+		case NT:
+			this->NormalTrucksList->enqueue(truck);
+			break;
+		case ST:
+			this->SpecialTrucksList->enqueue(truck);
+			break;
+		case VT:
+			this->VIPTrucksList->enqueue(truck);
+			break;
+	}
 }
 
 void Company::UpdateInterface() {
@@ -257,3 +294,5 @@ void Company::DeleteNormalCargo(int ID) {
 void Company::AddVIPCargo(Cargo* pCargo) {
 	this->VIPCargoList->enqueue(pCargo, pCargo->GetCost());
 }
+
+#endif 

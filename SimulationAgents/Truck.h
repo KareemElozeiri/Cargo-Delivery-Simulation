@@ -1,14 +1,17 @@
 #include "Time.h"
 #include "../Defs.h"
-
+#include "../DataStructures/LinkedList.h"
+#include "Cargo.h"
 class Truck {
 private:
 	TRUCKTYPE truck_type;
-	int capacity;
-	Time checkUpTime;
+	int capacity;		// the number of cargos that the truck can carry at a time
+	Time checkUpTime;	// the time consumed by the truck during maintenance 
 	double speed;
 	Time deliveryInterval; 
-	int jounrneysBeforeCheckUp;
+	int jounrneysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
+
+	LinkedList<Cargo*> cargos;
 
 public:
 	Truck();
@@ -24,6 +27,5 @@ public:
 	int GetJourneysBeforeCheckUp() const;
 
 	void CalculateDeliveryInterval();
-
 
 };
