@@ -162,3 +162,8 @@ Time Time::operator-(int subtracted_hours){
 		exit(1);
 	}
 }
+
+void Time::PrintTime() const
+{
+	std::cout << this->days << ":" << this->days << std::endl;
+}

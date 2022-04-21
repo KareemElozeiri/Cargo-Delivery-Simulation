@@ -26,6 +26,8 @@ public:
 
 	Time operator+(int added_hours);
 	Time operator-(int subtracted_hours);
+	
+	void PrintTime() const;
 
 };
 
