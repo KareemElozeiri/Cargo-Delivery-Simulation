@@ -64,5 +64,11 @@ public:
 	Cargo* FindNormalCargo(int ID);
 	void DeleteNormalCargo(int ID);
 	void AddVIPCargo(Cargo* pCargo);
+
+	/*
+	* Function: ExecuteUpcomingEvent.
+	* Executes the upcoming event if its time has come.
+	*/
+	bool ExecuteUpcomingEvent();
 };
 #endif

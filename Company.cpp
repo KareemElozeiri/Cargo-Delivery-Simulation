@@ -42,12 +42,14 @@ void Company::Simulate() {
 	while (true) {
 		this->TimestepNum = this->TimestepNum + 1;
 
-		//execute next event
-
-
-		if (this->TimestepNum.GetTotalHours() % 5 == 0) {
-			//move cargo 
+		// Execute the upcoming event
+		if (this->ExecuteUpcomingEvent()) {
+			break;
 		}
+		// if (this->TimestepNum.GetTotalHours() % 5 == 0) {
+		// 	//move cargo
+
+		// }
 
 		// print current info
 
@@ -314,6 +316,22 @@ void Company::DeleteNormalCargo(int ID) {
 */
 void Company::AddVIPCargo(Cargo* pCargo) {
 	this->VIPCargoList->enqueue(pCargo, pCargo->GetCost());
+}
+
+bool Company::ExecuteUpcomingEvent() {
+	Event* tempEvent = nullptr;
+	this->EventList->peek(tempEvent);
+	// Total Hours of the Event & Timestep Relative to the Starting Point.
+	int EventTotalHours = tempEvent->GetEventTime().GetTotalHours();
+	int TimestepTotalHours = TimestepNum.GetTotalHours();
+	// Executes the event in case the current time is equal to the event time.
+	if (TimestepTotalHours >= EventTotalHours) {
+		tempEvent->Execute();
+		EventList->dequeue(tempEvent);
+		delete tempEvent;
+		return true;
+	}
+	return false;
 }
 
 #endif 
