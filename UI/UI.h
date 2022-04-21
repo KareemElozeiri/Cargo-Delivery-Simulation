@@ -3,7 +3,14 @@
 
 #include <iostream>
 #include <string>
-#include <unistd.h>
+
+// Conditional Include for the direct/stat.h depending on the OS
+#ifdef _WIN32
+#include <direct.h>
+#elif defined __linux__
+#include <sys/stat.h>
+#endif
+
 #include "../Defs.h"
 using namespace std;
 
