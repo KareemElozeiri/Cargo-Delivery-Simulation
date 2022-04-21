@@ -92,6 +92,14 @@ void Company::LoadInputs() {
 		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed);
 
 
+	////////////////// Reading Auto Promotion Limit & Maximum waiting hours ////////////////
+	int Apl, MaxW;
+	inputFile >> Apl >> MaxW;
+
+	this->AutoPromotionLimit = Time(Apl, 0);
+	this->MaxWaitingTime = Time(MaxW);
+
+
 	///////////////// Loading events ///////////////////
 
 	//reading events from the file
@@ -116,6 +124,9 @@ void Company::LoadInputs() {
 			ReadCancellationEvent(inputFile);
 	}
 
+	Truck* t = new Truck();
+	this->NormalTrucksList->dequeue(t);
+	std::cout << t->GetSpeed();
 
 	inputFile.close();
 

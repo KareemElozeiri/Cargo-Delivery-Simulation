@@ -5,8 +5,8 @@
 #include "Events/Event.h"
 #include "SimulationAgents/Cargo.h"
 #include "SimulationAgents/Truck.h"
-#include "UI/UI.h"
 #include "SimulationAgents/Time.h"
+#include "UI/UI.h"
 
 #include <iostream>
 #include <fstream>
@@ -29,7 +29,8 @@ private:
 	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* VIPTrucksList = new Queue<Truck*>;
 
-
+	Time AutoPromotionLimit; // supposed to read days from the input file
+	Time MaxWaitingTime;	 // the maximum time that a truck should wait before loading cargo || supposed to read hours from the input file
 
 	string inputFileName = "input.txt";
 	int NumOfEvents;
