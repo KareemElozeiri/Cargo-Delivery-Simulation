@@ -73,4 +73,8 @@ MODE UI::GetAppMode() const {
     return this->AppMode;
 }
 
+void UI::PrintMsg(const string &msg) const {
+    cout << msg << endl;
+}
+
 #endif
