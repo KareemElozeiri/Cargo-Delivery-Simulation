@@ -7,7 +7,7 @@
 #include "SimulationAgents/Truck.h"
 #include "UI/UI.h"
 #include "SimulationAgents/Time.h"
-
+#include "custom/customs.h" //to get split function
 #include <iostream>
 #include <fstream>
 

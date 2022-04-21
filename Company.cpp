@@ -138,10 +138,8 @@ void Company::ReadReadyEvent(std::ifstream& inputFile)
 
 	string sEventTime;
 	inputFile >> sEventTime;
-	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
-	
+	Time* EventTime = splitTime(sEventTime);
+
 	int ID;
 	inputFile >> ID;
 	int Distance;
@@ -161,8 +159,8 @@ void Company::ReadCancellationEvent(std::ifstream& inputFile)
 	string sEventTime;
 	inputFile >> sEventTime;
 	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+
+	Time* EventTime = splitTime(sEventTime);
 
 	int ID;
 	inputFile >> ID;
@@ -175,8 +173,8 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 	string sEventTime;
 	inputFile >> sEventTime;
 	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+	
+	Time* EventTime = splitTime(sEventTime);
 	
 	int ID;
 	inputFile >> ID;
