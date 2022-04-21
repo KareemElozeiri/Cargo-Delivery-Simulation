@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataStructures\LinkedList.cpp" />
     <ClCompile Include="DataStructures\PQueue.cpp" />
     <ClCompile Include="Events\CancellationEvent.cpp" />
     <ClCompile Include="DataStructures\Queue.cpp" />

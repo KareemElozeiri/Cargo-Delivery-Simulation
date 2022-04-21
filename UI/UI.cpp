@@ -39,6 +39,14 @@ void UI::SetAppMode() {
 
 void UI::GetIOFiles() {
     string InputFile;
+    
+    
+    
+    
+    
+    
+    
+    
     string OutputFile;
 
     // Getting the user's input file name.
@@ -49,25 +57,25 @@ void UI::GetIOFiles() {
     cout << "[!]: The Input File Should Be Inside The Loads Directory" << endl;
     cout << "[!]: The Output File Should Be Inside The Outputs Directory" << endl;
 
-    do {
-        cout << "[+]: Input File Name: ";
-        cin >> InputFile;
-    }
-    while (!FileExists("Loads/" + InputFile));
+     do {
+         cout << "[+]: input file name: ";
+         cin >> inputfile;
+     }
+     while (!fileexists("loads/" + inputfile));
 
-    do {
-        cout << "[+]: Output File Name: ";
-        cin >> OutputFile;
-    }
-    while (!FileExists("Outputs/" + InputFile));
+     do {
+         cout << "[+]: output file name: ";
+         cin >> outputfile;
+     }
+     while (!fileexists("outputs/" + inputfile));
 
     this->InputFileName = "Loads/" + InputFile;
     this->OutputFileName = "Outputs/" + OutputFile;
 }
 
-bool UI::FileExists(const string fileName) const {
-    return (access(fileName.c_str(), F_OK) != -1);
-}
+ bool UI::FileExists(const string fileName) const {
+     return (access(fileName.c_str(), F_OK) != -1);
+ }
 
 MODE UI::GetAppMode() const {
     return this->AppMode;

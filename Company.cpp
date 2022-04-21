@@ -78,6 +78,22 @@ void Company::LoadInputs() {
 	inputFile >> JourNum;
 	inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
 
+
+	//adding VIP trucks
+	for (int i = 0; i < vTrucksNum; i++)
+		this->AddTruck(VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed);
+
+	//adding special trucks
+	for (int i = 0; i < sTrucksNum; i++)
+		this->AddTruck(ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed);
+
+	//adding normal trucks
+	for (int i = 0; i < sTrucksNum; i++)
+		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed);
+
+
+	///////////////// Loading events ///////////////////
+
 	//reading events from the file
 	
 	/// loops on each event and takes the letter to check which event function to call.
@@ -100,18 +116,6 @@ void Company::LoadInputs() {
 			ReadCancellationEvent(inputFile);
 	}
 
-
-	//adding VIP trucks
-	for (int i = 0; i < vTrucksNum; i++)
-		this->AddTruck(VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed);
-
-	//adding special trucks
-	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed);
-
-	//adding normal trucks
-	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed);
 
 	inputFile.close();
 
