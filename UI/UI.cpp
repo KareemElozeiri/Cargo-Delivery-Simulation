@@ -74,7 +74,8 @@ string UI::GetOutputFilePath() const {
 }
 
 bool UI::FileExists(const string fileName) const {
-    return (access(fileName.c_str(), F_OK) != -1);
+    struct stat buffer;   
+    return (stat (fileName.c_str(), &buffer) == 0); 
 }
 
 MODE UI::GetAppMode() const {
