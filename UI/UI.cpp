@@ -73,9 +73,22 @@ void UI::GetIOFiles() {
     this->OutputFileName = "Outputs/" + OutputFile;
 }
 
+
  bool UI::FileExists(const string fileName) const {
      return (access(fileName.c_str(), F_OK) != -1);
  }
+
+string UI::GetInputFilePath() const {
+    return this->InputFileName;
+}
+
+string UI::GetOutputFilePath() const {
+    return this->OutputFileName;
+}
+
+bool UI::FileExists(const string fileName) const {
+    return (access(fileName.c_str(), F_OK) != -1);
+}
 
 MODE UI::GetAppMode() const {
     return this->AppMode;
