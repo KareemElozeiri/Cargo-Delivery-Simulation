@@ -1,9 +1,7 @@
+#ifndef  Comapny_CPP
+#define Comapny_CPP
+
 #include "Company.h"
-
-#include "Events/CancellationEvent.h"
-#include "Events/PromotionEvent.h"
-#include "Events/ReadyEvent.h"
-
 
 
 Company::Company() {
@@ -110,12 +108,20 @@ void Company::LoadInputs() {
 	/// Cancellation: 2 params
 	/// Promotional: 3 params
 	
+	/// <summary>
+	/// This reads Line 8 in input file
+	/// Based on the number of file there will be number of loops below
+	/// </summary>
 	inputFile >> NumOfEvents;
 
 	for (int i = 0; i < NumOfEvents; i++) {
 		char EventChar;
 		inputFile >> EventChar;
 
+		/// <summary>
+		/// based on the the first letter in the line, it will go on the corresponding function.
+		/// it will continue reading the file by passing the file by reference.
+		/// </summary>
 		if (EventChar == 'R')
 			ReadReadyEvent(inputFile);
 		else if (EventChar == 'P')
@@ -127,6 +133,7 @@ void Company::LoadInputs() {
 	Truck* t = new Truck();
 	this->NormalTrucksList->dequeue(t);
 	std::cout << t->GetSpeed();
+
 
 	inputFile.close();
 
@@ -149,10 +156,8 @@ void Company::ReadReadyEvent(std::ifstream& inputFile)
 
 	string sEventTime;
 	inputFile >> sEventTime;
-	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
-	
+	Time* EventTime = splitTime(sEventTime);
+
 	int ID;
 	inputFile >> ID;
 	int Distance;
@@ -172,8 +177,8 @@ void Company::ReadCancellationEvent(std::ifstream& inputFile)
 	string sEventTime;
 	inputFile >> sEventTime;
 	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+
+	Time* EventTime = splitTime(sEventTime);
 
 	int ID;
 	inputFile >> ID;
@@ -186,8 +191,8 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 	string sEventTime;
 	inputFile >> sEventTime;
 	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+	
+	Time* EventTime = splitTime(sEventTime);
 	
 	int ID;
 	inputFile >> ID;
@@ -283,3 +288,5 @@ void Company::DeleteNormalCargo(int ID) {
 void Company::AddVIPCargo(Cargo* pCargo) {
 	this->VIPCargoList->enqueue(pCargo, pCargo->GetCost());
 }
+
+#endif 

@@ -1,13 +1,19 @@
-#pragma once
+#ifndef  Company_H
+#define Company_H
+
+
 #include "Defs.h"
 #include "DataStructures/PQueue.h"
 #include "DataStructures/LinkedList.h"
 #include "Events/Event.h"
+#include "Events/CancellationEvent.h"
+#include "Events/PromotionEvent.h"
+#include "Events/ReadyEvent.h"
 #include "SimulationAgents/Cargo.h"
 #include "SimulationAgents/Truck.h"
 #include "SimulationAgents/Time.h"
 #include "UI/UI.h"
-
+#include "custom/customs.h" //to get split function
 #include <iostream>
 #include <fstream>
 
@@ -55,3 +61,4 @@ public:
 	void DeleteNormalCargo(int ID);
 	void AddVIPCargo(Cargo* pCargo);
 };
+#endif

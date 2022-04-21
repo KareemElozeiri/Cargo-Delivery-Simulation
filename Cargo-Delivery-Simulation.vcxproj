@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="custom\customs.cpp" />
     <ClCompile Include="DataStructures\LinkedList.cpp" />
     <ClCompile Include="DataStructures\PQueue.cpp" />
     <ClCompile Include="Events\CancellationEvent.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="UI\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="custom\customs.h" />
     <ClInclude Include="Events\CancellationEvent.h" />
     <ClInclude Include="DataStructures\PQNode.h" />
     <ClInclude Include="DataStructures\PQueue.h" />
