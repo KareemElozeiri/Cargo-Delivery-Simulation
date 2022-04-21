@@ -59,7 +59,7 @@ void UI::GetIOFiles() {
         cout << "[+]: Output File Name: ";
         cin >> OutputFile;
     }
-    while (!FileExists("Outputs/" + InputFile));
+    while (!FileExists("Outputs/" + OutputFile));
 
     this->InputFileName = "Loads/" + InputFile;
     this->OutputFileName = "Outputs/" + OutputFile;
@@ -74,8 +74,13 @@ string UI::GetOutputFilePath() const {
 }
 
 bool UI::FileExists(const string fileName) const {
-    struct stat buffer;   
-    return (stat (fileName.c_str(), &buffer) == 0); 
+    ifstream file;
+    file.open(fileName);
+    bool state = false;
+    if (file)
+        state = true;
+    file.close();
+    return state;
 }
 
 MODE UI::GetAppMode() const {
