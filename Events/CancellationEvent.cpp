@@ -6,3 +6,5 @@
 void CancellationEvent::Execute() {
 	AppMngr->DeleteNormalCargo(ID);
 }
+
+#endif

@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include <unistd.h>
 #include "../Defs.h"
 using namespace std;
 
@@ -58,6 +57,12 @@ public:
 	* Produces the simulation output file.
 	*/
     void SaveOutput() const;
+
+    /*
+	* Function: PrintMsg.
+	* Prints a message to the CLI.
+	*/
+    void PrintMsg(const string &msg) const;
 };
 
 #endif
