@@ -56,7 +56,7 @@ void Company::LoadInputs() {
 
 	//checking that the stream open successfully 
 	if (!inputFile.is_open()) {
-		//this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
+		this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
 		exit(1);
 	}
 
@@ -122,18 +122,24 @@ void Company::LoadInputs() {
 		/// based on the the first letter in the line, it will go on the corresponding function.
 		/// it will continue reading the file by passing the file by reference.
 		/// </summary>
-		if (EventChar == 'R')
-			ReadReadyEvent(inputFile);
-		else if (EventChar == 'P')
-			ReadPromotionEvent(inputFile);
-		else if (EventChar == 'C')
-			ReadCancellationEvent(inputFile);
+		switch (EventChar) 
+		{
+			case 'R':
+				ReadReadyEvent(inputFile);
+				break;
+			case 'P':
+				ReadPromotionEvent(inputFile);
+				break;
+			case 'C':
+				ReadCancellationEvent(inputFile);
+				break;
+		}
+	
 	}
 
 	Truck* t = new Truck();
 	this->NormalTrucksList->dequeue(t);
 	std::cout << t->GetSpeed();
-
 
 	inputFile.close();
 

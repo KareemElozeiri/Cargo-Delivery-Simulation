@@ -59,3 +59,5 @@ void Truck::CalculateDeliveryInterval()
 	// we need to connect it to the cargo that it is carrying 
 	// find the furthest cargo that it is carrying and perform the equation on it
 }
+
+
