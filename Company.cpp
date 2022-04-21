@@ -225,6 +225,10 @@ Cargo* Company::FindNormalCargo(int ID) {
 	return nullptr;
 }
 
+/*
+	- Can be optimized.
+*/
+
 void Company::DeleteNormalCargo(int ID) {
 	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
 	Node<Cargo*>* Prev = nullptr;
@@ -247,6 +251,9 @@ void Company::DeleteNormalCargo(int ID) {
 	
 }
 
+/*
+	- Priority doesn't only depend on the cost. *Need to change*
+*/
 void Company::AddVIPCargo(Cargo* pCargo) {
 	this->VIPCargoList->enqueue(pCargo, pCargo->GetCost());
 }

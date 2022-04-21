@@ -3,6 +3,11 @@
 
 #include "PromotionEvent.h"
 
+/*
+	- Hash map may optimize this.
+	- Hash map with an array.
+*/
+
 void PromotionEvent::Execute()
 {
 	Cargo* pCargo = nullptr;
