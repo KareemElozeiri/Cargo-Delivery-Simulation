@@ -5,7 +5,7 @@
 
 
 Company::Company() {
-	this->TimestepNum = 0;
+	this->TimestepNum = Time();
 
 	this->pUI = new UI;
 
@@ -39,15 +39,23 @@ void Company::Simulate() {
 	(The cargo you choose to delete from each type must be the first cargo that should be assigned to an available truck in phase 2.)
 	Print all applicable info to the interface as described in �Program Interface� section without truck info.
 	Notes:The simulation function stops when there are no more events and all cargos are in delivered list(s)*/
+	while (true) {
+		this->TimestepNum = this->TimestepNum + 1;
 
-	this->TimestepNum += 1;
+		//execute next event
 
-	// Check Eventlist for any occuring ones
 
-	if (this->TimestepNum == 5) {
-		this->TimestepNum = 0;
-		// 4-b waiting cargo list operation
+		if (this->TimestepNum.GetTotalHours() % 5 == 0) {
+			//move cargo 
+		}
+
+		// print current info
+
+		//check break conditions
 	}
+
+	
+	
 }
 
 void Company::LoadInputs() {

@@ -21,14 +21,14 @@ class Company
 {
 
 private:
-	int TimestepNum; // increment on each step (check on 5 and reset)
+	Time TimestepNum; // increment on each step (check on 5 and reset)
 
 	UI* pUI; // UI object
 
 	Queue<Event*>* EventList = new Queue<Event*>; 
 	LinkedList<Cargo*>* NormalCargoList = new LinkedList<Cargo*>; // move cargo if found (using id of cargo) 
 	Queue<Cargo*>* SpecialCargoList = new Queue<Cargo*>;
-	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>; //
+	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>;
 	Queue<Cargo*>* CargoWaitList = new Queue<Cargo*>;
 	//// Trucks queues
 	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;

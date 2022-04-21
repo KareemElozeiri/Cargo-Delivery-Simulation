@@ -15,7 +15,7 @@ public:
 	
 	int GetDay() const;
 	int GetHour() const;
-
+	int GetTotalHours() const;
 	
 	void SetDay(int d);
 	void SetHour(int h);

@@ -40,6 +40,11 @@ Time::Time(int h)
 int Time::GetDay() const { return this->days; }
 int Time::GetHour() const { return this->hours; }
 
+int Time::GetTotalHours() const
+{
+	return this->hours + 24 * this->days;
+}
+
 void Time::SetDay(int d) {
 	try 
 	{
