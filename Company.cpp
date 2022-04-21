@@ -201,7 +201,18 @@ void Company::SaveOutputs() {
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
 {
 	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
-	this->TruckList->enqueue(truck);
+	switch (truck_type) 
+	{
+		case NT:
+			this->NormalTrucksList->enqueue(truck);
+			break;
+		case ST:
+			this->SpecialTrucksList->enqueue(truck);
+			break;
+		case VT:
+			this->VIPTrucksList->enqueue(truck);
+			break;
+	}
 }
 
 void Company::UpdateInterface() {

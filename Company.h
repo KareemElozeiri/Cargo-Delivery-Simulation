@@ -24,7 +24,12 @@ private:
 	Queue<Cargo*>* SpecialCargoList = new Queue<Cargo*>;
 	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>; //
 	Queue<Cargo*>* CargoWaitList = new Queue<Cargo*>;
-	Queue<Truck*>* TruckList = new Queue<Truck*>;
+	//// Trucks queues
+	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;
+	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;
+	Queue<Truck*>* VIPTrucksList = new Queue<Truck*>;
+
+
 
 	string inputFileName = "input.txt";
 	int NumOfEvents;
