@@ -1,6 +1,7 @@
 #include "Time.h"
 #include "../Defs.h"
 #include "../DataStructures/LinkedList.h"
+#include "../DataStructures/Node.h"
 #include "Cargo.h"
 class Truck {
 private:
