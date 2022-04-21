@@ -3,7 +3,6 @@
 
 #include "Company.h"
 
-
 Company::Company() {
 	this->TimestepNum = Time();
 
@@ -20,6 +19,7 @@ Company::~Company() {
 bool Company::CheckExitStatus() {
 	// check for application status 
 	// The simulation function stops when there are no more events and all cargos are in delivered list
+
 	return false;
 }
 
@@ -254,7 +254,20 @@ void Company::AddEvent(Event* pEvent) {
 }
 
 void Company::AddWaitCargo(Cargo* pCargo) {
-	this->CargoWaitList->enqueue(pCargo);
+	CARGOTYPE cargo_type = pCargo->GetType();
+	switch (cargo_type)
+	{
+		case CARGOTYPE::N:
+			this->NormalCargoList->Insert(pCargo);
+			break;
+		case CARGOTYPE::S:
+			this->SpecialCargoList->enqueue(pCargo);
+			break;
+		case CARGOTYPE::V:
+			this->AddVIPCargo(pCargo);
+			break;
+
+	}
 }
 
 Cargo* Company::FindNormalCargo(int ID) {

@@ -62,6 +62,22 @@ void LinkedList<T>::InsertBeg(const T& data)
 	Head = R;
 }
 
+template<typename T>
+void LinkedList<T>::Insert(const T& data)
+{
+	Node<T>* newNode = new Node<T>(data);
+	if (this->Head == nullptr) this->Head = newNode;
+	else 
+	{
+		Node<T>* curr = this->Head;
+		
+		while (curr->getNext() != nullptr) curr = curr->getNext();
+		curr->setNext(newNode);
+
+	}
+}
+
+
 /*
 * Function: DeleteAll.
 * Deletes all nodes of the list.
@@ -109,18 +125,6 @@ void LinkedList<T>::DeleteLast()
 	}
 }
 
-//searches for a given value in the list, returns true if found; false otherwise.
-template <typename T>
-bool LinkedList<T>::Find(T Key) const {
-	Node<T>* currentNode = this->Head;
-	while (currentNode.getNext() != nullptr) {
-		if (currentNode.getItem() == Key) {
-			return true;
-		}
-		currentNode = currentNode.getNext();
-	}
-	return false;
-};
 
 //deletes the first node with the given value(if found) and returns true
 //if not found, returns false
@@ -146,35 +150,6 @@ bool LinkedList<T>::DeleteNode(T value) {
 		}
 	}
 	return false;
-}
-
-//insert in a sorted list
-template <typename T>
-bool LinkedList<T>::InsertSorted(T item) {
-	if (this->Head->getItem() > item) {
-		Node<T>* oldHead = this->Head;
-		Node<T>* newHead = new Node<T>(item);
-		delete this->Head;
-		this->Head = nullptr;
-		this->Head = newHead;
-		this->Head->setNext(oldHead);
-		return true;
-	}
-
-	Node<T>* prev = this->Head;
-	Node<T>* next = this->Head->getNext();
-	Node<T>* newNode = new Node<T>(item);
-	while (next != nullptr) {
-		if (item >= prev->getItem() && item <= next->getItem()) {
-			prev->setNext(newNode);
-			newNode->setNext(next);
-			return true;
-		}
-		prev = prev->getNext();
-		next = next->getNext();
-	}
-	next->setNext(newNode);
-
 }
 
 #endif

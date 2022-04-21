@@ -19,12 +19,10 @@ public:
 	void SetHead(Node<T>* Head);
 
 	void PrintList() const;
-	
-	bool Find(T key) const;
-	
+		
 
 	void InsertBeg(const T& data);
-	bool InsertSorted(T item);
+	void Insert(const T& data);
 
 	void DeleteAll();
 	void DeleteFirst();
@@ -32,7 +30,6 @@ public:
 	bool DeleteNode(T value);
 	
 
-	bool ShiftLargest();
 	
 };
 
