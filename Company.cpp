@@ -402,5 +402,4 @@ std::string Company::GetCurrentTime() {
 	return to_string(day) + ":" + to_string(hours);
 }
 
-
 #endif 
