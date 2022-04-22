@@ -34,18 +34,13 @@ void Company::Simulate() {
 
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
-		this->NormalCargoList->PrintList();
 		// if (this->TimestepNum.GetTotalHours() % 5 == 0) {
 		// 	//move cargo
 
 		// }
 
 		// print current info
-		this->UpdateInterface();
-
-		if (!(this->NormalCargoList->isEmpty())) {
-			cout << this->NormalCargoList->GetHead()->getItem()->GetCost() << endl;
-		}		
+		this->UpdateInterface();		
 
 		//check break conditions
 		if (this->CheckExitStatus())
