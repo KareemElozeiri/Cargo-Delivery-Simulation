@@ -13,14 +13,14 @@ Truck::Truck()
 {
 }
 
-Truck::Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
+Truck::Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
 {
 	this->truck_type = truck_type;
 	this->capacity = capacity;
 	this->checkUpTime = checkUpTime;
 	this->speed = speed;
 	this->jounrneysBeforeCheckUp = journeysBeforeCheckUp;
-
+	this->ID = id;
 	this->CalculateDeliveryInterval();
 }
 
@@ -74,4 +74,26 @@ void Truck::CalculateDeliveryInterval()
 
 }
 
+int Truck::GetID() const
+{
+	return this->ID;
+}
 
+void Truck::SetID(int id)
+{
+	this->ID = id;
+}
+
+std::ostream& operator<<(std::ostream& os , const Truck* truck)
+{
+	os << truck->GetID();
+	return os;
+}
+
+
+std::ostream& operator<<(std::ostream& os, const Truck truck) 
+{
+	os << truck.GetID();
+
+	return os;
+}

@@ -71,3 +71,16 @@ void Cargo::SetCost(double p) {
 void Cargo::SetID(int p) {
 	this->cargoID = p;
 }
+
+// overloading the cout operator for the cargo 
+std::ostream& operator<<(std::ostream& os, const Cargo* cargo)
+{
+	os << cargo->GetID();
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Cargo cargo)
+{
+	os << cargo.GetID();
+	return os;
+}
