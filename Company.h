@@ -77,7 +77,7 @@ public:
 	*
 	* Returns: string.
 	*/
-	string Company::GetInteractiveModeData() const;
+	std::string GetInteractiveModeData() const;
 
 	/*
 	* Function: GetCurrentTime.
@@ -85,6 +85,6 @@ public:
 	*
 	* Returns: string.
 	*/
-	string GetCurrentTime();
+	std::string GetCurrentTime();
 };
 #endif

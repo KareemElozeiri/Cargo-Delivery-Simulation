@@ -264,10 +264,27 @@ void Company::UpdateInterface() {
     }
 }
 
-string Company::GetInteractiveModeData() const {
-	
-}
+std::string Company::GetInteractiveModeData() const {
+	string interactive_mode_data;
 
+	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
+		InCheckupTrucksCount, DeliveredCargosCount;
+
+	WaitingCargosCount = this->NormalCargoList->getCount() + 
+		this->SpecialCargoList->getCount() +
+		this->VIPCargoList->getCount();
+
+	LoadingTrucksCount = this->NormalTrucksList->getCount() +
+		this->SpecialTrucksList->getCount() +
+		this->VIPTrucksList->getCount();
+
+	interactive_mode_data += WaitingCargosCount + " Waiting Cargos: ";
+	interactive_mode_data += "[" + this->NormalCargoList->getData() + "] ";
+	interactive_mode_data += "(" + this->SpecialCargoList->getData() + "} ";
+	interactive_mode_data += "{" + this->VIPCargoList->getData() + "}";
+	
+	return interactive_mode_data;
+}
 
 void Company::AddEvent(Event* pEvent) {
 	this->EventList->enqueue(pEvent);
@@ -352,7 +369,7 @@ bool Company::ExecuteUpcomingEvent() {
 	return false;
 }
 
-string Company::GetCurrentTime() {
+std::string Company::GetCurrentTime() {
 	int hours = this->TimestepNum.GetHour();
 	int day = this->TimestepNum.GetDay();
 	
