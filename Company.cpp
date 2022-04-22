@@ -249,8 +249,25 @@ void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int
 }
 
 void Company::UpdateInterface() {
-	//pUI->Step(this);
+	// Run the appropriate interface function based on the current mode.
+    switch (this->pUI->GetAppMode())
+    {
+    case INTER:
+        pUI->InteractiveInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
+        break;
+    case STEP:
+        pUI->StepInterfaceUpdate();
+        break;
+    case SILENT:
+        pUI->SilentInterfaceUpdate();
+        break;
+    }
 }
+
+string Company::GetInteractiveModeData() const {
+	
+}
+
 
 void Company::AddEvent(Event* pEvent) {
 	this->EventList->enqueue(pEvent);
@@ -333,6 +350,13 @@ bool Company::ExecuteUpcomingEvent() {
 		return true;
 	}
 	return false;
+}
+
+string Company::GetCurrentTime() {
+	int hours = this->TimestepNum.GetHour();
+	int day = this->TimestepNum.GetDay();
+	
+	return to_string(hours) + ":" + to_string(day);
 }
 
 #endif 

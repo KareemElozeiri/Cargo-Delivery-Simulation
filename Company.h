@@ -70,5 +70,21 @@ public:
 	* Executes the upcoming event if its time has come.
 	*/
 	bool ExecuteUpcomingEvent();
+
+	/*
+	* Function: GetInteractiveModeData.
+	* Returns the interactive mode data to be printed on the CLI.
+	*
+	* Returns: string.
+	*/
+	string Company::GetInteractiveModeData() const;
+
+	/*
+	* Function: GetCurrentTime.
+	* Returns the current time step.
+	*
+	* Returns: string.
+	*/
+	string GetCurrentTime();
 };
 #endif
