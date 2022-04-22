@@ -4,7 +4,7 @@
 #include "UI.h"
 
 UI::UI() {
-    this->AppMode = INTER;
+    this->AppMode = MODE::INTER;
     this->GetIOFiles();
     this->SetAppMode();
 }
@@ -12,9 +12,9 @@ UI::UI() {
 UI::~UI() {}
 
 void UI::SetAppMode() {
-    int ModeChoice = -1;
+    int iModeChoice = -1;
     // Getting the user's choice of the app mode.
-    while(ModeChoice < 0 || ModeChoice > 2) {
+    while(iModeChoice < 0 || iModeChoice > 2) {
         cout << "----------------------------" << endl;
         cout << "SELECT THE APPLICATION MODE:" << endl;
         cout << "----------------------------" << endl;
@@ -22,18 +22,20 @@ void UI::SetAppMode() {
         cout << "[1]: Step-By-Step Mode" << endl;
         cout << "[2]: Silent Mode" << endl;
         cout << ">> ";
-        cin >> ModeChoice;
+        cin >> iModeChoice;
     }
+    
     // Assigning the correct value to the AppMode variable.
-    switch (ModeChoice) {
+    switch (iModeChoice) {
         case 0:
-            this->AppMode = INTER;
+            this->AppMode = MODE::INTER;
             break;
         case 1:
-            this->AppMode = STEP;
+            this->AppMode = MODE::STEP;
             break;
         default:
-            this->AppMode = SILENT;
+            this->AppMode = MODE::SILENT;
+            break;
     }
 }
 
