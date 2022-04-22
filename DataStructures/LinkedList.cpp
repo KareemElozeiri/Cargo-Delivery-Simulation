@@ -173,7 +173,7 @@ std::string LinkedList<T>::getData() const {
 	Node<T>* loopingPtr = this->Head;
 	while (loopingPtr != nullptr)
 	{
-		LinkedListData += this->loopingPtr;
+		LinkedListData += loopingPtr->getItem();
 		if (loopingPtr->getNext() != nullptr) {
 			LinkedListData += ",";
 		}

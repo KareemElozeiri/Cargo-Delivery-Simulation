@@ -74,7 +74,7 @@ std::string Queue<T>::getData() const {
 	Node<T>* loopingPtr = this->Head;
 	while (loopingPtr != nullptr)
 	{
-		QueueData += this->loopingPtr;
+		QueueData += loopingPtr->getItem();
 		if (loopingPtr->getNext() != nullptr) {
 			QueueData += ",";
 		}
