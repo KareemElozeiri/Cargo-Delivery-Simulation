@@ -74,4 +74,13 @@ void Truck::CalculateDeliveryInterval()
 
 }
 
+std::ostream& operator<<(std::ostream& os , const Truck* truck)
+{
 
+}
+
+
+std::ostream& operator<<(std::ostream& os, const Truck truck) 
+{
+
+}
