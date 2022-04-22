@@ -59,9 +59,7 @@ void Company::Simulate() {
 
 		// print current info
 		this->UpdateInterface();
-
 			
-		this->UpdateInterface();		
 
 		//check break conditions
 		if (this->CheckExitStatus())
