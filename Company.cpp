@@ -351,16 +351,16 @@ void Company::DeleteNormalCargo(int ID) {
 	Node<Cargo*>* prevPtr = loopingPtr;
 	if (this->NormalCargoList->GetHead() == loopingPtr) {
 		this->NormalCargoList->SetHead(loopingPtr->getNext());
-		loopingPtr = nullptr;
 		delete loopingPtr;
+		loopingPtr = nullptr;
 		return;		
 	}
 
 	while (loopingPtr != nullptr) {
 		if (loopingPtr->getItem()->GetID() == ID) {
 			prevPtr->setNext(loopingPtr->getNext());
-			loopingPtr = nullptr;
 			delete loopingPtr;
+			loopingPtr = nullptr;
 			return;
 		}
 	}
@@ -401,24 +401,5 @@ std::string Company::GetCurrentTime() {
 	return to_string(day) + ":" + to_string(hours);
 }
 
-void Company::AddDeliveredCargos(Cargo* pCargo)
-{
-	if (pCargo != nullptr) {
-
-		CARGOTYPE ct = pCargo->GetType();
-		switch (ct)
-		{
-		case CARGOTYPE::N:
-			this->DeliveredNormalCargoList->Insert(pCargo);
-			break;
-		case CARGOTYPE::S:
-			this->DeliveredSpecialCargoList->enqueue(pCargo);
-			break;
-		case CARGOTYPE::V:
-			this->AddVIPCargo(pCargo);
-			break;
-		}
-	}
-}
 
 #endif 

@@ -94,6 +94,5 @@ public:
 	* Returns: string.
 	*/
 	std::string GetCurrentTime();
-	void AddDeliveredCargos(Cargo* pCargo);
 };
 #endif
