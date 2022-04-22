@@ -29,21 +29,6 @@ bool Company::CheckExitStatus() {
 }
 
 void Company::Simulate() {
-	/*Simple Simulator function for Phase 1. 
-	The main purpose of this function is to test different 
-	lists and make sure all operations on them are working properly. 
-	This function should: Perform any needed initializations
-	Call file loading function
-	At each timestep do the following:
-	Get the events that should be executed at current timestep
-	For Preparation event,
-	generate a cargo and add it to the appropriate waiting cargos list.
-	For cancellation event, delete the corresponding normal cargo (if found)
-	For promotion event, move cargo (if found) from normal to VIP.
-	Each 5 timesteps, move a cargo of each type from waiting-cargo list(s) to delivered list(s) 
-	(The cargo you choose to delete from each type must be the first cargo that should be assigned to an available truck in phase 2.)
-	Print all applicable info to the interface as described in �Program Interface� section without truck info.
-	Notes:The simulation function stops when there are no more events and all cargos are in delivered list(s)*/
 	while (true) {
 		this->TimestepNum = this->TimestepNum + 1;
 
@@ -56,7 +41,11 @@ void Company::Simulate() {
 		// }
 
 		// print current info
-		
+		this->UpdateInterface();
+
+		if (!(this->NormalCargoList->isEmpty())) {
+			cout << this->NormalCargoList->GetHead()->getItem()->GetCost() << endl;
+		}		
 
 		//check break conditions
 		if (this->CheckExitStatus())
@@ -150,7 +139,7 @@ void Company::LoadInputs() {
 			case 'P':
 				ReadPromotionEvent(inputFile);
 				break;
-			case 'C':
+			case 'X':
 				ReadCancellationEvent(inputFile);
 				break;
 		}
@@ -159,7 +148,6 @@ void Company::LoadInputs() {
 
 	this->pUI->PrintMsg("Input file successfully loaded!");
 	inputFile.close();
-
 }
 
 
@@ -255,7 +243,44 @@ void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int
 }
 
 void Company::UpdateInterface() {
-	//pUI->Step(this);
+	// Run the appropriate interface function based on the current mode.
+    switch (this->pUI->GetAppMode())
+    {
+    case INTER:
+        pUI->InteractiveInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
+        break;
+    case STEP:
+        pUI->StepInterfaceUpdate();
+        break;
+    case SILENT:
+        pUI->SilentInterfaceUpdate();
+        break;
+    }
+}
+
+std::string Company::GetInteractiveModeData() const {
+	string interactive_mode_data;
+	string separator = "\n--------------------------------------------------";
+
+	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
+		InCheckupTrucksCount, DeliveredCargosCount;
+
+	WaitingCargosCount = this->NormalCargoList->getCount() + 
+		this->SpecialCargoList->getCount() +
+		this->VIPCargoList->getCount();
+
+	LoadingTrucksCount = this->NormalTrucksList->getCount() +
+		this->SpecialTrucksList->getCount() +
+		this->VIPTrucksList->getCount();
+
+	// Waiting Cargos Line:
+	interactive_mode_data += WaitingCargosCount + " Waiting Cargos: ";
+	interactive_mode_data += "[" + this->NormalCargoList->getData() + "] ";
+	interactive_mode_data += "(" + this->SpecialCargoList->getData() + ") ";
+	interactive_mode_data += "{" + this->VIPCargoList->getData() + "}";
+	interactive_mode_data += separator;
+	
+	return interactive_mode_data;
 }
 
 void Company::AddEvent(Event* pEvent) {
@@ -297,23 +322,23 @@ Cargo* Company::FindNormalCargo(int ID) {
 */
 
 void Company::DeleteNormalCargo(int ID) {
-	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
-	Node<Cargo*>* Prev = nullptr;
 
-	while (Head != nullptr) {
-		if (Head->getItem()->GetID() == ID) {
-			if (this->NormalCargoList->GetHead() == Head) {
-				this->NormalCargoList->SetHead(Head->getNext());
-			}
-			else {
-				Prev->setNext(Head->getNext());
-			}
-			delete Head->getItem();
-			delete Head;
-			break;
+	Node<Cargo*>* loopingPtr = this->NormalCargoList->GetHead();
+	Node<Cargo*>* prevPtr = loopingPtr;
+	if (this->NormalCargoList->GetHead() == loopingPtr) {
+		this->NormalCargoList->SetHead(loopingPtr->getNext());
+		loopingPtr = nullptr;
+		delete loopingPtr;
+		return;		
+	}
+
+	while (loopingPtr != nullptr) {
+		if (loopingPtr->getItem()->GetID() == ID) {
+			prevPtr->setNext(loopingPtr->getNext());
+			loopingPtr = nullptr;
+			delete loopingPtr;
+			return;
 		}
-		Prev = Head;
-		Head = Head->getNext();
 	}
 	
 }
@@ -337,12 +362,20 @@ bool Company::ExecuteUpcomingEvent() {
 		if (TimestepTotalHours >= EventTotalHours) {
 			tempEvent->Execute();
 			EventList->dequeue(tempEvent);
+			cout << EventTotalHours;
 			delete tempEvent;
 			return true;
 		}
 	}
 
 	return false;
+}
+
+std::string Company::GetCurrentTime() {
+	int hours = this->TimestepNum.GetHour();
+	int day = this->TimestepNum.GetDay();
+	
+	return to_string(day) + ":" + to_string(hours);
 }
 
 #endif 

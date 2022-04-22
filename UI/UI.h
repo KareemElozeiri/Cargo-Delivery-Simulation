@@ -70,6 +70,24 @@ public:
 	* Prints a message to the CLI.
 	*/
     void PrintMsg(const string &msg) const;
+
+	/*
+	* Function: InteractiveInterfaceUpdate.
+	* Updates the interface when the AppMode is set to Interactive.
+	*/
+	void InteractiveInterfaceUpdate(string currentTime, string InteractiveData) const;
+
+	/*
+	* Function: StepInterfaceUpdate.
+	* Updates the interface when the AppMode is set to Step-By-Step.
+	*/
+	void StepInterfaceUpdate() const;
+
+	/*
+	* Function: SilentInterfaceUpdate.
+	* Updates the interface when the AppMode is set to Silent.
+	*/
+	void SilentInterfaceUpdate() const;
 };
 
 #endif
