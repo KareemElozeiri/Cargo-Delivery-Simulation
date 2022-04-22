@@ -1,12 +1,13 @@
 #ifndef Time_H
 #define Time_H
+
 #include <iostream>
 
-class Time {
+class Time
+{
 private:
 	int days;
 	int hours;
-
 
 public:
 	
@@ -18,7 +19,6 @@ public:
 	*	- NO PARAMS.
 	*/
 	Time();
-	
 
 	/*
 	* Function: Time.
@@ -38,7 +38,6 @@ public:
 	*	- hour: the hour in that day
 	*/
 	Time(int hour);
-	
 
 	/*
 	* Function: GetDay.
@@ -51,7 +50,6 @@ public:
 	*/
 	int GetDay() const;
 	
-	
 	/*
 	* Function: GetDay.
 	* gets the hour in the time.
@@ -62,7 +60,6 @@ public:
 	* Returns: int.
 	*/
 	int GetHour() const;
-	
 	
 	/*
 	* Function: GetTotalHours.
@@ -75,7 +72,6 @@ public:
 	* Returns: int.
 	*/
 	int GetTotalHours() const;
-	
 
 	/*
 	* Function: SetDay.
@@ -88,7 +84,6 @@ public:
 	*/
 	void SetDay(int day);
 	
-	
 	/*
 	* Function: setHour.
 	* setting the hour in the time.
@@ -100,7 +95,6 @@ public:
 	*/
 	void SetHour(int hour);
 
-
 	/*
 	* Function: operator overloadind (-).
 	* overloading the negative sign to subtract 2 time classes from each others.
@@ -111,7 +105,6 @@ public:
 	* Returns: Time.
 	*/
 	Time operator-(Time other);
-	
 
 	/*
 	* Function: operator overloadind (+).
@@ -123,7 +116,6 @@ public:
 	* Returns: Time.
 	*/
 	Time operator+(Time other);
-
 	
 	/*
 	* Function: operator overloadind (+).
@@ -136,7 +128,6 @@ public:
 	*/
 	Time operator+(int added_hours);
 	
-	
 	/*
 	* Function: operator overloadind (-).
 	* overloading the negative sign to subtract hours(int) from a time class.
@@ -147,7 +138,6 @@ public:
 	* Returns: Time.
 	*/
 	Time operator-(int subtracted_hours);
-	
 
 	/*
 	* Function: PrintTime.
@@ -160,7 +150,6 @@ public:
 	* Returns: void.
 	*/
 	void PrintTime() const;
-
 };
 
 #endif
