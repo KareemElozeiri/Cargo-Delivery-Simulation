@@ -173,13 +173,18 @@ std::string LinkedList<T>::getData() const {
 	Node<T>* loopingPtr = this->Head;
 	while (loopingPtr != nullptr)
 	{
-		LinkedListData += loopingPtr->getItem();
+		LinkedListData += loopingPtr->getItem()->GetID();
 		if (loopingPtr->getNext() != nullptr) {
 			LinkedListData += ",";
 		}
 		loopingPtr = loopingPtr->getNext();
 	}
 	return LinkedListData;
+}
+
+template <typename T>
+int LinkedList<T>::getCount() const {
+	return this->count;
 }
 
 #endif
