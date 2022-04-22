@@ -19,6 +19,26 @@ Company::Company() {
 
 Company::~Company() {
 	this->SaveOutputs();
+	delete this->pUI;
+
+	delete this->EventList;
+
+	delete this->NormalCargoList;
+	delete this->SpecialCargoList;
+	delete this->VIPCargoList;
+
+	delete this->DeliveredNormalCargoList;
+	delete this->DeliveredSpecialCargoList;
+	delete this->DeliveredVIPCargoList;
+
+	delete this->NormalTrucksList;
+	delete this->SpecialTrucksList;
+	delete this->VIPTrucksList;
+	delete this->inCheckUpTrucksList;
+	
+
+
+
 }
 
 bool Company::CheckExitStatus() {
