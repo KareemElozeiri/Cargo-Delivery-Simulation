@@ -1,3 +1,7 @@
+#ifndef TIME_CPP
+#define TIME_CPP
+
+
 #include "Time.h"
 
 Time::Time() : days(0), hours(0) {}
@@ -172,3 +176,7 @@ void Time::PrintTime() const
 {
 	std::cout << this->days << ":" << this->hours << std::endl;
 }
+
+
+
+#endif
