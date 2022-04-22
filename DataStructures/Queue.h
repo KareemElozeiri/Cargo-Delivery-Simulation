@@ -31,6 +31,8 @@ public:
 	*
 	* Parameters:
 	*	- value : The value to be inserted in the LinkedList.
+	*
+	* Returns: void.
 	*/
 	void enqueue(T value);
 	
@@ -40,6 +42,8 @@ public:
 	*
 	* Parameters:
 	*	- value : This will hold the value of the first element in the queue.
+	*
+	* Returns: boolean.
 	*/
 	bool dequeue(T& value);
 
@@ -49,6 +53,8 @@ public:
 	*
 	* Parameters:
 	*	- value : This will hold the value of the first element in the queue.
+	*
+	* Returns: void.
 	*/
 	void peek(T& value) const;
 	

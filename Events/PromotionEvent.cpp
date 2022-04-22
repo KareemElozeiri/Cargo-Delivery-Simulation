@@ -3,11 +3,7 @@
 
 #include "PromotionEvent.h"
 
-/*
-	- Hash map may optimize this.
-	- Hash map with an array.
-*/
-
+// Promotes the Normal Cargo to be a VIP one and increases its cost.
 void PromotionEvent::Execute()
 {
 	Cargo* pCargo = nullptr;

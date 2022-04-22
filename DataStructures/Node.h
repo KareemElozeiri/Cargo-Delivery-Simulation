@@ -37,6 +37,8 @@ public :
 	*
 	* Parameters:
 	*	- newItem : The value to be stored in the node.
+	*
+	* Returns: void.
 	*/
 	void setItem(T newItem)
 	{
@@ -49,6 +51,8 @@ public :
 	*
 	* Parameters:
 	*	- priority : The priority value to be assigned to the node.
+	*
+	* Returns: void.
 	*/
 	void setPriority(double priority)
 	{
@@ -61,6 +65,8 @@ public :
 	*
 	* Parameters:
 	*	- nextNodePtr : The pointer to be stored as the next pointer to the node.
+	*
+	* Returns: void.
 	*/
 	void setNext(Node<T>* nextNodePtr)
 	{
@@ -70,6 +76,8 @@ public :
 	/*
 	* Function: getItem.
 	* Returns the value of the node item.
+	*
+	* Returns: <T>.
 	*/
 	T getItem() const
 	{
@@ -79,6 +87,8 @@ public :
 	/*
 	* Function: getPriority.
 	* Returns the priority value of the node.
+	*
+	* Returns: double.
 	*/
 	double getPriority() const
 	{
@@ -88,6 +98,8 @@ public :
 	/*
 	* Function: getNext.
 	* Returns the pointer to the next node.
+	*
+	* Returns: Node*.
 	*/
 	Node<T>* getNext() const
 	{
