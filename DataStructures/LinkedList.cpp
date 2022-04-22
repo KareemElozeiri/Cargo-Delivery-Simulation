@@ -35,6 +35,22 @@ void LinkedList<T>::InsertBeg(const T& data)
 	Head = R;
 }
 
+
+template<typename T>
+void LinkedList<T>::Insert(const T& data)
+{
+	Node<T>* newNode = new Node<T>(data);
+	if (this->Head == nullptr) this->Head = newNode;
+	else 
+	{
+		Node<T>* curr = this->Head;
+		
+		while (curr->getNext() != nullptr) curr = curr->getNext();
+		curr->setNext(newNode);
+
+	}
+}
+
 template <typename T>
 void LinkedList<T>::DeleteAll()
 {
@@ -111,6 +127,13 @@ bool LinkedList<T>::DeleteNode(T value) {
 	return false;
 }
 
+
+template<typename T>
+bool LinkedList<T>::isEmpty() const
+{
+	return (this->Head==nullptr);
+}
+  
 template <typename T>
 bool LinkedList<T>::InsertSorted(T item) {
 	if (this->Head->getItem() > item) {

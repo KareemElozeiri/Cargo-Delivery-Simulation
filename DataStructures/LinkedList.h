@@ -44,7 +44,9 @@ public:
 	* Function: PrintList.
 	* Prints the values in the linkedlist.
 	*/
-	void PrintList() const;
+	void PrintList() const;		
+
+	void Insert(const T& data);
 	
 	/*
 	* Function: Find.
@@ -84,6 +86,8 @@ public:
 	* Deletes the first node in the linkedlist.
 	*/
 	void DeleteFirst();
+
+	bool isEmpty() const;
 
 	/*
 	* Function: DeleteLast.
