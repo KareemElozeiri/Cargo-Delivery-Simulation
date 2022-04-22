@@ -100,25 +100,62 @@ public:
 	*/
 	void SetHour(int hour);
 
-	
+
+	/*
+	* Function: operator overloadind (-).
+	* overloading the negative sign to subtract 2 time classes from each others.
+	*
+	* Parameters:
+	*	- other: the other time to be subtracted from the main time
+	*
+	* Returns: Time.
+	*/
 	Time operator-(Time other);
 	
-	
+
+	/*
+	* Function: operator overloadind (+).
+	* overloading the plus sign to added 2 time classes to each others.
+	*
+	* Parameters:
+	*	- other: the other time to be added to the main time
+	*
+	* Returns: Time.
+	*/
 	Time operator+(Time other);
 
-
+	
+	/*
+	* Function: operator overloadind (+).
+	* overloading the plus sign to added hours (int) to the time class.
+	*
+	* Parameters:
+	*	- added_hours: the hours(int) to be added to the time
+	*
+	* Returns: Time.
+	*/
 	Time operator+(int added_hours);
 	
 	
+	/*
+	* Function: operator overloadind (-).
+	* overloading the negative sign to subtract hours(int) from a time class.
+	*
+	* Parameters:
+	*	- subtracted_hours: the hours(int) to be subtracted from the time
+	*
+	* Returns: Time.
+	*/
 	Time operator-(int subtracted_hours);
 	
 
 	/*
-	* Function: SetDay.
-	* setting the day in the time.
+	* Function: PrintTime.
+	* printing the time in days and hours
+	* ex: -->  5:15
 	*
 	* Parameters:
-	*	- day: the day need to be set
+	*	- NO PARAMS.
 	*
 	* Returns: void.
 	*/
