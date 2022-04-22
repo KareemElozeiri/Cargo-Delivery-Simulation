@@ -54,7 +54,7 @@ public:
 	void SaveOutputs(); // saves output on exit
 	
 
-	void AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed); // adds a truck to the truck list
+	void AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id); // adds a truck to the truck list
 	void AddEvent(Event* pEvent); // adds new event to the events list
 	void AddWaitCargo(Cargo* pCargo);
 	

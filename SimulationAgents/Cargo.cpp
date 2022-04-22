@@ -76,9 +76,11 @@ void Cargo::SetID(int p) {
 std::ostream& operator<<(std::ostream& os, const Cargo* cargo)
 {
 	os << cargo->GetID();
+	return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Cargo cargo)
 {
 	os << cargo.GetID();
+	return os;
 }

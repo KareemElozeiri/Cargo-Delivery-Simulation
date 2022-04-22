@@ -12,7 +12,6 @@ Company::Company() {
 	this->inputFileName = this->pUI->GetInputFilePath();
 	this->outputFileName = this->pUI->GetOutputFilePath();
 
-	std::cout << this->inputFileName;
 
 	// initialize load function
 	this->LoadInputs();
@@ -100,15 +99,15 @@ void Company::LoadInputs() {
 
 	//adding VIP trucks
 	for (int i = 0; i < vTrucksNum; i++)
-		this->AddTruck(VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed);
+		this->AddTruck(VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
 
 	//adding special trucks
 	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed);
+		this->AddTruck(ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
 
 	//adding normal trucks
 	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed);
+		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
 
 
 	////////////////// Reading Auto Promotion Limit & Maximum waiting hours ////////////////
@@ -238,9 +237,9 @@ void Company::SaveOutputs() {
 	// called on exit
 }
 
-void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
+void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
 {
-	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
+	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed, id);
 	switch (truck_type) 
 	{
 		case NT:
