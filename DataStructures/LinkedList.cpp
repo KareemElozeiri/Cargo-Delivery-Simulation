@@ -27,6 +27,16 @@ void LinkedList<T>::SetHead(Node<T>* Head) {
 	this->Head = Head;
 }
 
+template<typename T>
+void LinkedList<T>::PrintList() const
+{
+	Node<T>* curr = this->Head;
+	while (curr != nullptr) 
+	{
+		
+	}
+}
+
 template <typename T>
 void LinkedList<T>::InsertBeg(const T& data)
 {

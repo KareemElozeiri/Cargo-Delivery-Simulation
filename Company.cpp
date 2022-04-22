@@ -49,7 +49,7 @@ void Company::Simulate() {
 
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
-		
+		this->NormalCargoList->PrintList();
 		// if (this->TimestepNum.GetTotalHours() % 5 == 0) {
 		// 	//move cargo
 
