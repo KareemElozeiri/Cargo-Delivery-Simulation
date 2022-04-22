@@ -83,7 +83,7 @@ void UI::PrintMsg(const string &msg) const {
 
 void UI::InteractiveInterfaceUpdate(string currentTime, string InteractiveData) const {
     cout << "Current Time (Day:Hour) : " << currentTime << endl;
-    cin;
+    cin.get();
     cout << InteractiveData << endl;
 }
 
