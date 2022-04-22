@@ -35,13 +35,13 @@ void Company::Simulate() {
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
 
-		// if (this->TimestepNum.GetTotalHours() % 5 == 0) {
-		// 	//move cargo
-
+	
 		if (this->TimestepNum.GetTotalHours() % 5 == 0) {
 			//move cargo
 			Cargo* nc = nullptr; 
 			Cargo* sc = nullptr;
+
+
 			Cargo* vc = nullptr;
 
 			if(this->NormalCargoList->GetHead()) nc = this->NormalCargoList->GetHead()->getItem();
@@ -53,8 +53,9 @@ void Company::Simulate() {
 				this->DeliveredNormalCargoList->Insert(nc);
 				this->DeleteNormalCargo(nc->GetID());
 			}
+
 			if (sc != nullptr) this->DeliveredSpecialCargoList->enqueue(sc);
-			if (vc != nullptr) this->DeliveredVIPCargoList->enqueue(vc, 0);
+			if (vc != nullptr) this->DeliveredVIPCargoList->enqueue(vc);
 		}
 
 		// print current info

@@ -33,7 +33,7 @@ private:
 	// lists to store delivered cargo 
 	LinkedList<Cargo*>* DeliveredNormalCargoList = new LinkedList<Cargo*>;
 	Queue<Cargo*>* DeliveredSpecialCargoList = new Queue<Cargo*>;
-	PQueue<Cargo*>* DeliveredVIPCargoList = new PQueue<Cargo*>;
+	Queue<Cargo*>* DeliveredVIPCargoList = new Queue<Cargo*>;
 	//// Trucks queues
 	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;
