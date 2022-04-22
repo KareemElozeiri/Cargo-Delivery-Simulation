@@ -112,4 +112,7 @@
     <None Include=".gitignore" />
     <None Include="Defs.h.bak" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Loads\testfile.txt" />
+  </ItemGroup>
 </Project>

@@ -8,7 +8,8 @@
 #include "Cargo.h"
 
 
-class Truck {
+class Truck
+{
 private:
 	TRUCKTYPE truck_type;
 	int capacity;		// the number of cargos that the truck can carry at a time
@@ -30,7 +31,6 @@ public:
 	*/
 	Truck();
 
-
 	/*
 	* Function: Truck.
 	* The Truck Constructor.
@@ -43,8 +43,7 @@ public:
 	*	- speed: the truck's speed
 	* 	- ID : The Truck's id.
 	*/
-	Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id); //Time deliveryInterval);
-
+	Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id);
 
 	/*
 	* Function: GetTruckType.
@@ -114,7 +113,7 @@ public:
 	
 	/*
 	* Function: CalculateDeliveryInterval.
-	* calculated the deliveray interval of the truck. and saves it in deliveryInterval.
+	* calculated the delivery interval of the truck. and saves it in deliveryInterval.
 	* 
 	* The calculation:
 	* 2* (maxDeliveryDistance/this->speed) + totalLoadTime
@@ -148,8 +147,6 @@ public:
 	* Returns: void.
 	*/
 	void SetID(int id);
-
-
 };
 
 #endif

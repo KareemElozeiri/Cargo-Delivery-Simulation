@@ -1,10 +1,7 @@
 #ifndef TRUCK_CPP
 #define TRUCK_CPP
 
-
 #include "Truck.h"
-
-
 
 Truck::Truck()
 {
