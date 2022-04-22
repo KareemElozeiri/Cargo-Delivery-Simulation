@@ -38,8 +38,7 @@ private:
 	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* VIPTrucksList = new Queue<Truck*>;
-	// loading trucks trucks queue
-	Queue<Truck*>* LoadingTrucksList = new Queue<Truck*>;
+	PQueue<Truck*>* inCheckUpTrucksList = new PQueue<Truck*>;
 
 
 	Time AutoPromotionLimit; // supposed to read days from the input file

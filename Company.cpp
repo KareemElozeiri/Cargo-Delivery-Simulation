@@ -40,8 +40,6 @@ void Company::Simulate() {
 			//move cargo
 			Cargo* nc = nullptr; 
 			Cargo* sc = nullptr;
-
-
 			Cargo* vc = nullptr;
 
 			if(this->NormalCargoList->GetHead()) nc = this->NormalCargoList->GetHead()->getItem();
