@@ -167,4 +167,19 @@ bool LinkedList<T>::isEmpty() const
 	return (this->Head==nullptr);
 }
 
+template <typename T>
+std::string LinkedList<T>::getData() const {
+	std::string LinkedListData;
+	Node<T>* loopingPtr = this->Head;
+	while (loopingPtr != nullptr)
+	{
+		LinkedListData += this->loopingPtr;
+		if (loopingPtr->getNext() != nullptr) {
+			LinkedListData += ",";
+		}
+		loopingPtr = loopingPtr->getNext();
+	}
+	return LinkedListData;
+}
+
 #endif

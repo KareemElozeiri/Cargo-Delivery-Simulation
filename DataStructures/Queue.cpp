@@ -68,4 +68,19 @@ int Queue<T>::getCount() const {
 	return this->count;
 }
 
+template <typename T>
+std::string Queue<T>::getData() const {
+	std::string QueueData;
+	Node<T>* loopingPtr = this->Head;
+	while (loopingPtr != nullptr)
+	{
+		QueueData += this->loopingPtr;
+		if (loopingPtr->getNext() != nullptr) {
+			QueueData += ",";
+		}
+		loopingPtr = loopingPtr->getNext();
+	}
+	return QueueData;
+}
+
 #endif

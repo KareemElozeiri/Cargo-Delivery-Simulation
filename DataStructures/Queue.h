@@ -2,6 +2,7 @@
 #define QUEUE_H
 
 #include "Node.h"
+#include <string>
 
 template <typename T>
 class Queue
@@ -66,6 +67,14 @@ public:
 	* Returns: int.
 	*/
 	int getCount() const;
+
+	/*
+	* Function: getData.
+	* Returns the data in the queue separated by commas.
+	*
+	* Returns: string.
+	*/
+	std::string getData() const;
 };
 
 #include "Queue.cpp"
