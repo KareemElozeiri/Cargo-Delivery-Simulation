@@ -3,7 +3,6 @@
 
 #include "Node.h"
 #include <string>
-#include <iostream>
 
 template <typename T>
 class LinkedList
@@ -30,6 +29,8 @@ public:
 	/*
 	* Function: GetHead.
 	* Returns a pointer to the head of the linkedlist.
+	*
+	* Returns: Node*.
 	*/
 	Node<T>* GetHead();
 
@@ -39,12 +40,16 @@ public:
 	*
 	* Parameters:
 	*	- Head : The Node to be set as the head of the linkedlist.
+	*
+	* Returns: void.
 	*/
 	void SetHead(Node<T>* Head);
 
 	/*
 	* Function: PrintList.
 	* Prints the values in the linkedlist.
+	*
+	* Returns: void.
 	*/
 	void PrintList() const;		
 	
@@ -54,6 +59,8 @@ public:
 	*
 	* Parameters:
 	*	- key : The key to be looked for.
+	*
+	* Returns: boolean.
 	*/
 	bool Find(T key) const;
 	
@@ -63,6 +70,8 @@ public:
 	*
 	* Parameters:
 	*	- data : The value to be stored in the node.
+	*
+	* Returns: void.
 	*/
 	void InsertBeg(const T& data);
 
@@ -72,6 +81,8 @@ public:
 	*
 	* Parameters:
 	*	- data : The value to be stored in the node.
+	*
+	* Returns: void.
 	*/
 	void Insert(const T& data);
 	
@@ -81,24 +92,32 @@ public:
 	*
 	* Parameters:
 	*	- item : The value to be stored in the node.
+	*
+	* Returns: boolean.
 	*/
 	bool InsertSorted(T item);
 
 	/*
 	* Function: DeleteAll.
 	* Deletes all the nodes from the linkedlist.
+	*
+	* Returns: void.
 	*/
 	void DeleteAll();
 
 	/*
 	* Function: DeleteFirst.
 	* Deletes the first node in the linkedlist.
+	*
+	* Returns: void.
 	*/
 	void DeleteFirst();
 
 	/*
 	* Function: DeleteLast.
 	* Deletes the last node in the linkedlist.
+	*
+	* Returns: void.
 	*/
 	void DeleteLast();
 	
@@ -108,12 +127,16 @@ public:
 	*
 	* Parameters:
 	*	- value : The value to be looked for.
+	*
+	* Returns: boolean.
 	*/
 	bool DeleteNode(T value);	
 
 	/*
 	* Function: isEmpty.
 	* Checks whether the linkedlist is empty.
+	*
+	* Returns: boolean.
 	*/
 	bool isEmpty() const;
 

@@ -1,6 +1,7 @@
-#include "Cargo.h"
+#ifndef CARGO_CPP
+#define CARGO_CPP
 
-//getters
+#include "Cargo.h"
 
 Cargo::Cargo(CARGOTYPE type)
 {
@@ -9,8 +10,6 @@ Cargo::Cargo(CARGOTYPE type)
 
 Cargo::Cargo(CARGOTYPE type, int cargoID, Time* preparation_time, int load_time, double delivery_distance, double cost)
 {
-	////////////////////////////////
-	/////////////the cargoID will be automatically generated as per our agreement
 	this->Cargo_type = type;
 	this->cargoID = cargoID;
 	this->preparation_time = preparation_time;
@@ -18,8 +17,6 @@ Cargo::Cargo(CARGOTYPE type, int cargoID, Time* preparation_time, int load_time,
 	this->delivery_distance = delivery_distance;
 	this->cost = cost;
 }
-
-
 
 Time* Cargo::GetPrepTime() const
 {
@@ -51,28 +48,27 @@ CARGOTYPE Cargo::GetType() const
 	return Cargo_type;
 }
 
-//setters
-
-void Cargo::SetPrepTime(Time* p) {
-	this->preparation_time = p;
+void Cargo::SetPrepTime(Time* prep_time) {
+	this->preparation_time = prep_time;
 }
 
-void Cargo::SetLoadTime(int p) {
-	this->load_time = p;
+void Cargo::SetLoadTime(int load_time) {
+	this->load_time = load_time;
 }
 
-void Cargo::SetDeliveryDistance(double p) {
-	this->delivery_distance = p;
+void Cargo::SetDeliveryDistance(double delivery_distance) {
+	this->delivery_distance = delivery_distance;
 }
 
-void Cargo::SetCost(double p) {
-	this->cost = p;
+void Cargo::SetCost(double cost) {
+	this->cost = cost;
 }
-void Cargo::SetID(int p) {
-	this->cargoID = p;
+void Cargo::SetID(int id) {
+	this->cargoID = id;
 }
 
-// overloading the cout operator for the cargo 
+// Overloading the cout operator for the cargo
+
 std::ostream& operator<<(std::ostream& os, const Cargo* cargo)
 {
 	os << cargo->GetID();
@@ -84,3 +80,5 @@ std::ostream& operator<<(std::ostream& os, const Cargo cargo)
 	os << cargo.GetID();
 	return os;
 }
+
+#endif
