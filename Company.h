@@ -29,7 +29,7 @@ private:
 	LinkedList<Cargo*>* NormalCargoList = new LinkedList<Cargo*>; // move cargo if found (using id of cargo) 
 	Queue<Cargo*>* SpecialCargoList = new Queue<Cargo*>;
 	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>;
-	Queue<Cargo*>* CargoWaitList = new Queue<Cargo*>;
+	LinkedList<Cargo*>* DeliveredCargoList = new LinkedList<Cargo*>;
 	//// Trucks queues
 	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;
@@ -38,7 +38,8 @@ private:
 	Time AutoPromotionLimit; // supposed to read days from the input file
 	Time MaxWaitingTime;	 // the maximum time that a truck should wait before loading cargo || supposed to read hours from the input file
 
-	string inputFileName = "Loads/input.txt";
+	string inputFileName;
+	string outputFileName;
 	int NumOfEvents;
 
 public:

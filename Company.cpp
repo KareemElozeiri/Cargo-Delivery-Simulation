@@ -8,6 +8,12 @@ Company::Company() {
 
 	this->pUI = new UI;
 
+	//getting the input & output file names from the UI class
+	this->inputFileName = this->pUI->GetInputFilePath();
+	this->outputFileName = this->pUI->GetOutputFilePath();
+
+	std::cout << this->inputFileName;
+
 	// initialize load function
 	this->LoadInputs();
 }
@@ -152,6 +158,7 @@ void Company::LoadInputs() {
 	
 	}
 
+	this->pUI->PrintMsg("Input file successfully loaded!");
 	inputFile.close();
 
 }
@@ -322,16 +329,20 @@ void Company::AddVIPCargo(Cargo* pCargo) {
 bool Company::ExecuteUpcomingEvent() {
 	Event* tempEvent = nullptr;
 	this->EventList->peek(tempEvent);
-	// Total Hours of the Event & Timestep Relative to the Starting Point.
-	int EventTotalHours = tempEvent->GetEventTime().GetTotalHours();
-	int TimestepTotalHours = TimestepNum.GetTotalHours();
-	// Executes the event in case the current time is equal to the event time.
-	if (TimestepTotalHours >= EventTotalHours) {
-		tempEvent->Execute();
-		EventList->dequeue(tempEvent);
-		delete tempEvent;
-		return true;
+	// checking if there was actually an event to execute next
+	if (tempEvent != nullptr) {
+		// Total Hours of the Event & Timestep Relative to the Starting Point.
+		int EventTotalHours = tempEvent->GetEventTime().GetTotalHours();
+		int TimestepTotalHours = TimestepNum.GetTotalHours();
+		// Executes the event in case the current time is equal to the event time.
+		if (TimestepTotalHours >= EventTotalHours) {
+			tempEvent->Execute();
+			EventList->dequeue(tempEvent);
+			delete tempEvent;
+			return true;
+		}
 	}
+
 	return false;
 }
 
