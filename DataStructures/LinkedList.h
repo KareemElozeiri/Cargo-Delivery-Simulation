@@ -10,6 +10,7 @@ class LinkedList
 private:
 	Node<T>* Head;
 	Node<T>* Tail;
+	int count;
 
 public:
 
@@ -114,6 +115,14 @@ public:
 	* Checks whether the linkedlist is empty.
 	*/
 	bool isEmpty() const;
+
+	/*
+	* Function: getCount.
+	* Returns the number of nodes in the linkedlist.
+	*
+	* Returns: int.
+	*/
+	int getCount() const;
 };
 
 #include "LinkedList.cpp"

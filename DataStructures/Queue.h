@@ -9,6 +9,7 @@ class Queue
 protected:
 	Node<T>* Head;
 	Node<T>* Tail;
+	int count;
 
 public:
 	/*
@@ -57,6 +58,14 @@ public:
 	* Returns: boolean.
 	*/
 	bool isEmpty() const;
+
+	/*
+	* Function: getCount.
+	* Returns the number of nodes in the queue.
+	*
+	* Returns: int.
+	*/
+	int getCount() const;
 };
 
 #include "Queue.cpp"

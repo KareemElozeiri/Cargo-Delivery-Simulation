@@ -7,6 +7,7 @@ template <typename T>
 Queue<T>::Queue() {
 	this->Head = nullptr;
 	this->Tail = nullptr;
+	this->count = 0;
 }
 
 template <typename T>
@@ -17,6 +18,7 @@ Queue<T>::~Queue() {
 		delete Head;
 		Head = tempNode;
 	}
+	this->count = 0;
 }
 
 template <typename T>
@@ -26,11 +28,13 @@ void Queue<T>::enqueue(T value) {
 	if (Tail == nullptr) {
 		this->Head = newNode;
 		this->Tail = newNode;
+		this->count += 1;
 		return;
 	}
 
 	Tail->setNext(newNode);
 	Tail = newNode;
+	this->count += 1;
 }
 
 template <typename T>
@@ -42,6 +46,7 @@ bool Queue<T>::dequeue(T& value) {
 	Node<T>* tempNode = this->Head;
 	this->Head = this->Head->getNext();
 	delete tempNode;
+	this->count -= 1;
 
 	return 1;
 }
@@ -56,6 +61,11 @@ void Queue<T>::peek(T& value) const {
 template <typename T>
 bool Queue<T>::isEmpty() const {
 	return (this->Head == nullptr);
+}
+
+template <typename T>
+int Queue<T>::getCount() const {
+	return this->count;
 }
 
 #endif
