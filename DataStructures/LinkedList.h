@@ -45,8 +45,6 @@ public:
 	* Prints the values in the linkedlist.
 	*/
 	void PrintList() const;		
-
-	void Insert(const T& data);
 	
 	/*
 	* Function: Find.
@@ -65,6 +63,15 @@ public:
 	*	- data : The value to be stored in the node.
 	*/
 	void InsertBeg(const T& data);
+
+	/*
+	* Function: Insert.
+	* Inserts a value at the end of the linkedlist.
+	*
+	* Parameters:
+	*	- data : The value to be stored in the node.
+	*/
+	void Insert(const T& data);
 	
 	/*
 	* Function: InsertSorted.
@@ -87,8 +94,6 @@ public:
 	*/
 	void DeleteFirst();
 
-	bool isEmpty() const;
-
 	/*
 	* Function: DeleteLast.
 	* Deletes the last node in the linkedlist.
@@ -103,6 +108,12 @@ public:
 	*	- value : The value to be looked for.
 	*/
 	bool DeleteNode(T value);	
+
+	/*
+	* Function: isEmpty.
+	* Checks whether the linkedlist is empty.
+	*/
+	bool isEmpty() const;
 };
 
 #include "LinkedList.cpp"
