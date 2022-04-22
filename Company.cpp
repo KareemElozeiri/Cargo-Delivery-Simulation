@@ -100,15 +100,15 @@ void Company::LoadInputs() {
 
 	//adding VIP trucks
 	for (int i = 0; i < vTrucksNum; i++)
-		this->AddTruck(VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
+		this->AddTruck(TRUCKTYPE::VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
 
 	//adding special trucks
 	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
+		this->AddTruck(TRUCKTYPE::ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
 
 	//adding normal trucks
 	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
+		this->AddTruck(TRUCKTYPE::NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
 
 
 	////////////////// Reading Auto Promotion Limit & Maximum waiting hours ////////////////
@@ -242,13 +242,13 @@ void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int
 	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed, id);
 	switch (truck_type) 
 	{
-		case NT:
+		case TRUCKTYPE::NT:
 			this->NormalTrucksList->enqueue(truck);
 			break;
-		case ST:
+		case TRUCKTYPE::ST:
 			this->SpecialTrucksList->enqueue(truck);
 			break;
-		case VT:
+		case TRUCKTYPE::VT:
 			this->VIPTrucksList->enqueue(truck);
 			break;
 	}
@@ -258,13 +258,13 @@ void Company::UpdateInterface() {
 	// Run the appropriate interface function based on the current mode.
     switch (this->pUI->GetAppMode())
     {
-    case INTER:
+	case MODE::INTER:
         pUI->InteractiveInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
         break;
-    case STEP:
+    case MODE::STEP:
         pUI->StepInterfaceUpdate();
         break;
-    case SILENT:
+    case MODE::SILENT:
         pUI->SilentInterfaceUpdate();
         break;
     }
