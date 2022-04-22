@@ -34,18 +34,31 @@ void Company::Simulate() {
 
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
-		this->NormalCargoList->PrintList();
-		// if (this->TimestepNum.GetTotalHours() % 5 == 0) {
-		// 	//move cargo
 
-		// }
+		if (this->TimestepNum.GetTotalHours() % 5 == 0) {
+			//move cargo
+			Cargo* nc = nullptr; 
+			Cargo* sc = nullptr;
+			Cargo* vc = nullptr;
+
+			if(this->NormalCargoList->GetHead()) nc = this->NormalCargoList->GetHead()->getItem();
+		    this->SpecialCargoList->dequeue(sc);
+		    this->VIPCargoList->dequeue(vc);
+
+			if (nc != nullptr) 
+			{
+				this->DeliveredNormalCargoList->Insert(nc);
+				this->DeleteNormalCargo(nc->GetID());
+			}
+			if (sc != nullptr) this->DeliveredSpecialCargoList->enqueue(sc);
+			if (vc != nullptr) this->AddVIPCargo(vc);
+		    
+		}
 
 		// print current info
 		this->UpdateInterface();
 
-		if (!(this->NormalCargoList->isEmpty())) {
-			cout << this->NormalCargoList->GetHead()->getItem()->GetCost() << endl;
-		}		
+			
 
 		//check break conditions
 		if (this->CheckExitStatus())
@@ -260,7 +273,7 @@ void Company::UpdateInterface() {
 
 std::string Company::GetInteractiveModeData() const {
 	string interactive_mode_data;
-	string separator = "\n--------------------------------------------------";
+	string separator = "\n--------------------------------------------------\n";
 
 	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
 		InCheckupTrucksCount, DeliveredCargosCount;
@@ -273,6 +286,11 @@ std::string Company::GetInteractiveModeData() const {
 		this->SpecialTrucksList->getCount() +
 		this->VIPTrucksList->getCount();
 
+	DeliveredCargosCount = this->DeliveredNormalCargoList->getCount() +
+		this->DeliveredSpecialCargoList->getCount() +
+		this->DeliveredVIPCargoList->getCount();
+
+
 	// Waiting Cargos Line:
 	interactive_mode_data += WaitingCargosCount + " Waiting Cargos: ";
 	interactive_mode_data += "[" + this->NormalCargoList->getData() + "] ";
@@ -280,6 +298,12 @@ std::string Company::GetInteractiveModeData() const {
 	interactive_mode_data += "{" + this->VIPCargoList->getData() + "}";
 	interactive_mode_data += separator;
 	
+	interactive_mode_data += DeliveredCargosCount + " Delivered Cargos: ";
+	interactive_mode_data += "[" + this->DeliveredNormalCargoList->getData() + "] ";
+	interactive_mode_data += "(" + this->DeliveredSpecialCargoList->getData() + ") ";
+	interactive_mode_data += "{" + this->DeliveredVIPCargoList->getData() + "}";
+	interactive_mode_data += separator;
+
 	return interactive_mode_data;
 }
 
@@ -362,7 +386,6 @@ bool Company::ExecuteUpcomingEvent() {
 		if (TimestepTotalHours >= EventTotalHours) {
 			tempEvent->Execute();
 			EventList->dequeue(tempEvent);
-			cout << EventTotalHours;
 			delete tempEvent;
 			return true;
 		}
@@ -376,6 +399,26 @@ std::string Company::GetCurrentTime() {
 	int day = this->TimestepNum.GetDay();
 	
 	return to_string(day) + ":" + to_string(hours);
+}
+
+void Company::AddDeliveredCargos(Cargo* pCargo)
+{
+	if (pCargo != nullptr) {
+
+		CARGOTYPE ct = pCargo->GetType();
+		switch (ct)
+		{
+		case CARGOTYPE::N:
+			this->DeliveredNormalCargoList->Insert(pCargo);
+			break;
+		case CARGOTYPE::S:
+			this->DeliveredSpecialCargoList->enqueue(pCargo);
+			break;
+		case CARGOTYPE::V:
+			this->AddVIPCargo(pCargo);
+			break;
+		}
+	}
 }
 
 #endif 
