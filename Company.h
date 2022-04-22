@@ -31,7 +31,7 @@ private:
 	Queue<Cargo*>* SpecialCargoList = new Queue<Cargo*>;
 	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>;
 	// lists to store delivered cargo 
-	LinkedList<Cargo*>* DeliveredNormalCargoList = new LinkedList<Cargo*>;
+	Queue<Cargo*>* DeliveredNormalCargoList = new Queue<Cargo*>;
 	Queue<Cargo*>* DeliveredSpecialCargoList = new Queue<Cargo*>;
 	Queue<Cargo*>* DeliveredVIPCargoList = new Queue<Cargo*>;
 	//// Trucks queues

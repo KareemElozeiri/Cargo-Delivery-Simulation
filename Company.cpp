@@ -50,7 +50,7 @@ void Company::Simulate() {
 
 			if (nc != nullptr) 
 			{
-				this->DeliveredNormalCargoList->Insert(nc);
+				this->DeliveredNormalCargoList->enqueue(nc);
 				this->DeleteNormalCargo(nc->GetID());
 			}
 
@@ -122,6 +122,10 @@ void Company::LoadInputs() {
 	///////////////// Loading events ///////////////////
 
 	//reading events from the file
+
+
+
+
 	
 	/// loops on each event and takes the letter to check which event function to call.
 	/// based on this the event function will take the right number of params for it
