@@ -69,9 +69,6 @@ void Company::Simulate() {
 			break;
 		}
 	}
-
-	
-	
 }
 
 void Company::LoadInputs() {
