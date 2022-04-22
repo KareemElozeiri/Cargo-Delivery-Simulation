@@ -11,13 +11,14 @@ private:
 	double speed;
 	Time deliveryInterval; 
 	int jounrneysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
-
 	LinkedList<Cargo*> cargos;
+
+	int ID;
 
 public:
 	Truck();
 	//Truck(int capacity, Time checkUpTime, double speed);
-	Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed); //Time deliveryInterval);
+	Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id); //Time deliveryInterval);
 
 	//getters
 	TRUCKTYPE GetTruckType() const;
@@ -26,7 +27,10 @@ public:
 	double GetSpeed() const;
 	Time GetDeliveryInterval() const;
 	int GetJourneysBeforeCheckUp() const;
-
 	void CalculateDeliveryInterval();
+
+	int GetID() const;
+	void SetID(int id);
+
 
 };

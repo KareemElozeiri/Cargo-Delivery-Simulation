@@ -8,6 +8,11 @@ Company::Company() {
 
 	this->pUI = new UI;
 
+	//getting the input & output file names from the UI class
+	this->inputFileName = this->pUI->GetInputFilePath();
+	this->outputFileName = this->pUI->GetOutputFilePath();
+
+
 	// initialize load function
 	this->LoadInputs();
 }
@@ -94,15 +99,15 @@ void Company::LoadInputs() {
 
 	//adding VIP trucks
 	for (int i = 0; i < vTrucksNum; i++)
-		this->AddTruck(VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed);
+		this->AddTruck(VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
 
 	//adding special trucks
 	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed);
+		this->AddTruck(ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
 
 	//adding normal trucks
 	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed);
+		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
 
 
 	////////////////// Reading Auto Promotion Limit & Maximum waiting hours ////////////////
@@ -152,6 +157,7 @@ void Company::LoadInputs() {
 	
 	}
 
+	this->pUI->PrintMsg("Input file successfully loaded!");
 	inputFile.close();
 
 }
@@ -231,9 +237,9 @@ void Company::SaveOutputs() {
 	// called on exit
 }
 
-void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
+void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
 {
-	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
+	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed, id);
 	switch (truck_type) 
 	{
 		case NT:
@@ -339,16 +345,20 @@ void Company::AddVIPCargo(Cargo* pCargo) {
 bool Company::ExecuteUpcomingEvent() {
 	Event* tempEvent = nullptr;
 	this->EventList->peek(tempEvent);
-	// Total Hours of the Event & Timestep Relative to the Starting Point.
-	int EventTotalHours = tempEvent->GetEventTime().GetTotalHours();
-	int TimestepTotalHours = TimestepNum.GetTotalHours();
-	// Executes the event in case the current time is equal to the event time.
-	if (TimestepTotalHours >= EventTotalHours) {
-		tempEvent->Execute();
-		EventList->dequeue(tempEvent);
-		delete tempEvent;
-		return true;
+	// checking if there was actually an event to execute next
+	if (tempEvent != nullptr) {
+		// Total Hours of the Event & Timestep Relative to the Starting Point.
+		int EventTotalHours = tempEvent->GetEventTime().GetTotalHours();
+		int TimestepTotalHours = TimestepNum.GetTotalHours();
+		// Executes the event in case the current time is equal to the event time.
+		if (TimestepTotalHours >= EventTotalHours) {
+			tempEvent->Execute();
+			EventList->dequeue(tempEvent);
+			delete tempEvent;
+			return true;
+		}
 	}
+
 	return false;
 }
 
