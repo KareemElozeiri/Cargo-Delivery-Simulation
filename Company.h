@@ -25,12 +25,15 @@ private:
 
 	UI* pUI; // UI object
 
-	Queue<Event*>* EventList = new Queue<Event*>; 
+	Queue<Event*>* EventList = new Queue<Event*>;
+	//waiting lists
 	LinkedList<Cargo*>* NormalCargoList = new LinkedList<Cargo*>; // move cargo if found (using id of cargo) 
 	Queue<Cargo*>* SpecialCargoList = new Queue<Cargo*>;
 	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>;
-	// list to store delivered cargo 
-	LinkedList<Cargo*>* DeliveredCargoList = new LinkedList<Cargo*>;
+	// lists to store delivered cargo 
+	LinkedList<Cargo*>* DeliveredNormalCargoList = new LinkedList<Cargo*>;
+	Queue<Cargo*>* DeliveredSpecialCargoList = new Queue<Cargo*>;
+	PQueue<Cargo*>* DeliveredVIPCargoList = new PQueue<Cargo*>;
 	//// Trucks queues
 	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;

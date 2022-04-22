@@ -1,11 +1,8 @@
+#ifndef TRUCK_CPP
+#define TRUCK_CPP
+
+
 #include "Truck.h"
-/*
-Truck::Truck(int capacity, Time checkUpTime, double speed){
-	this->capacity = capacity;
-	this->checkUpTime = checkUpTime;
-	this->speed = speed;
-}
-*/
 
 
 
@@ -97,3 +94,5 @@ std::ostream& operator<<(std::ostream& os, const Truck truck)
 
 	return os;
 }
+
+#endif

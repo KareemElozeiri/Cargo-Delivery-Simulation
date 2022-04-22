@@ -3,6 +3,7 @@
 
 #include "Node.h"
 #include <string>
+#include <iostream>
 
 template <typename T>
 class LinkedList
@@ -141,10 +142,10 @@ public:
 	bool isEmpty() const;
 
 	/*
-	* Function: getCount.
-	* Returns the number of nodes in the linkedlist.
+	* function: getcount.
+	* returns the number of nodes in the linkedlist.
 	*
-	* Returns: int.
+	* returns: int.
 	*/
 	int getCount() const;
 

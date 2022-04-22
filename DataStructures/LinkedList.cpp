@@ -34,7 +34,8 @@ void LinkedList<T>::PrintList() const
 	Node<T>* curr = this->Head;
 	while (curr != nullptr) 
 	{
-		
+		std::cout << curr->getItem() << ",";
+		curr = curr->getNext();
 	}
 }
 
