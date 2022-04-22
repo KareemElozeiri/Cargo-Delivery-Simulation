@@ -2,6 +2,7 @@
 #define QUEUE_H
 
 #include "Node.h"
+#include <string>
 
 template <typename T>
 class Queue
@@ -9,6 +10,7 @@ class Queue
 protected:
 	Node<T>* Head;
 	Node<T>* Tail;
+	int count;
 
 public:
 	/*
@@ -57,6 +59,22 @@ public:
 	* Returns: boolean.
 	*/
 	bool isEmpty() const;
+
+	/*
+	* Function: getCount.
+	* Returns the number of nodes in the queue.
+	*
+	* Returns: int.
+	*/
+	int getCount() const;
+
+	/*
+	* Function: getData.
+	* Returns the data in the queue separated by commas.
+	*
+	* Returns: string.
+	*/
+	std::string getData() const;
 };
 
 #include "Queue.cpp"

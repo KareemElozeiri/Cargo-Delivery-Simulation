@@ -75,5 +75,21 @@ public:
 	* Executes the upcoming event if its time has come.
 	*/
 	bool ExecuteUpcomingEvent();
+
+	/*
+	* Function: GetInteractiveModeData.
+	* Returns the interactive mode data to be printed on the CLI.
+	*
+	* Returns: string.
+	*/
+	std::string GetInteractiveModeData() const;
+
+	/*
+	* Function: GetCurrentTime.
+	* Returns the current time step.
+	*
+	* Returns: string.
+	*/
+	std::string GetCurrentTime();
 };
 #endif

@@ -2,6 +2,7 @@
 #define _LINKEDLIST
 
 #include "Node.h"
+#include <string>
 #include <iostream>
 
 template <typename T>
@@ -10,6 +11,7 @@ class LinkedList
 private:
 	Node<T>* Head;
 	Node<T>* Tail;
+	int count;
 
 public:
 
@@ -114,6 +116,22 @@ public:
 	* Checks whether the linkedlist is empty.
 	*/
 	bool isEmpty() const;
+
+	/*
+	* Function: getCount.
+	* Returns the number of nodes in the linkedlist.
+	*
+	* Returns: int.
+	*/
+	int getCount() const;
+
+	/*
+	* Function: getData.
+	* Returns the data in the queue separated by commas.
+	*
+	* Returns: string.
+	*/
+	std::string getData() const;
 };
 
 #include "LinkedList.cpp"

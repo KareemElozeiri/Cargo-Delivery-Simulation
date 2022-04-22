@@ -6,7 +6,9 @@
 template <typename T>
 LinkedList<T>::LinkedList()
 {
-	Head = nullptr;
+	this->Head = nullptr;
+	this->Tail = nullptr;
+	this->count = 0;
 }
 
 // List is being destructed ==> delete all items in the list
@@ -33,6 +35,7 @@ void LinkedList<T>::InsertBeg(const T& data)
 	Node<T>* R = new Node<T>(data);
 	R->setNext(Head);
 	Head = R;
+	this->count += 1;
 }
 
 
@@ -47,8 +50,8 @@ void LinkedList<T>::Insert(const T& data)
 		
 		while (curr->getNext() != nullptr) curr = curr->getNext();
 		curr->setNext(newNode);
-
 	}
+	this->count += 1;
 }
 
 template <typename T>
@@ -60,6 +63,7 @@ void LinkedList<T>::DeleteAll()
 		P = Head->getNext();
 		delete Head;
 		Head = P;
+		this->count -= 1;
 	}
 }
 
@@ -71,6 +75,7 @@ void LinkedList<T>::DeleteFirst()
 		delete this->Head;
 		this->Head = nullptr;
 		this->Head = newHead;
+		this->count -= 1;
 	}
 }
 
@@ -89,6 +94,7 @@ void LinkedList<T>::DeleteLast()
 			delete this->Head;
 			this->Head = nullptr;
 		}
+		this->count -= 1;
 	}
 }
 
@@ -129,6 +135,7 @@ bool LinkedList<T>::DeleteNode(T value) {
   
 template <typename T>
 bool LinkedList<T>::InsertSorted(T item) {
+	this->count += 1;
 	if (this->Head->getItem() > item) {
 		Node<T>* oldHead = this->Head;
 		Node<T>* newHead = new Node<T>(item);
@@ -158,6 +165,26 @@ template<typename T>
 bool LinkedList<T>::isEmpty() const
 {
 	return (this->Head==nullptr);
+}
+
+template <typename T>
+std::string LinkedList<T>::getData() const {
+	std::string LinkedListData;
+	Node<T>* loopingPtr = this->Head;
+	while (loopingPtr != nullptr)
+	{
+		LinkedListData += std::to_string(loopingPtr->getItem()->GetID());
+		if (loopingPtr->getNext() != nullptr) {
+			LinkedListData += ",";
+		}
+		loopingPtr = loopingPtr->getNext();
+	}
+	return LinkedListData;
+}
+
+template <typename T>
+int LinkedList<T>::getCount() const {
+	return this->count;
 }
 
 #endif
