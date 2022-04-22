@@ -25,6 +25,8 @@ public:
 	*
 	* Parameters:
 	*	- value : The value to be inserted in the queue.
+	*
+	* Returns: void.
 	*/
 	void enqueue(T value, double priority);
 };

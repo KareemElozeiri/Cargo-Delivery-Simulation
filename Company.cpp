@@ -35,6 +35,9 @@ void Company::Simulate() {
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
 
+		// if (this->TimestepNum.GetTotalHours() % 5 == 0) {
+		// 	//move cargo
+
 		if (this->TimestepNum.GetTotalHours() % 5 == 0) {
 			//move cargo
 			Cargo* nc = nullptr; 
@@ -59,6 +62,7 @@ void Company::Simulate() {
 		this->UpdateInterface();
 
 			
+		this->UpdateInterface();		
 
 		//check break conditions
 		if (this->CheckExitStatus())

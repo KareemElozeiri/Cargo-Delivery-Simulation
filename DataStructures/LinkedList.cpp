@@ -11,7 +11,6 @@ LinkedList<T>::LinkedList()
 	this->count = 0;
 }
 
-// List is being destructed ==> delete all items in the list
 template <typename T>
 LinkedList<T>::~LinkedList()
 {
