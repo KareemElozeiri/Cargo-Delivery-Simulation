@@ -54,8 +54,7 @@ void Company::Simulate() {
 				this->DeleteNormalCargo(nc->GetID());
 			}
 			if (sc != nullptr) this->DeliveredSpecialCargoList->enqueue(sc);
-			if (vc != nullptr) this->AddVIPCargo(vc);
-		    
+			if (vc != nullptr) this->DeliveredVIPCargoList->enqueue(vc, 0);
 		}
 
 		// print current info
