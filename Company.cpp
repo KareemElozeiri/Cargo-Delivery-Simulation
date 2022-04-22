@@ -374,7 +374,14 @@ void Company::DeleteNormalCargo(int ID) {
 	- Priority doesn't only depend on the cost. *Need to change*
 */
 void Company::AddVIPCargo(Cargo* pCargo) {
-	this->VIPCargoList->enqueue(pCargo, pCargo->GetCost());
+
+	double priority_calc = pCargo->GetCost() / 2000
+		- pCargo->GetDeliveryDistance() / 2000
+		- pCargo->GetPrepTime()->GetTotalHours() / 5
+		- pCargo->GetLoadTime() / 10;
+
+
+	this->VIPCargoList->enqueue(pCargo, priority_calc);
 }
 
 bool Company::ExecuteUpcomingEvent() {
