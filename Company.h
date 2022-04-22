@@ -29,11 +29,15 @@ private:
 	LinkedList<Cargo*>* NormalCargoList = new LinkedList<Cargo*>; // move cargo if found (using id of cargo) 
 	Queue<Cargo*>* SpecialCargoList = new Queue<Cargo*>;
 	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>;
+	// list to store delivered cargo 
 	LinkedList<Cargo*>* DeliveredCargoList = new LinkedList<Cargo*>;
 	//// Trucks queues
 	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* VIPTrucksList = new Queue<Truck*>;
+	// loading trucks trucks queue
+	Queue<Truck*>* LoadingTrucksList = new Queue<Truck*>;
+
 
 	Time AutoPromotionLimit; // supposed to read days from the input file
 	Time MaxWaitingTime;	 // the maximum time that a truck should wait before loading cargo || supposed to read hours from the input file
