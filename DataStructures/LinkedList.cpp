@@ -9,7 +9,7 @@ LinkedList<T>::LinkedList()
 	Head = nullptr;
 }
 
-//List is being desturcted ==> delete all items in the list
+// List is being destructed ==> delete all items in the list
 template <typename T>
 LinkedList<T>::~LinkedList()
 {
@@ -27,33 +27,6 @@ void LinkedList<T>::SetHead(Node<T>* Head) {
 	this->Head = Head;
 }
 
-/*
-	* Function: PrintList.
-	* prints the values of all nodes in a linked list.
-	*/
-template <typename T>
-void LinkedList<T>:: PrintList()	const
-{
-	std::cout << "\nprinting list contents:\n\n";
-	Node<T>* p = Head;
-
-	while (p)
-	{
-		std::cout << "[ " << p->getItem() << " ]";
-		std::cout << "--->";
-		p = p->getNext();
-	}
-	std::cout << "*\n";
-}
-
-
-/*
-	* Function: InsertBeg.
-	* Creates a new node and adds it to the beginning of a linked list.
-	*
-	* Parameters:
-	*	- data : The value to be stored in the new node.
-	*/
 template <typename T>
 void LinkedList<T>::InsertBeg(const T& data)
 {
@@ -62,10 +35,6 @@ void LinkedList<T>::InsertBeg(const T& data)
 	Head = R;
 }
 
-/*
-* Function: DeleteAll.
-* Deletes all nodes of the list.
-*/
 template <typename T>
 void LinkedList<T>::DeleteAll()
 {
@@ -78,7 +47,6 @@ void LinkedList<T>::DeleteAll()
 	}
 }
 
-// Deletes the head of the linked list
 template<typename T>
 void LinkedList<T>::DeleteFirst()
 {
@@ -90,7 +58,6 @@ void LinkedList<T>::DeleteFirst()
 	}
 }
 
-//Deletes the tail of the linked list
 template<typename T>
 void LinkedList<T>::DeleteLast()
 {
@@ -109,7 +76,6 @@ void LinkedList<T>::DeleteLast()
 	}
 }
 
-//searches for a given value in the list, returns true if found; false otherwise.
 template <typename T>
 bool LinkedList<T>::Find(T Key) const {
 	Node<T>* currentNode = this->Head;
@@ -122,9 +88,6 @@ bool LinkedList<T>::Find(T Key) const {
 	return false;
 };
 
-//deletes the first node with the given value(if found) and returns true
-//if not found, returns false
-//Note: List is not sorted
 template <typename T>
 bool LinkedList<T>::DeleteNode(T value) {
 
@@ -148,7 +111,6 @@ bool LinkedList<T>::DeleteNode(T value) {
 	return false;
 }
 
-//insert in a sorted list
 template <typename T>
 bool LinkedList<T>::InsertSorted(T item) {
 	if (this->Head->getItem() > item) {

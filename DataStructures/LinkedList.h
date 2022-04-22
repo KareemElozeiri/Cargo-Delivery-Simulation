@@ -8,32 +8,97 @@ template <typename T>
 class LinkedList
 {
 private:
-	Node<T>* Head;	//Pointer to the head of the list
-	//You can add tail pointer too (depending on your problem)
+	Node<T>* Head;
+	Node<T>* Tail;
 
 public:
+
+	/*
+	* Function: LinkedList.
+	* Default-Constructor
+	*/
 	LinkedList();
+	
+	/*
+	* Function: LinkedList.
+	* Destructor
+	*/
 	~LinkedList();
 
+	/*
+	* Function: GetHead.
+	* Returns a pointer to the head of the linkedlist.
+	*/
 	Node<T>* GetHead();
+
+	/*
+	* Function: SetHead.
+	* Sets the head of the linkedlist.
+	*
+	* Parameters:
+	*	- Head : The Node to be set as the head of the linkedlist.
+	*/
 	void SetHead(Node<T>* Head);
 
+	/*
+	* Function: PrintList.
+	* Prints the values in the linkedlist.
+	*/
 	void PrintList() const;
 	
+	/*
+	* Function: Find.
+	* Checks whether a given key exists in the linkedlist.
+	*
+	* Parameters:
+	*	- key : The key to be looked for.
+	*/
 	bool Find(T key) const;
 	
-
+	/*
+	* Function: InsertBeg.
+	* Inserts a value at the beggining of the linkedlist.
+	*
+	* Parameters:
+	*	- data : The value to be stored in the node.
+	*/
 	void InsertBeg(const T& data);
+	
+	/*
+	* Function: InsertSorted.
+	* Inserts a value in the linkedlist in its correctly sorted position.
+	*
+	* Parameters:
+	*	- item : The value to be stored in the node.
+	*/
 	bool InsertSorted(T item);
 
+	/*
+	* Function: DeleteAll.
+	* Deletes all the nodes from the linkedlist.
+	*/
 	void DeleteAll();
-	void DeleteFirst();
-	void DeleteLast();
-	bool DeleteNode(T value);
-	
 
-	bool ShiftLargest();
+	/*
+	* Function: DeleteFirst.
+	* Deletes the first node in the linkedlist.
+	*/
+	void DeleteFirst();
+
+	/*
+	* Function: DeleteLast.
+	* Deletes the last node in the linkedlist.
+	*/
+	void DeleteLast();
 	
+	/*
+	* Function: DeleteNode.
+	* Deletes a node with a given value from the linkedlist, if exists.
+	*
+	* Parameters:
+	*	- value : The value to be looked for.
+	*/
+	bool DeleteNode(T value);	
 };
 
 #include "LinkedList.cpp"
