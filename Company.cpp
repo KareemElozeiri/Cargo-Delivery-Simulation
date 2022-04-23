@@ -18,27 +18,85 @@ Company::Company() {
 }
 
 Company::~Company() {
+	
 	this->SaveOutputs();
+
 	delete this->pUI;
 
+	// Delete The Event List
+	Event* EventTempPtr = nullptr;
+
+	while (this->EventList->dequeue(EventTempPtr)) {
+		delete EventTempPtr;
+		EventTempPtr = nullptr;
+	}
+
 	delete this->EventList;
+	
+	// Delete The Cargos Lists
+	Cargo* CargoTempPtr = nullptr;
+	Node<Cargo*>* CargoNodeTempPtr = nullptr;
+
+	CargoNodeTempPtr = NormalCargoList->GetHead();
+
+	while (CargoNodeTempPtr != nullptr) {
+		delete CargoNodeTempPtr->getItem();
+		CargoNodeTempPtr = CargoNodeTempPtr->getNext();
+	}
+	while (this->SpecialCargoList->dequeue(CargoTempPtr)) {
+		delete CargoTempPtr;
+		CargoTempPtr = nullptr;
+	}
+	while (this->VIPCargoList->dequeue(CargoTempPtr)) {
+		delete CargoTempPtr;
+		CargoTempPtr = nullptr;
+	}
 
 	delete this->NormalCargoList;
 	delete this->SpecialCargoList;
 	delete this->VIPCargoList;
 
+	while (this->DeliveredNormalCargoList->dequeue(CargoTempPtr)) {
+		delete CargoTempPtr;
+		CargoTempPtr = nullptr;
+	}
+	while (this->DeliveredSpecialCargoList->dequeue(CargoTempPtr)) {
+		delete CargoTempPtr;
+		CargoTempPtr = nullptr;
+	}
+	while (this->DeliveredVIPCargoList->dequeue(CargoTempPtr)) {
+		delete CargoTempPtr;
+		CargoTempPtr = nullptr;
+	}
+	
 	delete this->DeliveredNormalCargoList;
 	delete this->DeliveredSpecialCargoList;
 	delete this->DeliveredVIPCargoList;
+
+	// Delete The Trucks Lists
+	Truck* TruckTempPtr = nullptr;
+
+	while (this->NormalTrucksList->dequeue(TruckTempPtr)) {
+		delete TruckTempPtr;
+		TruckTempPtr = nullptr;
+	}
+	while (this->SpecialTrucksList->dequeue(TruckTempPtr)) {
+		delete TruckTempPtr;
+		TruckTempPtr = nullptr;
+	}
+	while (this->VIPTrucksList->dequeue(TruckTempPtr)) {
+		delete TruckTempPtr;
+		TruckTempPtr = nullptr;
+	}
+	while (this->inCheckUpTrucksList->dequeue(TruckTempPtr)) {
+		delete TruckTempPtr;
+		TruckTempPtr = nullptr;
+	}
 
 	delete this->NormalTrucksList;
 	delete this->SpecialTrucksList;
 	delete this->VIPTrucksList;
 	delete this->inCheckUpTrucksList;
-	
-
-
-
 }
 
 bool Company::CheckExitStatus() {
