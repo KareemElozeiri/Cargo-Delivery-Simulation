@@ -48,6 +48,15 @@ private:
 	string outputFileName;
 	int NumOfEvents;
 
+	/*
+	* takes a given queue whose inner values are pointers
+	* delete these inner pointers one by one
+	*/
+
+	template <typename T>
+	void cleanQueueInnerPointers(Queue<T*>* queue);
+
+
 public:
 	Company();
 	~Company();
@@ -95,3 +104,4 @@ public:
 	std::string GetCurrentTime();
 };
 #endif
+
