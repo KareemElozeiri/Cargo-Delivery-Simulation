@@ -27,32 +27,19 @@ Company::~Company() {
 	Event* EventTempPtr = nullptr;
 
 	this->cleanQueueInnerPointers(this->EventList);
-
-	/*while (this->EventList->dequeue(EventTempPtr)) {
-		delete EventTempPtr;
-		EventTempPtr = nullptr;
-	}*/
-
 	delete this->EventList;
 
 	// Delete The Cargos Lists
-	Cargo* CargoTempPtr = nullptr;
 	Node<Cargo*>* CargoNodeTempPtr = nullptr;
 
 	CargoNodeTempPtr = NormalCargoList->GetHead();
-
 	while (CargoNodeTempPtr != nullptr) {
 		delete CargoNodeTempPtr->getItem();
 		CargoNodeTempPtr = CargoNodeTempPtr->getNext();
 	}
 
 	this->cleanQueueInnerPointers(this->SpecialCargoList);
-
-
-	while (this->VIPCargoList->dequeue(CargoTempPtr)) {
-		delete CargoTempPtr;
-		CargoTempPtr = nullptr;
-	}
+	this->cleanPriorityQueueInnerPointers(this->VIPCargoList);
 
 	delete this->NormalCargoList;
 	delete this->SpecialCargoList;
@@ -68,17 +55,11 @@ Company::~Company() {
 	delete this->DeliveredVIPCargoList;
 
 	// Delete The Trucks Lists
-	Truck* TruckTempPtr = nullptr;
-
 	this->cleanQueueInnerPointers(this->NormalTrucksList);
 	this->cleanQueueInnerPointers(this->SpecialTrucksList);
 	this->cleanQueueInnerPointers(this->VIPTrucksList);
-
-	while (this->inCheckUpTrucksList->dequeue(TruckTempPtr)) {
-		delete TruckTempPtr;
-		TruckTempPtr = nullptr;
-	}
-
+	this->cleanPriorityQueueInnerPointers(this->inCheckUpTrucksList);
+	
 	delete this->NormalTrucksList;
 	delete this->SpecialTrucksList;
 	delete this->VIPTrucksList;
@@ -479,6 +460,17 @@ void Company::cleanQueueInnerPointers(Queue<T*>* queue)
 {
 	T* tempPointer = nullptr;
 	while (queue->dequeue(tempPointer))
+	{
+		delete tempPointer;
+		tempPointer = nullptr;
+	}
+}
+
+template <typename T>
+void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
+{
+	T* tempPointer = nullptr;
+	while (pqueue->dequeue(tempPointer))
 	{
 		delete tempPointer;
 		tempPointer = nullptr;

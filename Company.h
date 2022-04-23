@@ -56,6 +56,13 @@ private:
 	template <typename T>
 	void cleanQueueInnerPointers(Queue<T*>* queue);
 
+	/*
+	* takes a given priority queue whose inner values are pointers
+	* delete these inner pointers one by one
+	*/
+	template <typename T>
+	void cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue);
+
 
 public:
 	Company();
