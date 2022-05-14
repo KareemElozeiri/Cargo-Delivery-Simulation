@@ -1,7 +1,8 @@
-#ifndef LinkedList_CPP
-#define LinkedList_CPP
+#ifndef LINKEDLIST_CPP
+#define LINKEDLIST_CPP
 
 #include "LinkedList.h"
+#include <iostream>
 
 template <typename T>
 LinkedList<T>::LinkedList()
@@ -10,8 +11,6 @@ LinkedList<T>::LinkedList()
 	this->Tail = nullptr;
 	this->count = 0;
 }
-
-
 
 template <typename T>
 LinkedList<T>::~LinkedList()
@@ -124,16 +123,15 @@ bool LinkedList<T>::Find(T Key) const {
 
 template <typename T>
 bool LinkedList<T>::DeleteNode(T value) {
-
 	if (this->Head->getItem() == value) {
 		Node<T>* nextNode = this->Head->getNext();
-		// TODO
-		// add delete head values
+		// Head Value Deletion
 		delete this->Head;
 		this->Head = nullptr;
 		this->Head = nextNode;
 		return true;
 	}
+
 	Node<T>* prevNode = this->Head;
 	Node<T>* nextNode = this->Head->getNext()->getNext();
 	while (prevNode->getNext() != nullptr) {

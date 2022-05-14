@@ -1,20 +1,13 @@
-#ifndef _LINKEDLIST
-#define _LINKEDLIST
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
 
 #include "Node.h"
 #include <string>
-#include <iostream>
 
 template <typename T>
 class LinkedList
 {
-private:
-	Node<T>* Head;
-	Node<T>* Tail;
-	int count;
-
 public:
-
 	/*
 	* Function: LinkedList.
 	* Default-Constructor
@@ -156,9 +149,13 @@ public:
 	* Returns: string.
 	*/
 	std::string getData() const;
+
+private:
+	Node<T>* Head;
+	Node<T>* Tail;
+	int count;
 };
 
 #include "LinkedList.cpp"
 
-#endif	
-
+#endif

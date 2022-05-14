@@ -7,11 +7,6 @@
 template <typename T>
 class Queue
 {
-protected:
-	Node<T>* Head;
-	Node<T>* Tail;
-	int count;
-
 public:
 	/*
 	* Function: Queue.
@@ -81,6 +76,11 @@ public:
 	* Returns: string.
 	*/
 	std::string getData() const;
+
+protected:
+	Node<T>* Head;
+	Node<T>* Tail;
+	int count;
 };
 
 #include "Queue.cpp"

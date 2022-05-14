@@ -5,12 +5,7 @@
 
 class Time
 {
-private:
-	int days;
-	int hours;
-
 public:
-	
 	/*
 	* Function: Time.
 	* The Time Constructor.
@@ -150,6 +145,10 @@ public:
 	* Returns: void.
 	*/
 	void PrintTime() const;
+
+private:
+	int days;
+	int hours;
 };
 
 #endif
