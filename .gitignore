@@ -1,4 +1,5 @@
 .vs
+.vscode
 x64
 Debug
 Cargo-Delivery-Simulation.sln
