@@ -2,6 +2,7 @@
 #define QUEUE_H
 
 #include "Node.h"
+#include <string>
 
 template <typename T>
 class Queue
@@ -9,6 +10,7 @@ class Queue
 protected:
 	Node<T>* Head;
 	Node<T>* Tail;
+	int count;
 
 public:
 	/*
@@ -29,6 +31,8 @@ public:
 	*
 	* Parameters:
 	*	- value : The value to be inserted in the LinkedList.
+	*
+	* Returns: void.
 	*/
 	void enqueue(T value);
 	
@@ -38,6 +42,8 @@ public:
 	*
 	* Parameters:
 	*	- value : This will hold the value of the first element in the queue.
+	*
+	* Returns: boolean.
 	*/
 	bool dequeue(T& value);
 
@@ -47,6 +53,8 @@ public:
 	*
 	* Parameters:
 	*	- value : This will hold the value of the first element in the queue.
+	*
+	* Returns: void.
 	*/
 	void peek(T& value) const;
 	
@@ -57,6 +65,22 @@ public:
 	* Returns: boolean.
 	*/
 	bool isEmpty() const;
+
+	/*
+	* Function: getCount.
+	* Returns the number of nodes in the queue.
+	*
+	* Returns: int.
+	*/
+	int getCount() const;
+
+	/*
+	* Function: getData.
+	* Returns the data in the queue separated by commas.
+	*
+	* Returns: string.
+	*/
+	std::string getData() const;
 };
 
 #include "Queue.cpp"

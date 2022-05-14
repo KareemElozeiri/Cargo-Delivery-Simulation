@@ -1,13 +1,19 @@
-#pragma once
+#ifndef  Company_H
+#define Company_H
+
+
 #include "Defs.h"
 #include "DataStructures/PQueue.h"
 #include "DataStructures/LinkedList.h"
 #include "Events/Event.h"
+#include "Events/CancellationEvent.h"
+#include "Events/PromotionEvent.h"
+#include "Events/ReadyEvent.h"
 #include "SimulationAgents/Cargo.h"
 #include "SimulationAgents/Truck.h"
-#include "UI/UI.h"
 #include "SimulationAgents/Time.h"
-
+#include "UI/UI.h"
+#include "custom/customs.h" //to get split function
 #include <iostream>
 #include <fstream>
 
@@ -15,19 +21,48 @@ class Company
 {
 
 private:
-	int TimestepNum; // increment on each step (check on 5 and reset)
+	Time TimestepNum; // increment on each step (check on 5 and reset)
 
 	UI* pUI; // UI object
 
-	Queue<Event*>* EventList = new Queue<Event*>; 
+	Queue<Event*>* EventList = new Queue<Event*>;
+	//waiting lists
 	LinkedList<Cargo*>* NormalCargoList = new LinkedList<Cargo*>; // move cargo if found (using id of cargo) 
 	Queue<Cargo*>* SpecialCargoList = new Queue<Cargo*>;
-	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>; //
-	Queue<Cargo*>* CargoWaitList = new Queue<Cargo*>;
-	Queue<Truck*>* TruckList = new Queue<Truck*>;
+	PQueue<Cargo*>* VIPCargoList = new PQueue<Cargo*>;
+	// lists to store delivered cargo 
+	Queue<Cargo*>* DeliveredNormalCargoList = new Queue<Cargo*>;
+	Queue<Cargo*>* DeliveredSpecialCargoList = new Queue<Cargo*>;
+	Queue<Cargo*>* DeliveredVIPCargoList = new Queue<Cargo*>;
+	//// Trucks queues
+	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;
+	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;
+	Queue<Truck*>* VIPTrucksList = new Queue<Truck*>;
+	PQueue<Truck*>* inCheckUpTrucksList = new PQueue<Truck*>;
 
-	string inputFileName = "input.txt";
+
+	Time AutoPromotionLimit; // supposed to read days from the input file
+	Time MaxWaitingTime;	 // the maximum time that a truck should wait before loading cargo || supposed to read hours from the input file
+
+	string inputFileName;
+	string outputFileName;
 	int NumOfEvents;
+
+	/*
+	* takes a given queue whose inner values are pointers
+	* delete these inner pointers one by one
+	*/
+
+	template <typename T>
+	void cleanQueueInnerPointers(Queue<T*>* queue);
+
+	/*
+	* takes a given priority queue whose inner values are pointers
+	* delete these inner pointers one by one
+	*/
+	template <typename T>
+	void cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue);
+
 
 public:
 
@@ -148,4 +183,28 @@ public:
 	*	- pCargo : the cargo to be added.
 	*/
 	void AddVIPCargo(Cargo* pCargo);
+
+	/*
+	* Function: ExecuteUpcomingEvent.
+	* Executes the upcoming event if its time has come.
+	*/
+	bool ExecuteUpcomingEvent();
+
+	/*
+	* Function: GetInteractiveModeData.
+	* Returns the interactive mode data to be printed on the CLI.
+	*
+	* Returns: string.
+	*/
+	std::string GetInteractiveModeData() const;
+
+	/*
+	* Function: GetCurrentTime.
+	* Returns the current time step.
+	*
+	* Returns: string.
+	*/
+	std::string GetCurrentTime();
 };
+#endif
+

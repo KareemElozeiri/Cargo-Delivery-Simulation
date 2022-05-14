@@ -1,54 +1,116 @@
+#ifndef  Comapny_CPP
+#define Comapny_CPP
+
 #include "Company.h"
 
-#include "Events/CancellationEvent.h"
-#include "Events/PromotionEvent.h"
-#include "Events/ReadyEvent.h"
-
-
-
 Company::Company() {
-	this->TimestepNum = 0;
+	this->TimestepNum = Time();
 
 	this->pUI = new UI;
+
+	//getting the input & output file names from the UI class
+	this->inputFileName = this->pUI->GetInputFilePath();
+	this->outputFileName = this->pUI->GetOutputFilePath();
+
 
 	// initialize load function
 	this->LoadInputs();
 }
 
 Company::~Company() {
+
 	this->SaveOutputs();
+
+	delete this->pUI;
+
+	// Delete The Event List
+	Event* EventTempPtr = nullptr;
+
+	this->cleanQueueInnerPointers(this->EventList);
+	delete this->EventList;
+
+	// Delete The Cargos Lists
+	Node<Cargo*>* CargoNodeTempPtr = nullptr;
+
+	CargoNodeTempPtr = NormalCargoList->GetHead();
+	while (CargoNodeTempPtr != nullptr) {
+		delete CargoNodeTempPtr->getItem();
+		CargoNodeTempPtr = CargoNodeTempPtr->getNext();
+	}
+
+	this->cleanQueueInnerPointers(this->SpecialCargoList);
+	this->cleanPriorityQueueInnerPointers(this->VIPCargoList);
+
+	delete this->NormalCargoList;
+	delete this->SpecialCargoList;
+	delete this->VIPCargoList;
+
+	this->cleanQueueInnerPointers(this->DeliveredNormalCargoList);
+	this->cleanQueueInnerPointers(this->DeliveredSpecialCargoList);
+	this->cleanQueueInnerPointers(this->DeliveredVIPCargoList);
+
+
+	delete this->DeliveredNormalCargoList;
+	delete this->DeliveredSpecialCargoList;
+	delete this->DeliveredVIPCargoList;
+
+	// Delete The Trucks Lists
+	this->cleanQueueInnerPointers(this->NormalTrucksList);
+	this->cleanQueueInnerPointers(this->SpecialTrucksList);
+	this->cleanQueueInnerPointers(this->VIPTrucksList);
+	this->cleanPriorityQueueInnerPointers(this->inCheckUpTrucksList);
+	
+	delete this->NormalTrucksList;
+	delete this->SpecialTrucksList;
+	delete this->VIPTrucksList;
+	delete this->inCheckUpTrucksList;
 }
 
 bool Company::CheckExitStatus() {
 	// check for application status 
 	// The simulation function stops when there are no more events and all cargos are in delivered list
-	return false;
+
+	return (this->NormalCargoList->isEmpty() && this->SpecialCargoList->isEmpty() && this->VIPCargoList->isEmpty() && this->EventList->isEmpty());
 }
 
 void Company::Simulate() {
-	/*Simple Simulator function for Phase 1. 
-	The main purpose of this function is to test different 
-	lists and make sure all operations on them are working properly. 
-	This function should: Perform any needed initializations
-	Call file loading function
-	At each timestep do the following:
-	Get the events that should be executed at current timestep
-	For Preparation event,
-	generate a cargo and add it to the appropriate waiting cargos list.
-	For cancellation event, delete the corresponding normal cargo (if found)
-	For promotion event, move cargo (if found) from normal to VIP.
-	Each 5 timesteps, move a cargo of each type from waiting-cargo list(s) to delivered list(s) 
-	(The cargo you choose to delete from each type must be the first cargo that should be assigned to an available truck in phase 2.)
-	Print all applicable info to the interface as described in �Program Interface� section without truck info.
-	Notes:The simulation function stops when there are no more events and all cargos are in delivered list(s)*/
+	while (true) {
+		this->TimestepNum = this->TimestepNum + 1;
 
-	this->TimestepNum += 1;
+		// Execute the upcoming event
+		this->ExecuteUpcomingEvent();
 
-	// Check Eventlist for any occuring ones
 
-	if (this->TimestepNum == 5) {
-		this->TimestepNum = 0;
-		// 4-b waiting cargo list operation
+		if (this->TimestepNum.GetTotalHours() % 5 == 0) {
+			//move cargo
+			Cargo* nc = nullptr;
+			Cargo* sc = nullptr;
+			Cargo* vc = nullptr;
+
+			if (this->NormalCargoList->GetHead()) nc = this->NormalCargoList->GetHead()->getItem();
+			this->SpecialCargoList->dequeue(sc);
+			this->VIPCargoList->dequeue(vc);
+
+			if (nc != nullptr)
+			{
+				this->DeliveredNormalCargoList->enqueue(nc);
+				this->DeleteNormalCargo(nc->GetID());
+			}
+
+			if (sc != nullptr) this->DeliveredSpecialCargoList->enqueue(sc);
+			if (vc != nullptr) this->DeliveredVIPCargoList->enqueue(vc);
+		}
+
+		// print current info
+		this->UpdateInterface();
+
+
+		//check break conditions
+		if (this->CheckExitStatus())
+		{
+			this->pUI->PrintMsg("Simulation is done.");
+			break;
+		}
 	}
 }
 
@@ -58,7 +120,7 @@ void Company::LoadInputs() {
 
 	//checking that the stream open successfully 
 	if (!inputFile.is_open()) {
-		//this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
+		this->pUI->PrintMsg("*** Error: Could not open " + this->inputFileName + " ***");
 		exit(1);
 	}
 
@@ -78,43 +140,73 @@ void Company::LoadInputs() {
 	inputFile >> JourNum;
 	inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
 
+
+	//adding VIP trucks
+	for (int i = 0; i < vTrucksNum; i++)
+		this->AddTruck(TRUCKTYPE::VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
+
+	//adding special trucks
+	for (int i = 0; i < sTrucksNum; i++)
+		this->AddTruck(TRUCKTYPE::ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
+
+	//adding normal trucks
+	for (int i = 0; i < sTrucksNum; i++)
+		this->AddTruck(TRUCKTYPE::NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
+
+
+	////////////////// Reading Auto Promotion Limit & Maximum waiting hours ////////////////
+	int Apl, MaxW;
+	inputFile >> Apl >> MaxW;
+
+	this->AutoPromotionLimit = Time(Apl, 0);
+	this->MaxWaitingTime = Time(MaxW);
+
+
+	///////////////// Loading events ///////////////////
+
 	//reading events from the file
-	
+
+
+
+
+
 	/// loops on each event and takes the letter to check which event function to call.
 	/// based on this the event function will take the right number of params for it
 	/// Ready : 6 params
 	/// Cancellation: 2 params
 	/// Promotional: 3 params
-	
+
+	/// <summary>
+	/// This reads Line 8 in input file
+	/// Based on the number of file there will be number of loops below
+	/// </summary>
 	inputFile >> NumOfEvents;
 
 	for (int i = 0; i < NumOfEvents; i++) {
 		char EventChar;
 		inputFile >> EventChar;
 
-		if (EventChar == 'R')
+		/// <summary>
+		/// based on the the first letter in the line, it will go on the corresponding function.
+		/// it will continue reading the file by passing the file by reference.
+		/// </summary>
+		switch (EventChar)
+		{
+		case 'R':
 			ReadReadyEvent(inputFile);
-		else if (EventChar == 'P')
+			break;
+		case 'P':
 			ReadPromotionEvent(inputFile);
-		else if (EventChar == 'C')
+			break;
+		case 'X':
 			ReadCancellationEvent(inputFile);
+			break;
+		}
+
 	}
 
-
-	//adding VIP trucks
-	for (int i = 0; i < vTrucksNum; i++)
-		this->AddTruck(VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed);
-
-	//adding special trucks
-	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed);
-
-	//adding normal trucks
-	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed);
-
+	this->pUI->PrintMsg("Input file successfully loaded!");
 	inputFile.close();
-
 }
 
 
@@ -134,10 +226,8 @@ void Company::ReadReadyEvent(std::ifstream& inputFile)
 
 	string sEventTime;
 	inputFile >> sEventTime;
-	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
-	
+	Time* EventTime = splitTime(sEventTime);
+
 	int ID;
 	inputFile >> ID;
 	int Distance;
@@ -157,8 +247,8 @@ void Company::ReadCancellationEvent(std::ifstream& inputFile)
 	string sEventTime;
 	inputFile >> sEventTime;
 	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
+
+	Time* EventTime = splitTime(sEventTime);
 
 	int ID;
 	inputFile >> ID;
@@ -171,9 +261,9 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 	string sEventTime;
 	inputFile >> sEventTime;
 	string TimeList[2];
-	//////////////has to make a function to split the time and save it in time_list ex: 5:11 ---> ["5","11"]
-	Time* EventTime = new Time(stoi(TimeList[0]), stoi(TimeList[1]));
-	
+
+	Time* EventTime = splitTime(sEventTime);
+
 	int ID;
 	inputFile >> ID;
 	float ExtraMoney;
@@ -194,14 +284,73 @@ void Company::SaveOutputs() {
 	// called on exit
 }
 
-void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed)
+void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
 {
-	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed);
-	this->TruckList->enqueue(truck);
+	Truck* truck = new Truck(truck_type, capacity, checkUpTime, journeysBeforeCheckUp, speed, id);
+	switch (truck_type)
+	{
+	case TRUCKTYPE::NT:
+		this->NormalTrucksList->enqueue(truck);
+		break;
+	case TRUCKTYPE::ST:
+		this->SpecialTrucksList->enqueue(truck);
+		break;
+	case TRUCKTYPE::VT:
+		this->VIPTrucksList->enqueue(truck);
+		break;
+	}
 }
 
 void Company::UpdateInterface() {
-	//pUI->Step(this);
+	// Run the appropriate interface function based on the current mode.
+	switch (this->pUI->GetAppMode())
+	{
+	case MODE::INTER:
+		pUI->InteractiveInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
+		break;
+	case MODE::STEP:
+		pUI->StepInterfaceUpdate();
+		break;
+	case MODE::SILENT:
+		pUI->SilentInterfaceUpdate();
+		break;
+	}
+}
+
+std::string Company::GetInteractiveModeData() const {
+	string interactive_mode_data;
+	string separator = "\n--------------------------------------------------\n";
+
+	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
+		InCheckupTrucksCount, DeliveredCargosCount;
+
+	WaitingCargosCount = this->NormalCargoList->getCount() +
+		this->SpecialCargoList->getCount() +
+		this->VIPCargoList->getCount();
+
+	LoadingTrucksCount = this->NormalTrucksList->getCount() +
+		this->SpecialTrucksList->getCount() +
+		this->VIPTrucksList->getCount();
+
+	DeliveredCargosCount = this->DeliveredNormalCargoList->getCount() +
+		this->DeliveredSpecialCargoList->getCount() +
+		this->DeliveredVIPCargoList->getCount();
+
+
+	// Waiting Cargos Line:
+	interactive_mode_data += WaitingCargosCount + " Waiting Cargos: ";
+	interactive_mode_data += "[" + this->NormalCargoList->getData() + "] ";
+	interactive_mode_data += "(" + this->SpecialCargoList->getData() + ") ";
+	interactive_mode_data += "{" + this->VIPCargoList->getData() + "}";
+	interactive_mode_data += separator;
+
+	interactive_mode_data += DeliveredCargosCount + " Delivered Cargos: ";
+	interactive_mode_data += "[" + this->DeliveredNormalCargoList->getData() + "] ";
+	interactive_mode_data += "(" + this->DeliveredSpecialCargoList->getData() + ") ";
+	interactive_mode_data += "{" + this->DeliveredVIPCargoList->getData() + "}";
+	interactive_mode_data += separator;
+
+	return interactive_mode_data;
 }
 
 void Company::AddEvent(Event* pEvent) {
@@ -209,12 +358,25 @@ void Company::AddEvent(Event* pEvent) {
 }
 
 void Company::AddWaitCargo(Cargo* pCargo) {
-	this->CargoWaitList->enqueue(pCargo);
+	CARGOTYPE cargo_type = pCargo->GetType();
+	switch (cargo_type)
+	{
+	case CARGOTYPE::N:
+		this->NormalCargoList->Insert(pCargo);
+		break;
+	case CARGOTYPE::S:
+		this->SpecialCargoList->enqueue(pCargo);
+		break;
+	case CARGOTYPE::V:
+		this->AddVIPCargo(pCargo);
+		break;
+
+	}
 }
 
 Cargo* Company::FindNormalCargo(int ID) {
 	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
-	
+
 	while (Head != nullptr) {
 		if (Head->getItem()->GetID() == ID) {
 			return Head->getItem();
@@ -230,30 +392,89 @@ Cargo* Company::FindNormalCargo(int ID) {
 */
 
 void Company::DeleteNormalCargo(int ID) {
-	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
-	Node<Cargo*>* Prev = nullptr;
 
-	while (Head != nullptr) {
-		if (Head->getItem()->GetID() == ID) {
-			if (this->NormalCargoList->GetHead() == Head) {
-				this->NormalCargoList->SetHead(Head->getNext());
-			}
-			else {
-				Prev->setNext(Head->getNext());
-			}
-			delete Head->getItem();
-			delete Head;
-			break;
-		}
-		Prev = Head;
-		Head = Head->getNext();
+	Node<Cargo*>* loopingPtr = this->NormalCargoList->GetHead();
+	Node<Cargo*>* prevPtr = loopingPtr;
+	if (this->NormalCargoList->GetHead() == loopingPtr) {
+		this->NormalCargoList->SetHead(loopingPtr->getNext());
+		delete loopingPtr;
+		loopingPtr = nullptr;
+		return;
 	}
-	
+
+	while (loopingPtr != nullptr) {
+		if (loopingPtr->getItem()->GetID() == ID) {
+			prevPtr->setNext(loopingPtr->getNext());
+			delete loopingPtr;
+			loopingPtr = nullptr;
+			return;
+		}
+	}
+
 }
 
 /*
 	- Priority doesn't only depend on the cost. *Need to change*
 */
 void Company::AddVIPCargo(Cargo* pCargo) {
-	this->VIPCargoList->enqueue(pCargo, pCargo->GetCost());
+
+	double priority_calc = pCargo->GetCost() / 2000
+		- pCargo->GetDeliveryDistance() / 2000
+		- pCargo->GetPrepTime()->GetTotalHours() / 5
+		- pCargo->GetLoadTime() / 10;
+
+
+	this->VIPCargoList->enqueue(pCargo, priority_calc);
 }
+
+bool Company::ExecuteUpcomingEvent() {
+	Event* tempEvent = nullptr;
+	this->EventList->peek(tempEvent);
+	// checking if there was actually an event to execute next
+	if (tempEvent != nullptr) {
+		// Total Hours of the Event & Timestep Relative to the Starting Point.
+		int EventTotalHours = tempEvent->GetEventTime().GetTotalHours();
+		int TimestepTotalHours = TimestepNum.GetTotalHours();
+		// Executes the event in case the current time is equal to the event time.
+		if (TimestepTotalHours >= EventTotalHours) {
+			tempEvent->Execute();
+			EventList->dequeue(tempEvent);
+			delete tempEvent;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+std::string Company::GetCurrentTime() {
+	int hours = this->TimestepNum.GetHour();
+	int day = this->TimestepNum.GetDay();
+
+	return to_string(day) + ":" + to_string(hours);
+}
+
+
+template <typename T>
+void Company::cleanQueueInnerPointers(Queue<T*>* queue)
+{
+	T* tempPointer = nullptr;
+	while (queue->dequeue(tempPointer))
+	{
+		delete tempPointer;
+		tempPointer = nullptr;
+	}
+}
+
+template <typename T>
+void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
+{
+	T* tempPointer = nullptr;
+	while (pqueue->dequeue(tempPointer))
+	{
+		delete tempPointer;
+		tempPointer = nullptr;
+	}
+}
+
+#endif 

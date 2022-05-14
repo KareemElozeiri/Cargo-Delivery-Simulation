@@ -5,4 +5,3 @@ int main()
 	Company AppMngr;
 	AppMngr.Simulate();
 }
-

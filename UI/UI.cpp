@@ -4,7 +4,7 @@
 #include "UI.h"
 
 UI::UI() {
-    this->AppMode = INTER;
+    this->AppMode = MODE::INTER;
     this->GetIOFiles();
     this->SetAppMode();
 }
@@ -12,9 +12,9 @@ UI::UI() {
 UI::~UI() {}
 
 void UI::SetAppMode() {
-    int ModeChoice = -1;
+    int iModeChoice = -1;
     // Getting the user's choice of the app mode.
-    while(ModeChoice < 0 || ModeChoice > 2) {
+    while(iModeChoice < 0 || iModeChoice > 2) {
         cout << "----------------------------" << endl;
         cout << "SELECT THE APPLICATION MODE:" << endl;
         cout << "----------------------------" << endl;
@@ -22,18 +22,20 @@ void UI::SetAppMode() {
         cout << "[1]: Step-By-Step Mode" << endl;
         cout << "[2]: Silent Mode" << endl;
         cout << ">> ";
-        cin >> ModeChoice;
+        cin >> iModeChoice;
     }
+    
     // Assigning the correct value to the AppMode variable.
-    switch (ModeChoice) {
+    switch (iModeChoice) {
         case 0:
-            this->AppMode = INTER;
+            this->AppMode = MODE::INTER;
             break;
         case 1:
-            this->AppMode = STEP;
+            this->AppMode = MODE::STEP;
             break;
         default:
-            this->AppMode = SILENT;
+            this->AppMode = MODE::SILENT;
+            break;
     }
 }
 
@@ -53,20 +55,24 @@ void UI::GetIOFiles() {
         cout << "[+]: Input File Name: ";
         cin >> InputFile;
     }
-    while (!FileExists("Loads/" + InputFile));
+    while (!filesystem::exists("Loads/" + InputFile));
 
     do {
         cout << "[+]: Output File Name: ";
         cin >> OutputFile;
     }
-    while (!FileExists("Outputs/" + InputFile));
+    while (!filesystem::exists("Outputs/" + OutputFile));
 
     this->InputFileName = "Loads/" + InputFile;
     this->OutputFileName = "Outputs/" + OutputFile;
 }
 
-bool UI::FileExists(const string fileName) const {
-    return (access(fileName.c_str(), F_OK) != -1);
+string UI::GetInputFilePath() const {
+    return this->InputFileName;
+}
+
+string UI::GetOutputFilePath() const {
+    return this->OutputFileName;
 }
 
 MODE UI::GetAppMode() const {
@@ -75,6 +81,21 @@ MODE UI::GetAppMode() const {
 
 void UI::PrintMsg(const string &msg) const {
     cout << msg << endl;
+}
+
+void UI::InteractiveInterfaceUpdate(string currentTime, string InteractiveData) const {
+    cout << "Current Time (Day:Hour) : " << currentTime << endl;
+    cin.get();
+    cout << InteractiveData << endl;
+}
+
+/* Not Required In Phase I */
+void UI::StepInterfaceUpdate() const {
+    return;
+}
+/* Not Required In Phase I */
+void UI::SilentInterfaceUpdate() const {
+    return;
 }
 
 #endif

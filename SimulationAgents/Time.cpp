@@ -1,3 +1,7 @@
+#ifndef TIME_CPP
+#define TIME_CPP
+
+
 #include "Time.h"
 
 Time::Time() : days(0), hours(0) {}
@@ -39,6 +43,11 @@ Time::Time(int h)
 
 int Time::GetDay() const { return this->days; }
 int Time::GetHour() const { return this->hours; }
+
+int Time::GetTotalHours() const
+{
+	return this->hours + 24 * this->days;
+}
 
 void Time::SetDay(int d) {
 	try 
@@ -162,3 +171,12 @@ Time Time::operator-(int subtracted_hours){
 		exit(1);
 	}
 }
+
+void Time::PrintTime() const
+{
+	std::cout << this->days << ":" << this->hours << std::endl;
+}
+
+
+
+#endif

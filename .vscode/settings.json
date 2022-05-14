@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "*.ejs": "html",
-        "string": "cpp"
-    },
-    "cSpell.words": [
-        "Mngr"
-    ]
-}
