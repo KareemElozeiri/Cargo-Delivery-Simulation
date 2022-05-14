@@ -1,7 +1,6 @@
 #ifndef  Company_H
 #define Company_H
 
-
 #include "Defs.h"
 #include "DataStructures/PQueue.h"
 #include "DataStructures/LinkedList.h"
@@ -155,7 +154,7 @@ public:
 	*	- journeysBeforeCheckUp : The journeys before checkup of the truck.
 	*	- speed : The truck's speed.
 	*/
-	void AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp,double speed);
+	void AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp,double speed, int id);
 	
 	/*
 	* Function: FindNormalCargo.
