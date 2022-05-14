@@ -16,7 +16,7 @@ private:
 	Time checkUpTime;	// the time consumed by the truck during maintenance 
 	double speed;
 	Time deliveryInterval; 
-	int jounrneysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
+	int journeysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
 	LinkedList<Cargo*> cargos;
 	int ID;
 

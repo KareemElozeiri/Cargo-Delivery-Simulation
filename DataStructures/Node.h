@@ -4,13 +4,7 @@
 template<typename T>
 class Node
 {
-protected :
-	T item;	// A data item (can be any complex structure)
-	double priority; // Item's Priority in case there is
-	Node<T>* next;	// Pointer to the next node
-
 public :
-
 	/*
 	* Function: Node.
 	* Default Constructor.
@@ -106,6 +100,10 @@ public :
 		return this->next;
 	}
 
+protected :
+	T item;	// Data Item (can be any complex structure)
+	double priority; // Item's Priority in case there is
+	Node<T>* next;	// Pointer to the next node
 };
 
 #endif	

@@ -1,13 +1,11 @@
 #ifndef TIME_CPP
 #define TIME_CPP
 
-
 #include "Time.h"
 
 Time::Time() : days(0), hours(0) {}
 
 Time::Time(int d, int h) {
-
 	try 
 	{
 		if (d < 0) throw std::string("Days cannot be negative");
@@ -31,8 +29,6 @@ Time::Time(int h)
 
 		this->hours = h % 24;
 		this->days = (h - this->hours) / 24;
-
-
 	}
 	catch (std::string e)
 	{
@@ -42,6 +38,7 @@ Time::Time(int h)
 }
 
 int Time::GetDay() const { return this->days; }
+
 int Time::GetHour() const { return this->hours; }
 
 int Time::GetTotalHours() const
@@ -75,9 +72,7 @@ void Time::SetHour(int h) {
 	}
 }
 
-
 Time Time::operator-(Time other) {
-
 	try {
 		if ((this->days < other.days) || (this->days == other.days && this->hours < other.hours)) { throw std::string("Invalid operands!"); }
 
@@ -99,7 +94,6 @@ Time Time::operator-(Time other) {
 	}
 }
 
-
 Time Time::operator+(Time other) {
 	int newDay, newHour;
 	if (this->hours + other.hours >= 24) {
@@ -115,18 +109,13 @@ Time Time::operator+(Time other) {
 	return t;
 }
 
-
-
-/// <summary>
-/// adding hours to the time
-/// </summary>
+// Adding hours to the current time (Overloading the + operator for int)
 Time Time::operator+(int added_hours) {
 	int newDay, newHour;
 
-	/////////to make sure that these hours smaller than 24 hours
-	//////// if not so it will be divided into days and hours
+	// Divinding the added_hours into days & hours, in case it's more than 24
 	int added_days = added_hours / 24;
-	added_hours = added_hours%24;
+	added_hours = added_hours % 24;
 
 	if (this->hours + added_hours >= 24) {
 		newDay = this->days + 1 + added_days;
@@ -141,27 +130,25 @@ Time Time::operator+(int added_hours) {
 	return t;
 }
 
+// Subtracting hours from the current time (Overloading the - operator for int)
 Time Time::operator-(int subtracted_hours){
-	////////This overloading has different logic than the preceding one
-
-	int subtracted_days = subtracted_hours / 24; /////to make sure that hours are divded if more than 24 hours.
+	// Handling the case when the subtracted hours are more than 24.
+	int subtracted_days = subtracted_hours / 24;
 	subtracted_hours = subtracted_hours % 24;
-	Time other(subtracted_days, subtracted_hours);
+	Time tempTime(subtracted_days, subtracted_hours);
 
 	try {
-
-		int All_hours_in_time = this->days * 24 + this->hours;
-
-		if (All_hours_in_time < subtracted_hours) { throw std::string("Invalid operands!"); }
+		int total_hours = this->days * 24 + this->hours;
+		if (total_hours < subtracted_hours) { throw std::string("Invalid operands!"); }
 
 		int newDay, newHour;
 		if (this->hours < subtracted_hours) {
-			newDay = this->days - other.days - 1;
-			newHour = 24 - (other.hours - this->hours);
+			newDay = this->days - tempTime.days - 1;
+			newHour = 24 - (tempTime.hours - this->hours);
 		}
 		else {
-			newDay = this->days - other.days;
-			newHour = this->hours - other.hours;
+			newDay = this->days - tempTime.days;
+			newHour = this->hours - tempTime.hours;
 		}
 		Time t(newDay, newHour);
 		return t;
@@ -176,7 +163,5 @@ void Time::PrintTime() const
 {
 	std::cout << this->days << ":" << this->hours << std::endl;
 }
-
-
 
 #endif

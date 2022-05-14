@@ -3,9 +3,7 @@
 
 #include "Truck.h"
 
-Truck::Truck()
-{
-}
+Truck::Truck() {}
 
 Truck::Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
 {
@@ -13,7 +11,7 @@ Truck::Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysB
 	this->capacity = capacity;
 	this->checkUpTime = checkUpTime;
 	this->speed = speed;
-	this->jounrneysBeforeCheckUp = journeysBeforeCheckUp;
+	this->journeysBeforeCheckUp = journeysBeforeCheckUp;
 	this->ID = id;
 	this->CalculateDeliveryInterval();
 }
@@ -45,7 +43,7 @@ Time Truck::GetDeliveryInterval() const
 
 int Truck::GetJourneysBeforeCheckUp() const
 {
-	return this->jounrneysBeforeCheckUp;
+	return this->journeysBeforeCheckUp;
 }
 
 void Truck::CalculateDeliveryInterval()
@@ -65,7 +63,6 @@ void Truck::CalculateDeliveryInterval()
 	}
 
 	this->deliveryInterval = 2* (maxDeliveryDistance/this->speed) + totalLoadTime;
-
 }
 
 int Truck::GetID() const
@@ -84,11 +81,9 @@ std::ostream& operator<<(std::ostream& os , const Truck* truck)
 	return os;
 }
 
-
 std::ostream& operator<<(std::ostream& os, const Truck truck) 
 {
 	os << truck.GetID();
-
 	return os;
 }
 

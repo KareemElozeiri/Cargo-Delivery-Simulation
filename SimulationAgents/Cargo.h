@@ -6,16 +6,7 @@
 
 class Cargo
 {
-protected:
-	CARGOTYPE Cargo_type;
-	int cargoID;
-	Time* preparation_time;
-	int load_time;
-	double delivery_distance;
-	double cost;
-
 public:
-
 	/*
 	* Function: Cargo.
 	* The Cargo Constructor.
@@ -142,6 +133,14 @@ public:
 	* Returns: void.
 	*/
 	void SetID(int id);
+
+protected:
+	CARGOTYPE Cargo_type;
+	int cargoID;
+	Time* preparation_time;
+	int load_time;
+	double delivery_distance;
+	double cost;
 };
 
 #endif

@@ -68,7 +68,6 @@ void Cargo::SetID(int id) {
 }
 
 // Overloading the cout operator for the cargo
-
 std::ostream& operator<<(std::ostream& os, const Cargo* cargo)
 {
 	os << cargo->GetID();
