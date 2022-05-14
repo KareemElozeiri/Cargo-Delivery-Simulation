@@ -2,3 +2,7 @@
 .vscode
 x64
 Debug
+Cargo-Delivery-Simulation.sln
+Cargo-Delivery-Simulation.vcxproj
+Cargo-Delivery-Simulation.vcxproj.filters
+Cargo-Delivery-Simulation.vcxproj.user
