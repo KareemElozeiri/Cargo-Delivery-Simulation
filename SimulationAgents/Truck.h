@@ -5,7 +5,9 @@
 #include "../Defs.h"
 #include "../DataStructures/LinkedList.h"
 #include "../DataStructures/Node.h"
+#include "../DataStructures/PQueue.h"
 #include "Cargo.h"
+
 
 
 class Truck
@@ -17,7 +19,7 @@ private:
 	double speed;
 	Time deliveryInterval; 
 	int journeysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
-	LinkedList<Cargo*> cargos;
+	PQueue<Cargo*> cargos;
 	int ID;
 
 public:

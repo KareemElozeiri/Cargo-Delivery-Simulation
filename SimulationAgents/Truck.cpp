@@ -51,16 +51,7 @@ void Truck::CalculateDeliveryInterval()
 	int totalLoadTime = 0;
 	double maxDeliveryDistance = 0;
 
-	Node<Cargo*>* curr = this->cargos.GetHead();
 	
-	while(curr != nullptr){
-		if(maxDeliveryDistance < curr->getItem()->GetDeliveryDistance()){
-			maxDeliveryDistance = curr->getItem()->GetDeliveryDistance();
-		}
-
-		totalLoadTime += curr->getItem()->GetLoadTime();
-		curr = curr->getNext();
-	}
 
 	this->deliveryInterval = 2* (maxDeliveryDistance/this->speed) + totalLoadTime;
 }
