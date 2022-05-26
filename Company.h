@@ -37,8 +37,9 @@ private:
 	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* VIPTrucksList = new Queue<Truck*>;
-	PQueue<Truck*>* inCheckUpTrucksList = new PQueue<Truck*>;
+	PQueue<Truck*>* InCheckUpTrucksList = new PQueue<Truck*>;
 
+	PQueue<Truck*>* MovingTrucks = new PQueue<Truck*>;
 
 	Time AutoPromotionLimit; // supposed to read days from the input file
 	Time MaxWaitingTime;	 // the maximum time that a truck should wait before loading cargo || supposed to read hours from the input file
