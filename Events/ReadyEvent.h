@@ -30,7 +30,7 @@ public:
 	*
 	* Returns: void.
 	*/
-	ReadyEvent(Company* AppMngr, Time* EventTime, int ID, CARGOTYPE CType, int Distance, int LT, int Cost) : Event(AppMngr, EventTime, ID), 
+	ReadyEvent(Company* AppMngr, Time EventTime, int ID, CARGOTYPE CType, int Distance, int LT, int Cost) : Event(AppMngr, EventTime, ID), 
 		CType(CType), Distance(Distance), LT(LT), Cost(Cost) {};
 
 	/*
