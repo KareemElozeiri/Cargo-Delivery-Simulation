@@ -92,7 +92,9 @@ void Company::Simulate() {
 		this->LoadVIPCargosToTruck();
 		this->LoadSpecialCargosToTruck();
 		this->LoadNormalCargosToTruck();
-		
+
+		// Move Trucks to the moving trucks list if applicable
+		this->MoveTrucks();
 
 		// print current info
 		this->UpdateInterface();
@@ -382,7 +384,7 @@ std::string Company::GetInteractiveModeData() const {
 	string interactive_mode_data;
 	string separator = "\n--------------------------------------------------\n";
 
-	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
+	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCount,
 		InCheckupTrucksCount, DeliveredCargosCount;
 
 	WaitingCargosCount = this->NormalCargoList->getCount() +
@@ -392,6 +394,8 @@ std::string Company::GetInteractiveModeData() const {
 	LoadingTrucksCount = this->NormalTrucksList->getCount() +
 		this->SpecialTrucksList->getCount() +
 		this->VIPTrucksList->getCount();
+
+	MovingCargosCount = this->MovingTrucks->getCount();
 
 	DeliveredCargosCount = this->DeliveredNormalCargoList->getCount() +
 		this->DeliveredSpecialCargoList->getCount() +
@@ -691,6 +695,28 @@ void Company::AutoPromote(Cargo* pCargo) {
 		this->DeleteNormalCargo(pCargo->GetID());
 		this->AddVIPCargo(pCargo);
 	
+}
+
+void Company::MoveTrucks() {
+	Truck* checkingTruck = nullptr;
+
+	this->NormalTrucksList->peek(checkingTruck);
+	if (checkingTruck->IsLoaded()) {
+		NormalTrucksList->dequeue(checkingTruck);
+		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+	}
+
+	this->SpecialTrucksList->peek(checkingTruck);
+	if (checkingTruck->IsLoaded()) {
+		SpecialTrucksList->dequeue(checkingTruck);
+		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+	}
+
+	this->VIPTrucksList->peek(checkingTruck);
+	if (checkingTruck->IsLoaded()) {
+		VIPTrucksList->dequeue(checkingTruck);
+		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+	}
 }
 
 void Company::CheckForCheckUp() {
