@@ -65,7 +65,15 @@ void Cargo::SetDeliveredTime(Time del_time)
 {
 	this->delivered_time = del_time;
 }
-
+
+Time Cargo::GetWaitingTime() const
+{
+	return this->waiting_time;
+}
+void Cargo::SetWaitingTime(Time t)
+{
+	this->waiting_time = t;
+}
 void Cargo::SetDeliveryDistance(double delivery_distance) {
 	this->delivery_distance = delivery_distance;
 }

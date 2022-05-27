@@ -83,6 +83,7 @@ bool Truck::LoadCargo(Cargo* cargo)
 
 		}
 		else {
+			this->SetLoaded(true);
 			return false;
 		}
 	}
