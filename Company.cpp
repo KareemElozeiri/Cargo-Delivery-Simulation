@@ -319,25 +319,27 @@ void Company::SaveOutputs() {
 
 		CARGOTYPE type = whichIsFirst(normal, vip, special);
 
-		Cargo* cargo = new Cargo;
+		Cargo* cargo;
 		switch (type)
 		{
-		case CARGOTYPE::N:
-			this->DeliveredNormalCargoList->dequeue(cargo);
-			break;
+		
 		case CARGOTYPE::S:
 			this->DeliveredSpecialCargoList->dequeue(cargo);
 			break;
 		case CARGOTYPE::V:
 			this->DeliveredVIPCargoList->dequeue(cargo);
 			break;
-		}
 
+		default://case CARGOTYPE::N:
+			this->DeliveredNormalCargoList->dequeue(cargo);
+			break;
+		}
+		/*
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
 			cargo->GetWaitTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetTruckID()) + "\n" ;
-
+			*/
 	}
 
 
