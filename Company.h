@@ -249,6 +249,8 @@ public:
 
 	void AutoPromote(Cargo* pCargo);
 
+	void CheckForCheckUp();
+
 };
 #endif
 

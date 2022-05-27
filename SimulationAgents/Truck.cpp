@@ -12,6 +12,7 @@ Truck::Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysB
 	this->checkUpTime = checkUpTime;
 	this->speed = speed;
 	this->journeysBeforeCheckUp = journeysBeforeCheckUp;
+	this->maxjourneysBeforeCheckUp = journeysBeforeCheckUp;
 	this->ID = id;
 	this->CalculateDeliveryInterval();
 }
@@ -100,6 +101,10 @@ Time Truck::GetMinimumDeliveryTime() const
 	}
 	
 	return t;
+}
+
+void Truck::ResetJourneysCount() {
+	this->journeysBeforeCheckUp = this->maxjourneysBeforeCheckUp;
 }
 
 std::ostream& operator<<(std::ostream& os , const Truck* truck)

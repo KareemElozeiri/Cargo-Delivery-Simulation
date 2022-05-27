@@ -83,6 +83,10 @@ void Company::Simulate() {
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
 
+
+		// move checkup trucks to checkup
+		this->CheckForCheckUp();
+
 		// Todo: account for the max time waiting rule
 		this->LoadVIPCargosToTruck();
 		this->LoadSpecialCargosToTruck();
@@ -444,7 +448,7 @@ std::string Company::GetCurrentTime() {
 }
 
 bool Company::LoadVIPCargosToTruck()
-{
+{	
 	if (this->VIPCargoList->getCount() != 0) {
 		
 		//checks first for the availability of VIP trucks
@@ -612,5 +616,49 @@ void Company::AutoPromote(Cargo* pCargo) {
 		this->AddVIPCargo(pCargo);
 	}
 }
+
+void Company::CheckForCheckUp() {
+	
+	// check for normal trucks
+	Truck* pTruck;
+	while (true) {
+		this->NormalTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+			pTruck->ResetJourneysCount();
+			this->NormalTrucksList->dequeue(pTruck);
+			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+		}
+		else break;
+	}
+
+	// check for special trucks
+	while (true) {
+		this->SpecialTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+			pTruck->ResetJourneysCount();
+			this->SpecialTrucksList->dequeue(pTruck);
+			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+		}
+		else break;
+	}
+
+	// check for vip trucks
+	while (true) {
+		this->VIPTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+			pTruck->ResetJourneysCount();
+			this->VIPTrucksList->dequeue(pTruck);
+			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+		}
+		else break;
+	}
+}
+
 
 #endif 
