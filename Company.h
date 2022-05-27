@@ -248,6 +248,7 @@ public:
 	bool isChangeableCargo(int ID);
 
 	void AutoPromote(Cargo* pCargo);
+	void checkForAutoPromote(Time time);
 
 };
 #endif

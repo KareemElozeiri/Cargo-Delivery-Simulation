@@ -92,6 +92,8 @@ void Company::Simulate() {
 		// print current info
 		this->UpdateInterface();
 
+		//check for Auto Promote
+		this->checkForAutoPromote(TimestepNum);
 
 		//check break conditions
 		if (this->CheckExitStatus())
@@ -590,6 +592,11 @@ void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
 		delete tempPointer;
 		tempPointer = nullptr;
 	}
+}
+
+
+void Company::checkForAutoPromote(Time time) {
+
 }
 
 bool Company::isChangeableCargo(int ID) {
