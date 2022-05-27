@@ -82,16 +82,6 @@ public:
 	Time GetDeliveredTime();
 
 
-	/*
-	* Function: GetWaitTime.
-	* Gets the time the cargo waited until moving
-	*
-	* Parameters:
-	*	- NO PARAMS
-	*
-	* Returns: Time.
-	*/
-	Time GetWaitTime();
 
 	/*
 	* Function: GetWaitTime.

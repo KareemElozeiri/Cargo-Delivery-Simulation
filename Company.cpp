@@ -301,7 +301,28 @@ CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
 
 void Company::SaveOutputs() {
+
 	// called on exit
+	std::ofstream outputFile(this->outputFileName);
+
+	Time avgWaitinngTime;
+
+	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
+		InCheckupTrucksCount, DeliveredCargosCount;
+
+	WaitingCargosCount = this->NormalCargoList->getCount() +
+		this->SpecialCargoList->getCount() +
+		this->VIPCargoList->getCount();
+
+	LoadingTrucksCount = this->NormalTrucksList->getCount() +
+		this->SpecialTrucksList->getCount() +
+		this->VIPTrucksList->getCount();
+
+	DeliveredCargosCount = this->DeliveredNormalCargoList->getCount() +
+		this->DeliveredSpecialCargoList->getCount() +
+		this->DeliveredVIPCargoList->getCount();
+
+
 
 	string dataToOutput = "";
 
@@ -322,7 +343,6 @@ void Company::SaveOutputs() {
 		Cargo* cargo;
 		switch (type)
 		{
-		
 		case CARGOTYPE::S:
 			this->DeliveredSpecialCargoList->dequeue(cargo);
 			break;
@@ -334,15 +354,23 @@ void Company::SaveOutputs() {
 			this->DeliveredNormalCargoList->dequeue(cargo);
 			break;
 		}
+
+		avgWaitinngTime = avgWaitinngTime + cargo->GetWaitingTime();
 		
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
-			cargo->GetWaitTime().StringifyTime() + "\t" +
+			cargo->GetWaitingTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetTruckID()) + "\n" +
 			"";
 	}
 
 
+	//output the file here
+	outputFile << "-----------------------------------------"<<endl;
+
+
+
+	outputFile.close();
 }
 
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
