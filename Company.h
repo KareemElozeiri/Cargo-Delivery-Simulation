@@ -230,6 +230,10 @@ public:
 	*/
 	bool LoadNormalCargosToTruck();
 
+	/*
+	*Checks if cargo is allowed to be promoted or canceled
+	*/
+	bool isChangeableCargo(int ID);
 
 	void AutoPromote(Cargo* pCargo);
 
