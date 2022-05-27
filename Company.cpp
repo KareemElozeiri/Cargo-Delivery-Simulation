@@ -514,7 +514,7 @@ bool Company::LoadNormalCargosToTruck()
 			return false;
 		}
 		else {
-			//this->LoadTruck(normalTruck, this->NormalCargoList);
+			this->LoadTruck(normalTruck, this->NormalCargoList);
 			return true;
 		}
 	}
@@ -526,7 +526,7 @@ bool Company::LoadNormalCargosToTruck()
 			return false;
 		}
 		else {
-			//this->LoadTruck(vipTruck, this->NormalCargoList);
+			this->LoadTruck(vipTruck, this->NormalCargoList);
 			return true;
 		}
 	}
