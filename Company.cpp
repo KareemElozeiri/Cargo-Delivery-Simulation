@@ -334,12 +334,12 @@ void Company::SaveOutputs() {
 			this->DeliveredNormalCargoList->dequeue(cargo);
 			break;
 		}
-		/*
+		
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
 			cargo->GetWaitTime().StringifyTime() + "\t" +
-			std::to_string(cargo->GetTruckID()) + "\n" ;
-			*/
+			std::to_string(cargo->GetTruckID()) + "\n" +
+			"";
 	}
 
 
