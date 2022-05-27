@@ -600,7 +600,11 @@ void Company::checkForAutoPromote() {
 	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
 	
 	while (Head != nullptr) {
-		AutoPromote(Head->getItem());
+		Cargo* pCargo = Head->getItem();
+		Time res = (pCargo->GetPrepTime() - this->TimestepNum);
+		if (this->AutoPromotionLimit <= res) {
+			AutoPromote(pCargo);
+		}
 		Head = Head->getNext();
 	}
 
@@ -613,15 +617,10 @@ bool Company::isChangeableCargo(int ID) {
 void Company::AutoPromote(Cargo* pCargo) {
 	//if a cargo wait more than auotp days from its preparation time to be assigned to a truck,
 	//it should be automatically promoted to be an vip cargo
-	
-
-	Time res = (pCargo->GetPrepTime() - this->TimestepNum);
-	
-	// Not sure if this condition is right
-	if (this->AutoPromotionLimit <= res) {
+		 
 		this->DeleteNormalCargo(pCargo->GetID());
 		this->AddVIPCargo(pCargo);
-	}
+	
 }
 
 #endif 
