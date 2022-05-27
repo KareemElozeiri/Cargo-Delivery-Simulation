@@ -558,12 +558,10 @@ void Company::LoadTruck(Truck* truck, LinkedList<Cargo*>* cargoList)
 		}
 		c = cargoList->GetHead()->getItem();
 		tempNode = cargoList->GetHead();
-		std::cout << "here";
 
 		cargoList->SetHead(cargoList->GetHead()->getNext());
 		cargoList->setCount(cargoList->getCount() - 1);
 		delete tempNode;
-		std::cout << "triggered";
 	}
 }
 
