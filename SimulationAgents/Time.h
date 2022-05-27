@@ -146,6 +146,17 @@ public:
 	bool operator<(Time other_time);
 
 	/*
+	* Function: operator overloading (<=).
+	* overloading the less than or equal operator to compare time objects.
+	*
+	* Parameters:
+	*	- other_time : the time to be compared with the current one.
+	*
+	* Returns: Boolean.
+	*/
+	bool operator<=(Time other_time);
+
+	/*
 	* Function: operator overloading (>).
 	* overloading the greater than operator to compare time objects.
 	*
@@ -155,6 +166,17 @@ public:
 	* Returns: Boolean.
 	*/
 	bool operator>(Time other_time);
+
+	/*
+	* Function: operator overloading (>=).
+	* overloading the greater than or equal operator to compare time objects.
+	*
+	* Parameters:
+	*	- other_time : the time to be compared with the current one.
+	*
+	* Returns: Boolean.
+	*/
+	bool operator>=(Time other_time);
 
 	/*
 	* Function: PrintTime.
