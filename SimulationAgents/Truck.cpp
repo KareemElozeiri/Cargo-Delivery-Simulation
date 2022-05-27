@@ -66,24 +66,27 @@ void Truck::SetID(int id)
 
 bool Truck::LoadCargo(Cargo* cargo)
 {
-	if (this->cargos.getCount() < this->capacity) {
-		//adding load time of the cargo to the total time spent
-		//by the truck waiting for the cargos to be loaded
-		this->total_load_time = this->total_load_time + cargo->GetLoadTime();
-		//setting max distance that the truck will move to 
-		if (cargo->GetDeliveryDistance() > this->max_distance_to_deliver)
-			this->max_distance_to_deliver = cargo->GetDeliveryDistance();
-		//checking minimumm time required for delivering a cargo
+	if (cargo != nullptr) {
+		if (this->cargos.getCount() <= this->capacity) {
+			//adding load time of the cargo to the total time spent
+			//by the truck waiting for the cargos to be loaded
+			this->total_load_time = this->total_load_time + cargo->GetLoadTime();
+			//setting max distance that the truck will move to 
+			if (cargo->GetDeliveryDistance() > this->max_distance_to_deliver)
+				this->max_distance_to_deliver = cargo->GetDeliveryDistance();
+			//checking minimumm time required for delivering a cargo
 
 
-		this->cargos.enqueue(cargo,- cargo->GetDeliveryDistance()/this->speed);
-		this->CalculateDeliveryInterval();
-		return true;
-	
+			this->cargos.enqueue(cargo, -cargo->GetDeliveryDistance() / this->speed);
+			this->CalculateDeliveryInterval();
+			return true;
+
+		}
+		else {
+			return false;
+		}
 	}
-	else {
-		return false;
-	}
+	return false;
 
 }
 

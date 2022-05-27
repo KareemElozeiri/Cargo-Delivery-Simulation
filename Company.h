@@ -236,6 +236,11 @@ public:
 	*/
 	void LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue);
 
+	/*
+	* Overloads the previos function to handle Cargo list 
+	* whose data structure type is linked list
+	*/
+	void LoadTruck(Truck*, LinkedList<Cargo*>* cargoList);
 
 };
 #endif

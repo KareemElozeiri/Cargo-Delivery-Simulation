@@ -80,9 +80,10 @@ void Company::Simulate() {
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
 
-		// Todo: load trucks based on the criteria 
 		// Todo: account for the max time waiting rule
-		
+		this->LoadVIPCargosToTruck();
+		this->LoadSpecialCargosToTruck();
+		this->LoadNormalCargosToTruck();
 		
 
 		// print current info
@@ -490,7 +491,7 @@ bool Company::LoadSpecialCargosToTruck()
 {
 	Truck* specialTruck;
 	this->SpecialTrucksList->peek(specialTruck);
-	
+
 	if (specialTruck != nullptr) {
 		if (this->SpecialCargoList->getCount() < specialTruck->GetCapacity()) {
 			return false;
@@ -506,19 +507,30 @@ bool Company::LoadSpecialCargosToTruck()
 
 bool Company::LoadNormalCargosToTruck()
 {
-	Truck* vipTruck;
-	this->VIPTrucksList->peek(vipTruck);
-
-	Truck* specialTruck;
-	this->SpecialTrucksList->peek(specialTruck);
-
 	Truck* normalTruck;
 	this->NormalTrucksList->peek(normalTruck);
+	if (normalTruck != nullptr) {
+		if (this->NormalCargoList->getCount() < normalTruck->GetCapacity()) {
+			return false;
+		}
+		else {
+			//this->LoadTruck(normalTruck, this->NormalCargoList);
+			return true;
+		}
+	}
 
+	Truck* vipTruck;
+	this->VIPTrucksList->peek(vipTruck);
+	if (vipTruck != nullptr) {
+		if (this->NormalCargoList->getCount() < vipTruck->GetCapacity()) {
+			return false;
+		}
+		else {
+			//this->LoadTruck(vipTruck, this->NormalCargoList);
+			return true;
+		}
+	}
 
-	delete vipTruck;
-	delete specialTruck;
-	delete normalTruck;
 	return false;
 }
 
@@ -526,9 +538,32 @@ void Company::LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue)
 {
 	Cargo* c;
 	cargoQueue->peek(c);
-	while (truck->LoadCargo(c)) {
-		cargoQueue->dequeue(c);
+	truck->LoadCargo(c);
+	while (cargoQueue->dequeue(c)) {
 		cargoQueue->peek(c);
+		if(!(truck->LoadCargo(c)))
+			break;
+	}
+}
+
+void Company::LoadTruck(Truck* truck, LinkedList<Cargo*>* cargoList)
+{
+	Cargo* c = nullptr;
+	Node<Cargo*>* tempNode;
+	while (cargoList->GetHead() != nullptr) {
+
+		if (c != nullptr) {
+			if (!(truck->LoadCargo(c)))
+				break;
+		}
+		c = cargoList->GetHead()->getItem();
+		tempNode = cargoList->GetHead();
+		std::cout << "here";
+
+		cargoList->SetHead(cargoList->GetHead()->getNext());
+		cargoList->setCount(cargoList->getCount() - 1);
+		delete tempNode;
+		std::cout << "triggered";
 	}
 }
 
