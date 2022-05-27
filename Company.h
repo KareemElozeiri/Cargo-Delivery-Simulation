@@ -250,11 +250,15 @@ public:
 	void AutoPromote(Cargo* pCargo);
 	void checkForAutoPromote();
 
+<<<<<<< HEAD
 	/*
 	* Function: CheckMaxWaitingTime
 	* Checks if a given cargo has waited for the maximum waiting time
 	*/
 	bool CheckMaxWaitingTime(Cargo* c);
+=======
+	void CheckForCheckUp();
+>>>>>>> 41e2017714044c21446549a5cef17f3ee6a7628c
 
 };
 #endif

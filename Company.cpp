@@ -10,8 +10,6 @@ Company::Company() {
 	this->pUI = new UI;
 
 
-
-
 	//getting the input & output file names from the UI class
 	this->inputFileName = this->pUI->GetInputFilePath();
 	this->outputFileName = this->pUI->GetOutputFilePath();
@@ -83,6 +81,10 @@ void Company::Simulate() {
 
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
+
+
+		// move checkup trucks to checkup
+		this->CheckForCheckUp();
 
 		// Todo: account for the max time waiting rule
 		this->LoadVIPCargosToTruck();
@@ -272,8 +274,21 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 }
 
 
-TRUCKTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
+CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
+	Cargo* first_delivered_Cargo = normal;
+	CARGOTYPE type = CARGOTYPE::N;
+	
+	if (vip->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+		first_delivered_Cargo = vip;
+		type = CARGOTYPE::V;
+	}
+	if (special->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+		first_delivered_Cargo = special;
+		type = CARGOTYPE::S;
+	}
+
+	return type;
 
 
 }
@@ -285,16 +300,38 @@ TRUCKTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
 void Company::SaveOutputs() {
 	// called on exit
-	Cargo* normal;
-	this->DeliveredNormalCargoList->peek(normal);
-	Cargo* vip;
-	this->DeliveredVIPCargoList->peek(vip);
-	Cargo* special;
-	this->DeliveredSpecialCargoList->peek(special);
-	whichIsFirst(normal, vip, special);
 
+	string dataToOutput = "";
 
+	while (!DeliveredNormalCargoList->isEmpty() ||
+		!DeliveredVIPCargoList->isEmpty() ||
+		!DeliveredSpecialCargoList->isEmpty() ) {
 
+		Cargo* normal;
+		this->DeliveredNormalCargoList->peek(normal);
+		Cargo* vip;
+		this->DeliveredVIPCargoList->peek(vip);
+		Cargo* special;
+		this->DeliveredSpecialCargoList->peek(special);
+
+		CARGOTYPE type = whichIsFirst(normal, vip, special);
+
+		Cargo* cargo;
+		switch (type)
+		{
+		case CARGOTYPE::N:
+			this->DeliveredNormalCargoList->dequeue(cargo);
+			break;
+		case CARGOTYPE::S:
+			this->DeliveredSpecialCargoList->dequeue(cargo);
+			break;
+		case CARGOTYPE::V:
+			this->DeliveredVIPCargoList->dequeue(cargo);
+			break;
+		}
+
+		dataToOutput += cargo->GetDeliveredTime().PrintTime()
+	}
 
 
 }
@@ -471,7 +508,7 @@ std::string Company::GetCurrentTime() {
 }
 
 bool Company::LoadVIPCargosToTruck()
-{
+{	
 	if (this->VIPCargoList->getCount() != 0) {
 		
 		//checks first for the availability of VIP trucks
@@ -646,5 +683,49 @@ void Company::AutoPromote(Cargo* pCargo) {
 		this->AddVIPCargo(pCargo);
 	
 }
+
+void Company::CheckForCheckUp() {
+	
+	// check for normal trucks
+	Truck* pTruck;
+	while (true) {
+		this->NormalTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+			pTruck->ResetJourneysCount();
+			this->NormalTrucksList->dequeue(pTruck);
+			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+		}
+		else break;
+	}
+
+	// check for special trucks
+	while (true) {
+		this->SpecialTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+			pTruck->ResetJourneysCount();
+			this->SpecialTrucksList->dequeue(pTruck);
+			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+		}
+		else break;
+	}
+
+	// check for vip trucks
+	while (true) {
+		this->VIPTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+			pTruck->ResetJourneysCount();
+			this->VIPTrucksList->dequeue(pTruck);
+			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+		}
+		else break;
+	}
+}
+
 
 #endif 
