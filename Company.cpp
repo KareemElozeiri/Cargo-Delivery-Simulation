@@ -488,19 +488,19 @@ bool Company::LoadVIPCargosToTruck()
 
 bool Company::LoadSpecialCargosToTruck()
 {
-	Truck* vipTruck;
-	this->VIPTrucksList->peek(vipTruck);
-
 	Truck* specialTruck;
 	this->SpecialTrucksList->peek(specialTruck);
+	
+	if (specialTruck != nullptr) {
+		if (this->SpecialCargoList->getCount() < specialTruck->GetCapacity()) {
+			return false;
+		}
+		else {
+			this->LoadTruck(specialTruck, this->SpecialCargoList);
+			return true;
+		}
+	}
 
-	Truck* normalTruck;
-	this->NormalTrucksList->peek(normalTruck);
-
-
-	delete vipTruck;
-	delete specialTruck;
-	delete normalTruck;
 	return false;
 }
 
