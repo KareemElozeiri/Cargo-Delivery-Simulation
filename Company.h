@@ -162,6 +162,15 @@ public:
 	void AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp,double speed, int id);
 	
 	/*
+	* Function: MoveTrucks.
+	* Moves the upcoming trucks to the moving trucks list if applicable.
+	*
+	* Parameters:
+	*	NO PARAMS.
+	*/
+	void MoveTrucks();
+
+	/*
 	* Function: FindNormalCargo.
 	* Finds a normal cargo by ID.
 	*
