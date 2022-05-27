@@ -3,6 +3,7 @@
 
 #include "Company.h"
 
+
 Company::Company() {
 	this->TimestepNum = Time();
 
@@ -596,6 +597,18 @@ void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
 
 
 void Company::checkForAutoPromote(Time time) {
+	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
+	Head
+	while (Head != nullptr) {
+		Head->getItem()
+			
+		
+		Head = Head->getNext();
+	}
+
+
+
+	return;
 
 }
 
@@ -607,9 +620,6 @@ void Company::AutoPromote(Cargo* pCargo) {
 	//if a cargo wait more than auotp days from its preparation time to be assigned to a truck,
 	//it should be automatically promoted to be an vip cargo
 	
-	if (!this->isChangeableCargo(pCargo->GetID())) {
-		return;
-	}
 
 	Time res = (pCargo->GetPrepTime() - this->TimestepNum);
 	
