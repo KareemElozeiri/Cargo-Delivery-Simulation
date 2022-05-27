@@ -19,7 +19,9 @@ private:
 	double speed;
 	Time deliveryInterval; 
 	Time first_delivered_cargo;
+	int maxjourneysBeforeCheckUp;
 	int journeysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
+	Time CheckUpOutTime;
 	PQueue<Cargo*> cargos;
 	int ID;
 	double max_distance_to_deliver = 0;
@@ -173,6 +175,8 @@ public:
 
 	void SetLoaded(bool value);
 
+
+	void ResetJourneysCount();
 };
 
 #endif
