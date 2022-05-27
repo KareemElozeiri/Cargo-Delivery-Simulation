@@ -94,7 +94,7 @@ void Company::Simulate() {
 		this->UpdateInterface();
 
 		//check for Auto Promote
-		this->checkForAutoPromote(TimestepNum);
+		this->checkForAutoPromote();
 
 		//check break conditions
 		if (this->CheckExitStatus())
@@ -596,19 +596,13 @@ void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
 }
 
 
-void Company::checkForAutoPromote(Time time) {
+void Company::checkForAutoPromote() {
 	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
-	Head
+	
 	while (Head != nullptr) {
-		Head->getItem()
-			
-		
+		AutoPromote(Head->getItem());
 		Head = Head->getNext();
 	}
-
-
-
-	return;
 
 }
 
