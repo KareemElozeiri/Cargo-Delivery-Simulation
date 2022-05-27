@@ -230,6 +230,12 @@ public:
 	*/
 	bool LoadNormalCargosToTruck();
 
+	/*
+	* Function: LoadTruck
+	* Takes the truck to be loaded and the queue that it should load from
+	*/
+	void LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue);
+
 
 };
 #endif

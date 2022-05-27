@@ -440,17 +440,96 @@ std::string Company::GetCurrentTime() {
 
 bool Company::LoadVIPCargosToTruck()
 {
+	if (this->VIPCargoList->getCount() != 0) {
+		
+		//checks first for the availability of VIP trucks
+		Truck* vipTruck;
+		this->VIPTrucksList->peek(vipTruck);
+
+		if (vipTruck != nullptr) {
+			if (this->VIPCargoList->getCount() < vipTruck->GetCapacity()) {
+				return false;
+			}
+			else {
+				this->LoadTruck(vipTruck, this->VIPCargoList);
+				return true;
+			}
+		}
+
+		//checks second for the availability of normal trucks
+		Truck* normalTruck;
+		this->NormalTrucksList->peek(normalTruck);
+		if (normalTruck != nullptr) {
+			if (this->VIPCargoList->getCount() < normalTruck->GetCapacity()) {
+				return false;
+			}
+			else {
+				this->LoadTruck(normalTruck, this->VIPCargoList);
+				return true;
+			}
+
+		}
+
+		//checks last for the availability of special trucks
+		Truck* specialTruck;
+		this->SpecialTrucksList->peek(specialTruck);
+		if (specialTruck != nullptr) {
+			if (this->VIPCargoList->getCount() < specialTruck->GetCapacity()) {
+				return false;
+			}
+			else {
+				this->LoadTruck(specialTruck, this->VIPCargoList);
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
 bool Company::LoadSpecialCargosToTruck()
 {
+	Truck* vipTruck;
+	this->VIPTrucksList->peek(vipTruck);
+
+	Truck* specialTruck;
+	this->SpecialTrucksList->peek(specialTruck);
+
+	Truck* normalTruck;
+	this->NormalTrucksList->peek(normalTruck);
+
+
+	delete vipTruck;
+	delete specialTruck;
+	delete normalTruck;
 	return false;
 }
 
 bool Company::LoadNormalCargosToTruck()
 {
+	Truck* vipTruck;
+	this->VIPTrucksList->peek(vipTruck);
+
+	Truck* specialTruck;
+	this->SpecialTrucksList->peek(specialTruck);
+
+	Truck* normalTruck;
+	this->NormalTrucksList->peek(normalTruck);
+
+
+	delete vipTruck;
+	delete specialTruck;
+	delete normalTruck;
 	return false;
+}
+
+void Company::LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue)
+{
+	Cargo* c;
+	cargoQueue->peek(c);
+	while (truck->LoadCargo(c)) {
+		cargoQueue->dequeue(c);
+		cargoQueue->peek(c);
+	}
 }
 
 
