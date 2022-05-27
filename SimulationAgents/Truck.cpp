@@ -118,6 +118,14 @@ void Truck::SetLoaded(bool value)
 	this->Loaded = true;
 }
 
+Time Truck::getCheckUpOutTime() const {
+	return this->CheckUpOutTime;
+}
+
+void Truck::setCheckUpOutTime(Time time) {
+	this->CheckUpOutTime = time;
+}
+
 std::ostream& operator<<(std::ostream& os , const Truck* truck)
 {
 	os << truck->GetID();

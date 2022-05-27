@@ -256,6 +256,7 @@ public:
 	*/
 	bool CheckMaxWaitingTime(Cargo* c);
 	void CheckForCheckUp();
+	void MoveCheckUpToAvailable();
 
 };
 #endif

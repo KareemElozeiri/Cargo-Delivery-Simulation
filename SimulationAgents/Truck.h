@@ -21,7 +21,7 @@ private:
 	Time first_delivered_cargo;
 	int maxjourneysBeforeCheckUp;
 	int journeysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
-	Time CheckUpOutTime;
+	Time CheckUpOutTime; // time to get out of the checkup
 	PQueue<Cargo*> cargos;
 	int ID;
 	double max_distance_to_deliver = 0;
@@ -177,6 +177,9 @@ public:
 
 
 	void ResetJourneysCount();
+
+	Time getCheckUpOutTime() const;
+	void setCheckUpOutTime(Time time);
 };
 
 #endif
