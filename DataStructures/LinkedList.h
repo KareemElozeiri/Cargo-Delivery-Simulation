@@ -142,6 +142,8 @@ public:
 	*/
 	int getCount() const;
 
+	void setCount(int value);
+
 	/*
 	* Function: getData.
 	* Returns the data in the queue separated by commas.

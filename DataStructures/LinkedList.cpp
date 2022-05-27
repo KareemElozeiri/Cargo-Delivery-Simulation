@@ -198,6 +198,11 @@ int LinkedList<T>::getCount() const {
 }
 
 template <typename T>
+void LinkedList<T>::setCount(int value){
+	this->count = value;
+}
+
+template <typename T>
 void LinkedList<T>::DecreaseCount() {
 	this->count -= 1;
 }

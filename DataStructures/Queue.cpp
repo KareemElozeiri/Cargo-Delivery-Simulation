@@ -40,7 +40,7 @@ void Queue<T>::enqueue(T value) {
 template <typename T>
 bool Queue<T>::dequeue(T& value) {
 	if (this->isEmpty())
-		return 0;
+		return false;
 
 	value = this->Head->getItem();
 	Node<T>* tempNode = this->Head;
@@ -48,7 +48,7 @@ bool Queue<T>::dequeue(T& value) {
 	delete tempNode;
 	this->count -= 1;
 
-	return 1;
+	return true;
 }
 
 template <typename T>

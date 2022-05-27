@@ -231,6 +231,18 @@ public:
 	bool LoadNormalCargosToTruck();
 
 	/*
+	* Function: LoadTruck
+	* Takes the truck to be loaded and the queue that it should load from
+	*/
+	void LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue);
+
+	/*
+	* Overloads the previos function to handle Cargo list 
+	* whose data structure type is linked list
+	*/
+	void LoadTruck(Truck*, LinkedList<Cargo*>* cargoList);
+
+  /*
 	*Checks if cargo is allowed to be promoted or canceled
 	*/
 	bool isChangeableCargo(int ID);

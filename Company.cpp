@@ -83,9 +83,10 @@ void Company::Simulate() {
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
 
-		// Todo: load trucks based on the criteria 
 		// Todo: account for the max time waiting rule
-		
+		this->LoadVIPCargosToTruck();
+		this->LoadSpecialCargosToTruck();
+		this->LoadNormalCargosToTruck();
 		
 
 		// print current info
@@ -444,17 +445,128 @@ std::string Company::GetCurrentTime() {
 
 bool Company::LoadVIPCargosToTruck()
 {
+	if (this->VIPCargoList->getCount() != 0) {
+		
+		//checks first for the availability of VIP trucks
+		Truck* vipTruck;
+		this->VIPTrucksList->peek(vipTruck);
+
+		if (vipTruck != nullptr) {
+			if (this->VIPCargoList->getCount() < vipTruck->GetCapacity()) {
+				return false;
+			}
+			else {
+				this->LoadTruck(vipTruck, this->VIPCargoList);
+				return true;
+			}
+		}
+
+		//checks second for the availability of normal trucks
+		Truck* normalTruck;
+		this->NormalTrucksList->peek(normalTruck);
+		if (normalTruck != nullptr) {
+			if (this->VIPCargoList->getCount() < normalTruck->GetCapacity()) {
+				return false;
+			}
+			else {
+				this->LoadTruck(normalTruck, this->VIPCargoList);
+				return true;
+			}
+
+		}
+
+		//checks last for the availability of special trucks
+		Truck* specialTruck;
+		this->SpecialTrucksList->peek(specialTruck);
+		if (specialTruck != nullptr) {
+			if (this->VIPCargoList->getCount() < specialTruck->GetCapacity()) {
+				return false;
+			}
+			else {
+				this->LoadTruck(specialTruck, this->VIPCargoList);
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
 bool Company::LoadSpecialCargosToTruck()
 {
+	Truck* specialTruck;
+	this->SpecialTrucksList->peek(specialTruck);
+
+	if (specialTruck != nullptr) {
+		if (this->SpecialCargoList->getCount() < specialTruck->GetCapacity()) {
+			return false;
+		}
+		else {
+			this->LoadTruck(specialTruck, this->SpecialCargoList);
+			return true;
+		}
+	}
+
 	return false;
 }
 
 bool Company::LoadNormalCargosToTruck()
 {
+	Truck* normalTruck;
+	this->NormalTrucksList->peek(normalTruck);
+	if (normalTruck != nullptr) {
+		if (this->NormalCargoList->getCount() < normalTruck->GetCapacity()) {
+			return false;
+		}
+		else {
+			this->LoadTruck(normalTruck, this->NormalCargoList);
+			return true;
+		}
+	}
+
+	Truck* vipTruck;
+	this->VIPTrucksList->peek(vipTruck);
+	if (vipTruck != nullptr) {
+		if (this->NormalCargoList->getCount() < vipTruck->GetCapacity()) {
+			return false;
+		}
+		else {
+			this->LoadTruck(vipTruck, this->NormalCargoList);
+			return true;
+		}
+	}
+
 	return false;
+}
+
+void Company::LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue)
+{
+	Cargo* c;
+	cargoQueue->peek(c);
+	truck->LoadCargo(c);
+	while (cargoQueue->dequeue(c)) {
+		cargoQueue->peek(c);
+		if(!(truck->LoadCargo(c)))
+			break;
+	}
+}
+
+void Company::LoadTruck(Truck* truck, LinkedList<Cargo*>* cargoList)
+{
+	Cargo* c = nullptr;
+	Node<Cargo*>* tempNode;
+	while (cargoList->GetHead() != nullptr) {
+
+		if (c != nullptr) {
+			if (!(truck->LoadCargo(c)))
+				break;
+		}
+		c = cargoList->GetHead()->getItem();
+		tempNode = cargoList->GetHead();
+
+		cargoList->SetHead(cargoList->GetHead()->getNext());
+		cargoList->setCount(cargoList->getCount() - 1);
+		delete tempNode;
+	}
 }
 
 
