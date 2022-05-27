@@ -18,13 +18,6 @@ Company::Company() {
 
 	// initialize load function
 	this->LoadInputs();
-
-	///// test area
-
-	Cargo* testCargo = new Cargo(CARGOTYPE::N, 1, Time(1, 2), 10, 10.0, 10.0);
-	this->NormalCargoList->Insert(testCargo);
-	this->AutoPromotionLimit = Time(1, 1);
-	this->AutoPromote(testCargo);
 }
 
 Company::~Company() {
