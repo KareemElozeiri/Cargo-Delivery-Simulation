@@ -84,8 +84,10 @@ void Company::Simulate() {
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
 
+		// move trucks from checkup to available
+		this->MoveCheckUpToAvailable();
 
-		// move checkup trucks to checkup
+		// move trucks from available to checkup
 		this->CheckForCheckUp();
 
 		// Todo: account for the max time waiting rule
@@ -279,7 +281,7 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 TRUCKTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
 
-
+	return TRUCKTYPE::NT;
 }
 
 /// There was AddEvents function here and I replaced it with ReadEvents
@@ -660,9 +662,10 @@ void Company::CheckForCheckUp() {
 		if (pTruck == nullptr) break;
 		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
 			pTruck->ResetJourneysCount();
-			this->NormalTrucksList->dequeue(pTruck);
 			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			pTruck->setCheckUpOutTime(OutTime);
 			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+			this->NormalTrucksList->dequeue(pTruck);
 		}
 		else break;
 	}
@@ -673,9 +676,10 @@ void Company::CheckForCheckUp() {
 		if (pTruck == nullptr) break;
 		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
 			pTruck->ResetJourneysCount();
-			this->SpecialTrucksList->dequeue(pTruck);
 			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			pTruck->setCheckUpOutTime(OutTime);
 			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+			this->SpecialTrucksList->dequeue(pTruck);
 		}
 		else break;
 	}
@@ -686,9 +690,37 @@ void Company::CheckForCheckUp() {
 		if (pTruck == nullptr) break;
 		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
 			pTruck->ResetJourneysCount();
-			this->VIPTrucksList->dequeue(pTruck);
 			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			pTruck->setCheckUpOutTime(OutTime);
 			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+			this->VIPTrucksList->dequeue(pTruck);
+		}
+		else break;
+	}
+}
+
+
+void Company::MoveCheckUpToAvailable() {
+	Truck* pTruck;
+	while (true) {
+		this->InCheckUpTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			
+			switch (pTruck->GetTruckType())
+			{
+			case (TRUCKTYPE::NT):
+				this->NormalTrucksList->enqueue(pTruck);
+				break;
+			case (TRUCKTYPE::ST):
+				this->SpecialTrucksList->enqueue(pTruck);
+				break;
+			case (TRUCKTYPE::VT):
+				this->VIPTrucksList->enqueue(pTruck);
+				break;
+			}
+
+			this->InCheckUpTrucksList->dequeue(pTruck);
 		}
 		else break;
 	}

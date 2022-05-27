@@ -251,6 +251,7 @@ public:
 	void checkForAutoPromote();
 
 	void CheckForCheckUp();
+	void MoveCheckUpToAvailable();
 
 };
 #endif
