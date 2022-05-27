@@ -14,10 +14,13 @@ private:
 	double delivery_distance;
 	double cost;
 	Time delivered_time;
-	Time Wait_time;
+	Time Waiting_time;
 	int truck_ID;
 
 public:
+
+	Cargo();
+
 	/*
 	* Function: Cargo.
 	* The Cargo Constructor.
@@ -217,15 +220,6 @@ public:
 	Time GetWaitingTime() const;
 	void SetWaitingTime(Time t);
 
-private:
-	CARGOTYPE Cargo_type;
-	int cargoID;
-	Time preparation_time;
-	int load_time;
-	double delivery_distance;
-	double cost;
-	Time delivered_time;
-	Time waiting_time;
 };
 
 #endif

@@ -292,7 +292,7 @@ CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
 	return type;
 
-	return TRUCKTYPE::NT;
+	return CARGOTYPE::N;
 }
 
 /// There was AddEvents function here and I replaced it with ReadEvents
@@ -319,7 +319,7 @@ void Company::SaveOutputs() {
 
 		CARGOTYPE type = whichIsFirst(normal, vip, special);
 
-		Cargo* cargo;
+		Cargo* cargo = new Cargo;
 		switch (type)
 		{
 		case CARGOTYPE::N:
