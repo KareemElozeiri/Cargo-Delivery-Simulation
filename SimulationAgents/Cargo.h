@@ -6,6 +6,17 @@
 
 class Cargo
 {
+private:
+	CARGOTYPE Cargo_type;
+	int cargoID;
+	Time preparation_time;
+	int load_time;
+	double delivery_distance;
+	double cost;
+	Time delivered_time;
+	Time Wait_time;
+	int truck_ID;
+
 public:
 	/*
 	* Function: Cargo.
@@ -66,6 +77,29 @@ public:
 	* Returns: Time.
 	*/
 	Time GetDeliveredTime();
+
+
+	/*
+	* Function: GetWaitTime.
+	* Gets the time the cargo waited until moving
+	*
+	* Parameters:
+	*	- NO PARAMS
+	*
+	* Returns: Time.
+	*/
+	Time GetWaitTime();
+
+	/*
+	* Function: GetWaitTime.
+	* Gets the ID of the truck that moved it.
+	*
+	* Parameters:
+	*	- NO PARAMS
+	*
+	* Returns: Time.
+	*/
+	int GetTruckID();
 	
 	/*
 	* Function: GetCost.
@@ -125,6 +159,28 @@ public:
 	void SetDeliveredTime(Time del_time);
 	
 	/*
+	* Function: SetWaitTime.
+	* Sets the time the cargo waited until moving
+	*
+	* Parameters:
+	*	- wait_time : the time the cargo waited until moving
+	*
+	* Returns: void.
+	*/
+	void SetWaitTime(Time wait_time);
+
+	/*
+	* Function: SetTruckID.
+	* Sets the ID of the truck that moved it.
+	*
+	* Parameters:
+	*	- id : the ID of the truck that moved it.
+	*
+	* Returns: void.
+	*/
+	void SetTruckID(int truck_id);
+
+	/*
 	* Function: SetDeliveryDistance.
 	* Sets the delivery distance of the Cargo.
 	*
@@ -137,7 +193,7 @@ public:
 	
 	/*
 	* Function: SetCost.
-	* Sets the cost of the Cargo.
+	* Sets the cost of the Cargo
 	*
 	* Parameters:
 	*	- cost : The cost of the Cargo.
@@ -157,6 +213,10 @@ public:
 	*/
 	void SetID(int id);
 
+
+	Time GetWaitingTime() const;
+	void SetWaitingTime(Time t);
+
 private:
 	CARGOTYPE Cargo_type;
 	int cargoID;
@@ -165,6 +225,7 @@ private:
 	double delivery_distance;
 	double cost;
 	Time delivered_time;
+	Time waiting_time;
 };
 
 #endif

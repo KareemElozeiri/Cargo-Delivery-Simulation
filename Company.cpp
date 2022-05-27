@@ -10,8 +10,6 @@ Company::Company() {
 	this->pUI = new UI;
 
 
-
-
 	//getting the input & output file names from the UI class
 	this->inputFileName = this->pUI->GetInputFilePath();
 	this->outputFileName = this->pUI->GetOutputFilePath();
@@ -278,8 +276,21 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 }
 
 
-TRUCKTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
+CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
+	Cargo* first_delivered_Cargo = normal;
+	CARGOTYPE type = CARGOTYPE::N;
+	
+	if (vip->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+		first_delivered_Cargo = vip;
+		type = CARGOTYPE::V;
+	}
+	if (special->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+		first_delivered_Cargo = special;
+		type = CARGOTYPE::S;
+	}
+
+	return type;
 
 	return TRUCKTYPE::NT;
 }
@@ -291,16 +302,38 @@ TRUCKTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
 void Company::SaveOutputs() {
 	// called on exit
-	Cargo* normal;
-	this->DeliveredNormalCargoList->peek(normal);
-	Cargo* vip;
-	this->DeliveredVIPCargoList->peek(vip);
-	Cargo* special;
-	this->DeliveredSpecialCargoList->peek(special);
-	whichIsFirst(normal, vip, special);
 
+	string dataToOutput = "";
 
+	while (!DeliveredNormalCargoList->isEmpty() ||
+		!DeliveredVIPCargoList->isEmpty() ||
+		!DeliveredSpecialCargoList->isEmpty() ) {
 
+		Cargo* normal;
+		this->DeliveredNormalCargoList->peek(normal);
+		Cargo* vip;
+		this->DeliveredVIPCargoList->peek(vip);
+		Cargo* special;
+		this->DeliveredSpecialCargoList->peek(special);
+
+		CARGOTYPE type = whichIsFirst(normal, vip, special);
+
+		Cargo* cargo;
+		switch (type)
+		{
+		case CARGOTYPE::N:
+			this->DeliveredNormalCargoList->dequeue(cargo);
+			break;
+		case CARGOTYPE::S:
+			this->DeliveredSpecialCargoList->dequeue(cargo);
+			break;
+		case CARGOTYPE::V:
+			this->DeliveredVIPCargoList->dequeue(cargo);
+			break;
+		}
+
+		dataToOutput += cargo->GetDeliveredTime().PrintTime()
+	}
 
 
 }
