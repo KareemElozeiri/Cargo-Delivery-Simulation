@@ -33,6 +33,11 @@ double Cargo::GetDeliveryDistance() const
 	return this->delivery_distance;
 }
 
+Time Cargo::GetDeliveredTime()
+{
+	return delivered_time;
+}
+
 double Cargo::GetCost() const
 {
 	return this->cost;
@@ -54,6 +59,11 @@ void Cargo::SetPrepTime(Time prep_time) {
 
 void Cargo::SetLoadTime(int load_time) {
 	this->load_time = load_time;
+}
+
+void Cargo::SetDeliveredTime(Time del_time)
+{
+	this->delivered_time = del_time;
 }
 
 void Cargo::SetDeliveryDistance(double delivery_distance) {

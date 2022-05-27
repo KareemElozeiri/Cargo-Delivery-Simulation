@@ -54,6 +54,18 @@ public:
 	* Returns: double.
 	*/
 	double GetDeliveryDistance() const;
+
+
+	/*
+	* Function: GetDelivereddTime.
+	* Gets the time by which a cargo has been delivered.
+	*
+	* Parameters:
+	*	- NO PARAMS
+	*
+	* Returns: Time.
+	*/
+	Time GetDeliveredTime();
 	
 	/*
 	* Function: GetCost.
@@ -100,6 +112,17 @@ public:
 	* Returns: void.
 	*/
 	void SetLoadTime(int load_time);
+
+	/*
+	* Function: SetDelivereddTime.
+	* Sets the time by which a cargo has been delivered.
+	*
+	* Parameters:
+	*	- del_time : the time by which a cargo has been delivered.
+	*
+	* Returns: void.
+	*/
+	void SetDeliveredTime(Time del_time);
 	
 	/*
 	* Function: SetDeliveryDistance.
@@ -141,6 +164,7 @@ private:
 	int load_time;
 	double delivery_distance;
 	double cost;
+	Time delivered_time;
 };
 
 #endif
