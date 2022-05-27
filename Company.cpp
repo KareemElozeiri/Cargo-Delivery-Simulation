@@ -80,26 +80,10 @@ void Company::Simulate() {
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
 
-
-		if (this->TimestepNum.GetTotalHours() % 5 == 0) {
-			//move cargo
-			Cargo* nc = nullptr;
-			Cargo* sc = nullptr;
-			Cargo* vc = nullptr;
-
-			if (this->NormalCargoList->GetHead()) nc = this->NormalCargoList->GetHead()->getItem();
-			this->SpecialCargoList->dequeue(sc);
-			this->VIPCargoList->dequeue(vc);
-
-			if (nc != nullptr)
-			{
-				this->DeliveredNormalCargoList->enqueue(nc);
-				this->DeleteNormalCargo(nc->GetID());
-			}
-
-			if (sc != nullptr) this->DeliveredSpecialCargoList->enqueue(sc);
-			if (vc != nullptr) this->DeliveredVIPCargoList->enqueue(vc);
-		}
+		// Todo: load trucks based on the criteria 
+		// Todo: account for the max time waiting rule
+		
+		
 
 		// print current info
 		this->UpdateInterface();
@@ -452,6 +436,21 @@ std::string Company::GetCurrentTime() {
 	int day = this->TimestepNum.GetDay();
 
 	return to_string(day) + ":" + to_string(hours);
+}
+
+bool Company::LoadVIPCargosToTruck()
+{
+	return false;
+}
+
+bool Company::LoadSpecialCargosToTruck()
+{
+	return false;
+}
+
+bool Company::LoadNormalCargosToTruck()
+{
+	return false;
 }
 
 

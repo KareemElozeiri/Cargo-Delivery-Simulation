@@ -18,9 +18,12 @@ private:
 	Time checkUpTime;	// the time consumed by the truck during maintenance 
 	double speed;
 	Time deliveryInterval; 
+	Time first_delivered_cargo;
 	int journeysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
 	PQueue<Cargo*> cargos;
 	int ID;
+	double max_distance_to_deliver = 0;
+	Time total_load_time = 0;
 
 public:
 	
@@ -149,6 +152,10 @@ public:
 	* Returns: void.
 	*/
 	void SetID(int id);
+
+
+	bool LoadCargo(Cargo* cargo);
+
 };
 
 #endif
