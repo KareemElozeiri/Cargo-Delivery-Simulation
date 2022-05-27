@@ -197,9 +197,4 @@ int LinkedList<T>::getCount() const {
 	return this->count;
 }
 
-template <typename T>
-void LinkedList<T>::DecreaseCount() {
-	this->count -= 1;
-}
-
 #endif

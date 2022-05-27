@@ -8,9 +8,6 @@ Company::Company() {
 
 	this->pUI = new UI;
 
-
-
-
 	//getting the input & output file names from the UI class
 	this->inputFileName = this->pUI->GetInputFilePath();
 	this->outputFileName = this->pUI->GetOutputFilePath();
@@ -18,13 +15,6 @@ Company::Company() {
 
 	// initialize load function
 	this->LoadInputs();
-
-	///// test area
-
-	Cargo* testCargo = new Cargo(CARGOTYPE::N, 1, Time(1, 2), 10, 10.0, 10.0);
-	this->NormalCargoList->Insert(testCargo);
-	this->AutoPromotionLimit = Time(1, 1);
-	this->AutoPromote(testCargo);
 }
 
 Company::~Company() {
@@ -392,7 +382,6 @@ void Company::DeleteNormalCargo(int ID) {
 	if (this->NormalCargoList->GetHead() == loopingPtr) {
 		this->NormalCargoList->SetHead(loopingPtr->getNext());
 		delete loopingPtr;
-		this->NormalCargoList->DecreaseCount();
 		loopingPtr = nullptr;
 		return;
 	}
@@ -487,25 +476,18 @@ void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
 	}
 }
 
-bool Company::isChangeableCargo(int ID) {
-	return (this->FindNormalCargo(ID) != nullptr) ? true : false;
-}
-
 void Company::AutoPromote(Cargo* pCargo) {
 	//if a cargo wait more than auotp days from its preparation time to be assigned to a truck,
 	//it should be automatically promoted to be an vip cargo
-	
-	if (!this->isChangeableCargo(pCargo->GetID())) {
-		return;
-	}
 
-	Time res = (pCargo->GetPrepTime() - this->TimestepNum);
+	Time prepTime = pCargo->GetPrepTime();
+
 	
-	// Not sure if this condition is right
-	if (this->AutoPromotionLimit <= res) {
-		this->DeleteNormalCargo(pCargo->GetID());
-		this->AddVIPCargo(pCargo);
-	}
+	this->DeleteNormalCargo(pCargo->GetID());
+	this->AddVIPCargo(pCargo);
 }
+
+
+
 
 #endif 

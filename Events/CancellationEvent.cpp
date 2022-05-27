@@ -4,12 +4,11 @@
 #include "CancellationEvent.h"
 
 void CancellationEvent::Execute() {
-
-	if (!AppMngr->isChangeableCargo(ID)) {
-		return;
+	Cargo* pCargo = nullptr;
+	pCargo = AppMngr->FindNormalCargo(ID);
+	if (pCargo != nullptr) {
+		AppMngr->DeleteNormalCargo(ID);
 	}
-
-	AppMngr->DeleteNormalCargo(ID);
 }
 
 #endif
