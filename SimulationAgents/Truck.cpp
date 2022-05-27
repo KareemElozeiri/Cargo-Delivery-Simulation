@@ -102,6 +102,16 @@ Time Truck::GetMinimumDeliveryTime() const
 	return t;
 }
 
+bool Truck::IsLoaded() const
+{
+	return this->Loaded;
+}
+
+void Truck::SetLoaded(bool value)
+{
+	this->Loaded = true;
+}
+
 std::ostream& operator<<(std::ostream& os , const Truck* truck)
 {
 	os << truck->GetID();
