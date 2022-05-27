@@ -231,6 +231,8 @@ public:
 	bool LoadNormalCargosToTruck();
 
 
+	void AutoPromote(Cargo* pCargo);
+
 };
 #endif
 

@@ -23,7 +23,7 @@ public:
 	*
 	* Returns: void.
 	*/
-	PromotionEvent(Company* AppMngr, Time* EventTime, int ID, double ExtraMoney) : Event(AppMngr, EventTime, ID), ExtraMoney(ExtraMoney) {};
+	PromotionEvent(Company* AppMngr, Time EventTime, int ID, double ExtraMoney) : Event(AppMngr, EventTime, ID), ExtraMoney(ExtraMoney) {};
 	
 	/*
 	* Function: Execute.

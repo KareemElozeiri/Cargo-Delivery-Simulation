@@ -8,7 +8,7 @@ Cargo::Cargo(CARGOTYPE type)
 	this->Cargo_type = type;
 }
 
-Cargo::Cargo(CARGOTYPE type, int cargoID, Time* preparation_time, int load_time, double delivery_distance, double cost)
+Cargo::Cargo(CARGOTYPE type, int cargoID, Time preparation_time, int load_time, double delivery_distance, double cost)
 {
 	this->Cargo_type = type;
 	this->cargoID = cargoID;
@@ -18,7 +18,7 @@ Cargo::Cargo(CARGOTYPE type, int cargoID, Time* preparation_time, int load_time,
 	this->cost = cost;
 }
 
-Time* Cargo::GetPrepTime() const
+Time Cargo::GetPrepTime() const
 {
 	return this->preparation_time;
 }
@@ -48,7 +48,7 @@ CARGOTYPE Cargo::GetType() const
 	return Cargo_type;
 }
 
-void Cargo::SetPrepTime(Time* prep_time) {
+void Cargo::SetPrepTime(Time prep_time) {
 	this->preparation_time = prep_time;
 }
 

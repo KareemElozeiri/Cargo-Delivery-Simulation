@@ -10,7 +10,7 @@ using namespace std;
 //int* splitInt(string str, int len);
 
 string* split(string str, char ch);
-Time* splitTime(string str);
+Time splitTime(string str);
 
 
 
