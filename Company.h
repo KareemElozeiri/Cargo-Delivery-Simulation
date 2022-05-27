@@ -250,6 +250,8 @@ public:
 	void AutoPromote(Cargo* pCargo);
 	void checkForAutoPromote();
 
+	void CheckForCheckUp();
+
 };
 #endif
 
