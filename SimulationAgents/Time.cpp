@@ -164,8 +164,17 @@ bool Time::operator<(Time other_time) {
 	return (this->days * 24 + this->hours) < (other_time.days * 24 + other_time.hours);
 }
 
+bool Time::operator<=(Time other_time) {
+
+	return (this->days * 24 + this->hours) <= (other_time.days * 24 + other_time.hours);
+}
+
 bool Time::operator>(Time other_time) {
 	return (other_time < *this);
+}
+
+bool Time::operator>=(Time other_time) {
+	return (other_time <= *this);
 }
 
 void Time::PrintTime() const
