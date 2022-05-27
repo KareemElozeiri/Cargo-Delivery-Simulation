@@ -745,6 +745,7 @@ void Company::MoveCheckUpToAvailable() {
 	while (true) {
 		this->InCheckUpTrucksList->peek(pTruck);
 		if (pTruck == nullptr) break;
+
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
 			
 			switch (pTruck->GetTruckType())
