@@ -211,7 +211,7 @@ void Company::ReadReadyEvent(std::ifstream& inputFile)
 
 	string sEventTime;
 	inputFile >> sEventTime;
-	Time* EventTime = splitTime(sEventTime);
+	Time EventTime = splitTime(sEventTime);
 
 	int ID;
 	inputFile >> ID;
@@ -233,7 +233,7 @@ void Company::ReadCancellationEvent(std::ifstream& inputFile)
 	inputFile >> sEventTime;
 	string TimeList[2];
 
-	Time* EventTime = splitTime(sEventTime);
+	Time EventTime = splitTime(sEventTime);
 
 	int ID;
 	inputFile >> ID;
@@ -247,7 +247,7 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 	inputFile >> sEventTime;
 	string TimeList[2];
 
-	Time* EventTime = splitTime(sEventTime);
+	Time EventTime = splitTime(sEventTime);
 
 	int ID;
 	inputFile >> ID;
@@ -405,7 +405,7 @@ void Company::AddVIPCargo(Cargo* pCargo) {
 
 	double priority_calc = pCargo->GetCost() / 2000
 		- pCargo->GetDeliveryDistance() / 2000
-		- pCargo->GetPrepTime()->GetTotalHours() / 5
+		- pCargo->GetPrepTime().GetTotalHours() / 5
 		- pCargo->GetLoadTime() / 10;
 
 
@@ -589,5 +589,19 @@ void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
 		tempPointer = nullptr;
 	}
 }
+
+void Company::AutoPromote(Cargo* pCargo) {
+	//if a cargo wait more than auotp days from its preparation time to be assigned to a truck,
+	//it should be automatically promoted to be an vip cargo
+
+	Time prepTime = pCargo->GetPrepTime();
+
+	
+	this->DeleteNormalCargo(pCargo->GetID());
+	this->AddVIPCargo(pCargo);
+}
+
+
+
 
 #endif 

@@ -28,7 +28,7 @@ public:
 	*	- delivery_distance : The Cargo's delivery distance.
 	*	- cost : The Cargo's cost.
 	*/
-	Cargo(CARGOTYPE type, int cargoID, Time* preparation_time, int load_time,
+	Cargo(CARGOTYPE type, int cargoID, Time preparation_time, int load_time,
 		double delivery_distance, double cost);
 
 	/*
@@ -37,7 +37,7 @@ public:
 	*
 	* Returns: Time*.
 	*/
-	Time* GetPrepTime() const;
+	Time GetPrepTime() const;
 	
 	/*
 	* Function: GetLoadTime.
@@ -88,7 +88,7 @@ public:
 	*
 	* Returns: void.
 	*/
-	void SetPrepTime(Time* prep_time);
+	void SetPrepTime(Time prep_time);
 	
 	/*
 	* Function: SetLoadTime.
@@ -137,7 +137,7 @@ public:
 private:
 	CARGOTYPE Cargo_type;
 	int cargoID;
-	Time* preparation_time;
+	Time preparation_time;
 	int load_time;
 	double delivery_distance;
 	double cost;

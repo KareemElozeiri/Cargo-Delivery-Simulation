@@ -9,7 +9,7 @@ class Event
 {
 protected:
 	Company* AppMngr;
-	Time* EventTime;
+	Time EventTime;
 	int ID;
 
 public:
@@ -25,7 +25,7 @@ public:
 	*
 	* Returns: void.
 	*/
-	Event(Company* AppMngr, Time* EventTime, int ID) : AppMngr(AppMngr), EventTime(EventTime), ID(ID) {}
+	Event(Company* AppMngr, Time EventTime, int ID) : AppMngr(AppMngr), EventTime(EventTime), ID(ID) {}
 
 	/*
 	* Function: Execute.
@@ -41,7 +41,7 @@ public:
 	*
 	* Returns: Time.
 	*/
-	Time GetEventTime() const { return *EventTime; }
+	Time GetEventTime() const { return EventTime; }
 
 	/*
 	* Function: GetEventID.

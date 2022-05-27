@@ -19,7 +19,7 @@ public:
 	*
 	* Returns: void.
 	*/
-	CancellationEvent(Company* AppMngr, Time* EventTime, int ID) : Event(AppMngr, EventTime, ID) {};
+	CancellationEvent(Company* AppMngr, Time EventTime, int ID) : Event(AppMngr, EventTime, ID) {};
 
 	/*
 	* Function: Execute.

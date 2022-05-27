@@ -242,6 +242,8 @@ public:
 	*/
 	void LoadTruck(Truck*, LinkedList<Cargo*>* cargoList);
 
+	void AutoPromote(Cargo* pCargo);
+
 };
 #endif
 

@@ -44,10 +44,9 @@ int* splitInt(string str, int len)
 /// ex: "5:22" --> Time(5,22)
 /// </summary>
 /// <returns> Time* </returns>
-Time* splitTime(string str)
+Time splitTime(string str)
 {
     int* intTime = splitInt(str,2);
-    Time* time = new Time(intTime[0],intTime[1]);
+    Time time = Time(intTime[0],intTime[1]);
     return time;
-
 }
