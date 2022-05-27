@@ -205,6 +205,32 @@ public:
 	* Returns: string.
 	*/
 	std::string GetCurrentTime();
+
+	/* 
+	* Function: LoadVIPCargosToTruck
+	* Handles the logic for loading VIP cargos to the proper truck
+	* Returns: true if the loading went successfully
+	* Returns: false if the loading failed
+	*/
+	bool LoadVIPCargosToTruck();
+
+	/*
+	* Function: LoadVIPCargosToTruck
+	* Handles the logic for loading special cargos to the proper truck
+	* Returns: true if the loading went successfully
+	* Returns: false if the loading failed
+	*/
+	bool LoadSpecialCargosToTruck();
+
+	/*
+	* Function: LoadVIPCargosToTruck
+	* Handles the logic for loading Normal cargos to the proper truck
+	* Returns: true if the loading went successfully
+	* Returns: false if the loading failed
+	*/
+	bool LoadNormalCargosToTruck();
+
+
 };
 #endif
 

@@ -73,6 +73,7 @@ bool Truck::LoadCargo(Cargo* cargo)
 			this->max_distance_to_deliver = cargo->GetDeliveryDistance();
 
 		this->cargos.enqueue(cargo,- cargo->GetDeliveryDistance()/this->speed);
+		this->CalculateDeliveryInterval();
 		return true;
 	
 	}
