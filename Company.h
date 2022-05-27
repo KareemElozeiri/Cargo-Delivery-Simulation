@@ -39,6 +39,10 @@ private:
 	Queue<Truck*>* VIPTrucksList = new Queue<Truck*>;
 	PQueue<Truck*>* InCheckUpTrucksList = new PQueue<Truck*>;
 
+	Queue<Truck*>* NormalMaintenanceTrucksList = new Queue<Truck*>;
+	Queue<Truck*>* SpecialMaintenanceTrucksList = new Queue<Truck*>;
+	Queue<Truck*>* VIPMaintenanceTrucksList = new Queue<Truck*>;
+
 	PQueue<Truck*>* MovingTrucks = new PQueue<Truck*>;
 
 	Time AutoPromotionLimit; // supposed to read days from the input file
@@ -266,7 +270,12 @@ public:
 	bool CheckMaxWaitingTime(Cargo* c);
 	void CheckForCheckUp();
 	void MoveCheckUpToAvailable();
+	bool CheckForMaintenance(Truck* pTruck);
+	void MoveMaintenanceToAvailable();
 
+	// TODO
+	TRUCKTYPE CheckTrucksNeeded(); // get what truck type needed
+	void ForceMoveMaintenanceToAvailable(TRUCKTYPE type); // release one of the trucks in the list
 };
 #endif
 
