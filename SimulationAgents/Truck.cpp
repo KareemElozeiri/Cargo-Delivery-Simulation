@@ -12,6 +12,7 @@ Truck::Truck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysB
 	this->checkUpTime = checkUpTime;
 	this->speed = speed;
 	this->journeysBeforeCheckUp = journeysBeforeCheckUp;
+	this->maxjourneysBeforeCheckUp = journeysBeforeCheckUp;
 	this->ID = id;
 	this->CalculateDeliveryInterval();
 }
@@ -84,6 +85,7 @@ bool Truck::LoadCargo(Cargo* cargo)
 
 		}
 		else {
+			this->SetLoaded(true);
 			return false;
 		}
 	}
@@ -122,6 +124,10 @@ double Truck::GetTruckPriority() const {
 }
 
 
+void Truck::ResetJourneysCount() {
+	this->journeysBeforeCheckUp = this->maxjourneysBeforeCheckUp;
+}
+
 bool Truck::IsLoaded() const
 {
 	return this->Loaded;
@@ -130,6 +136,14 @@ bool Truck::IsLoaded() const
 void Truck::SetLoaded(bool value)
 {
 	this->Loaded = true;
+}
+
+Time Truck::getCheckUpOutTime() const {
+	return this->CheckUpOutTime;
+}
+
+void Truck::setCheckUpOutTime(Time time) {
+	this->CheckUpOutTime = time;
 }
 
 std::ostream& operator<<(std::ostream& os , const Truck* truck)

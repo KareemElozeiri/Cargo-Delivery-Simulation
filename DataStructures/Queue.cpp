@@ -53,8 +53,10 @@ bool Queue<T>::dequeue(T& value) {
 
 template <typename T>
 void Queue<T>::peek(T& value) const {
-	if (this->isEmpty())
+	if (this->isEmpty()) {
+		value = nullptr;
 		return;
+	}
 	value = this->Head->getItem();
 }
 

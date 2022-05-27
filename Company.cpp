@@ -10,8 +10,6 @@ Company::Company() {
 	this->pUI = new UI;
 
 
-
-
 	//getting the input & output file names from the UI class
 	this->inputFileName = this->pUI->GetInputFilePath();
 	this->outputFileName = this->pUI->GetOutputFilePath();
@@ -83,6 +81,12 @@ void Company::Simulate() {
 
 		// Execute the upcoming event
 		this->ExecuteUpcomingEvent();
+
+		// move trucks from checkup to available
+		this->MoveCheckUpToAvailable();
+
+		// move trucks from available to checkup
+		this->CheckForCheckUp();
 
 		// Todo: account for the max time waiting rule
 		this->LoadVIPCargosToTruck();
@@ -274,6 +278,25 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 }
 
 
+CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
+
+	Cargo* first_delivered_Cargo = normal;
+	CARGOTYPE type = CARGOTYPE::N;
+	
+	if (vip->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+		first_delivered_Cargo = vip;
+		type = CARGOTYPE::V;
+	}
+	if (special->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+		first_delivered_Cargo = special;
+		type = CARGOTYPE::S;
+	}
+
+	return type;
+
+	return CARGOTYPE::N;
+}
+
 /// There was AddEvents function here and I replaced it with ReadEvents
 /// purpose: to read from files and then call the Event class
 /// if it has different purpose, add it again 
@@ -281,15 +304,45 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 
 void Company::SaveOutputs() {
 	// called on exit
-	Cargo* normal;
-	this->DeliveredNormalCargoList->peek(normal);
-	Cargo* vip;
-	this->DeliveredVIPCargoList->peek(vip);
-	Cargo* special;
-	this->DeliveredSpecialCargoList->peek(special);
 
+	string dataToOutput = "";
 
+	while (!DeliveredNormalCargoList->isEmpty() ||
+		!DeliveredVIPCargoList->isEmpty() ||
+		!DeliveredSpecialCargoList->isEmpty() )
+	{
 
+		Cargo* normal;
+		this->DeliveredNormalCargoList->peek(normal);
+		Cargo* vip;
+		this->DeliveredVIPCargoList->peek(vip);
+		Cargo* special;
+		this->DeliveredSpecialCargoList->peek(special);
+
+		CARGOTYPE type = whichIsFirst(normal, vip, special);
+
+		Cargo* cargo;
+		switch (type)
+		{
+		
+		case CARGOTYPE::S:
+			this->DeliveredSpecialCargoList->dequeue(cargo);
+			break;
+		case CARGOTYPE::V:
+			this->DeliveredVIPCargoList->dequeue(cargo);
+			break;
+
+		default://case CARGOTYPE::N:
+			this->DeliveredNormalCargoList->dequeue(cargo);
+			break;
+		}
+		
+		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
+			std::to_string(cargo->GetID()) + "\t" +
+			cargo->GetWaitTime().StringifyTime() + "\t" +
+			std::to_string(cargo->GetTruckID()) + "\n" +
+			"";
+	}
 
 
 }
@@ -468,7 +521,7 @@ std::string Company::GetCurrentTime() {
 }
 
 bool Company::LoadVIPCargosToTruck()
-{
+{	
 	if (this->VIPCargoList->getCount() != 0) {
 		
 		//checks first for the availability of VIP trucks
@@ -665,5 +718,80 @@ void Company::MoveTrucks() {
 		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
 	}
 }
+
+void Company::CheckForCheckUp() {
+	
+	// check for normal trucks
+	Truck* pTruck;
+	while (true) {
+		this->NormalTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+			pTruck->ResetJourneysCount();
+			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			pTruck->setCheckUpOutTime(OutTime);
+			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+			this->NormalTrucksList->dequeue(pTruck);
+		}
+		else break;
+	}
+
+	// check for special trucks
+	while (true) {
+		this->SpecialTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+			pTruck->ResetJourneysCount();
+			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			pTruck->setCheckUpOutTime(OutTime);
+			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+			this->SpecialTrucksList->dequeue(pTruck);
+		}
+		else break;
+	}
+
+	// check for vip trucks
+	while (true) {
+		this->VIPTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+			pTruck->ResetJourneysCount();
+			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+			pTruck->setCheckUpOutTime(OutTime);
+			this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
+			this->VIPTrucksList->dequeue(pTruck);
+		}
+		else break;
+	}
+}
+
+
+void Company::MoveCheckUpToAvailable() {
+	Truck* pTruck;
+	while (true) {
+		this->InCheckUpTrucksList->peek(pTruck);
+		if (pTruck == nullptr) break;
+
+		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			
+			switch (pTruck->GetTruckType())
+			{
+			case (TRUCKTYPE::NT):
+				this->NormalTrucksList->enqueue(pTruck);
+				break;
+			case (TRUCKTYPE::ST):
+				this->SpecialTrucksList->enqueue(pTruck);
+				break;
+			case (TRUCKTYPE::VT):
+				this->VIPTrucksList->enqueue(pTruck);
+				break;
+			}
+
+			this->InCheckUpTrucksList->dequeue(pTruck);
+		}
+		else break;
+	}
+}
+
 
 #endif 

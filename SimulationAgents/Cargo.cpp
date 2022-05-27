@@ -3,6 +3,10 @@
 
 #include "Cargo.h"
 
+Cargo::Cargo()
+{
+}
+
 Cargo::Cargo(CARGOTYPE type)
 {
 	this->Cargo_type = type;
@@ -38,6 +42,16 @@ Time Cargo::GetDeliveredTime()
 	return delivered_time;
 }
 
+Time Cargo::GetWaitTime()
+{
+	return Waiting_time;
+}
+
+int Cargo::GetTruckID()
+{
+	return truck_ID;
+}
+
 double Cargo::GetCost() const
 {
 	return this->cost;
@@ -65,6 +79,15 @@ void Cargo::SetDeliveredTime(Time del_time)
 {
 	this->delivered_time = del_time;
 }
+
+Time Cargo::GetWaitingTime() const
+{
+	return this->Waiting_time;
+}
+void Cargo::SetWaitingTime(Time t)
+{
+	this->Waiting_time = t;
+}
 
 void Cargo::SetDeliveryDistance(double delivery_distance) {
 	this->delivery_distance = delivery_distance;
@@ -89,5 +112,6 @@ std::ostream& operator<<(std::ostream& os, const Cargo cargo)
 	os << cargo.GetID();
 	return os;
 }
+
 
 #endif
