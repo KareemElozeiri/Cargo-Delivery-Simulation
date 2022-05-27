@@ -38,6 +38,16 @@ Time Cargo::GetDeliveredTime()
 	return delivered_time;
 }
 
+Time Cargo::GetWaitTime()
+{
+	return Wait_time;
+}
+
+int Cargo::GetTruckID()
+{
+	return truck_ID;
+}
+
 double Cargo::GetCost() const
 {
 	return this->cost;

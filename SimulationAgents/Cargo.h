@@ -6,6 +6,17 @@
 
 class Cargo
 {
+private:
+	CARGOTYPE Cargo_type;
+	int cargoID;
+	Time preparation_time;
+	int load_time;
+	double delivery_distance;
+	double cost;
+	Time delivered_time;
+	Time Wait_time;
+	int truck_ID;
+
 public:
 	/*
 	* Function: Cargo.
@@ -66,6 +77,29 @@ public:
 	* Returns: Time.
 	*/
 	Time GetDeliveredTime();
+
+
+	/*
+	* Function: GetWaitTime.
+	* Gets the time the cargo waited until moving
+	*
+	* Parameters:
+	*	- NO PARAMS
+	*
+	* Returns: Time.
+	*/
+	Time GetWaitTime();
+
+	/*
+	* Function: GetWaitTime.
+	* Gets the ID of the truck that moved it.
+	*
+	* Parameters:
+	*	- NO PARAMS
+	*
+	* Returns: Time.
+	*/
+	int GetTruckID();
 	
 	/*
 	* Function: GetCost.
@@ -157,14 +191,7 @@ public:
 	*/
 	void SetID(int id);
 
-private:
-	CARGOTYPE Cargo_type;
-	int cargoID;
-	Time preparation_time;
-	int load_time;
-	double delivery_distance;
-	double cost;
-	Time delivered_time;
+
 };
 
 #endif
