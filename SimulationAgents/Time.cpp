@@ -165,7 +165,6 @@ bool Time::operator<(Time other_time) {
 }
 
 bool Time::operator<=(Time other_time) {
-
 	return (this->days * 24 + this->hours) <= (other_time.days * 24 + other_time.hours);
 }
 

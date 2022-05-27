@@ -150,6 +150,15 @@ public:
 	*/
 	std::string getData() const;
 
+
+	/*
+	* Function: DecreaseCount.
+	* Decreases total list count by one.
+	*
+	* Returns: void.
+	*/
+	void DecreaseCount();
+
 private:
 	Node<T>* Head;
 	Node<T>* Tail;
