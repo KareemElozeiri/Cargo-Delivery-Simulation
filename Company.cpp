@@ -3,10 +3,14 @@
 
 #include "Company.h"
 
+
 Company::Company() {
 	this->TimestepNum = Time();
 
 	this->pUI = new UI;
+
+
+
 
 	//getting the input & output file names from the UI class
 	this->inputFileName = this->pUI->GetInputFilePath();
@@ -89,10 +93,20 @@ void Company::Simulate() {
 		// print current info
 		this->UpdateInterface();
 
+		//check for Auto Promote
+		this->checkForAutoPromote();
 
 		//check break conditions
 		if (this->CheckExitStatus())
 		{
+
+			//making data for the output file
+
+
+
+			this->SaveOutputs();
+
+
 			this->pUI->PrintMsg("Simulation is done.");
 			break;
 		}
@@ -258,7 +272,11 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 }
 
 
+TRUCKTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
+
+
+}
 
 /// There was AddEvents function here and I replaced it with ReadEvents
 /// purpose: to read from files and then call the Event class
@@ -267,6 +285,18 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 
 void Company::SaveOutputs() {
 	// called on exit
+	Cargo* normal;
+	this->DeliveredNormalCargoList->peek(normal);
+	Cargo* vip;
+	this->DeliveredVIPCargoList->peek(vip);
+	Cargo* special;
+	this->DeliveredSpecialCargoList->peek(special);
+	whichIsFirst(normal, vip, special);
+
+
+
+
+
 }
 
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
@@ -383,6 +413,7 @@ void Company::DeleteNormalCargo(int ID) {
 	if (this->NormalCargoList->GetHead() == loopingPtr) {
 		this->NormalCargoList->SetHead(loopingPtr->getNext());
 		delete loopingPtr;
+		this->NormalCargoList->DecreaseCount();
 		loopingPtr = nullptr;
 		return;
 	}
@@ -588,18 +619,32 @@ void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
 	}
 }
 
+
+void Company::checkForAutoPromote() {
+	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
+	
+	while (Head != nullptr) {
+		Cargo* pCargo = Head->getItem();
+		Time res = (pCargo->GetPrepTime() - this->TimestepNum);
+		if (this->AutoPromotionLimit <= res) {
+			AutoPromote(pCargo);
+		}
+		Head = Head->getNext();
+	}
+
+}
+
+bool Company::isChangeableCargo(int ID) {
+	return (this->FindNormalCargo(ID) != nullptr) ? true : false;
+}
+
 void Company::AutoPromote(Cargo* pCargo) {
 	//if a cargo wait more than auotp days from its preparation time to be assigned to a truck,
 	//it should be automatically promoted to be an vip cargo
-
-	Time prepTime = pCargo->GetPrepTime();
-
+		 
+		this->DeleteNormalCargo(pCargo->GetID());
+		this->AddVIPCargo(pCargo);
 	
-	this->DeleteNormalCargo(pCargo->GetID());
-	this->AddVIPCargo(pCargo);
 }
-
-
-
 
 #endif 

@@ -202,5 +202,9 @@ void LinkedList<T>::setCount(int value){
 	this->count = value;
 }
 
+template <typename T>
+void LinkedList<T>::DecreaseCount() {
+	this->count -= 1;
+}
 
 #endif
