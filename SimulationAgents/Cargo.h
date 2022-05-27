@@ -193,7 +193,7 @@ public:
 	
 	/*
 	* Function: SetCost.
-	* Sets the cost of the Cargo.
+	* Sets the cost of the Cargo
 	*
 	* Parameters:
 	*	- cost : The cost of the Cargo.
@@ -214,6 +214,18 @@ public:
 	void SetID(int id);
 
 
+	Time GetWaitingTime() const;
+	void SetWaitingTime(Time t);
+
+private:
+	CARGOTYPE Cargo_type;
+	int cargoID;
+	Time preparation_time;
+	int load_time;
+	double delivery_distance;
+	double cost;
+	Time delivered_time;
+	Time waiting_time;
 };
 
 #endif
