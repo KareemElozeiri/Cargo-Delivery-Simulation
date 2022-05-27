@@ -57,7 +57,7 @@ public:
 
 
 	/*
-	* Function: GetDelivereddTime.
+	* Function: GetDeliveredTime.
 	* Gets the time by which a cargo has been delivered.
 	*
 	* Parameters:

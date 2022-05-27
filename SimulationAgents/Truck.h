@@ -25,7 +25,7 @@ private:
 	double max_distance_to_deliver = 0;
 	Time total_load_time = 0;
 	bool Loaded = false;
-
+	double truck_priority = NULL;
 
 public:
 	
@@ -142,7 +142,28 @@ public:
 	* Returns: int.
 	*/
 	int GetID() const;
-	
+
+	/*
+	* Function: UpdateTruckPriority.
+	* Updates the priority of the truck.
+	*
+	* Parameters:
+	*	- NO PARAMS
+	*
+	* Returns: double.
+	*/
+	void UpdateTruckPriority(double delivery_distance);
+
+	/*
+	* Function: GetTruckPriority.
+	* Gets the priority of the truck.
+	*
+	* Parameters:
+	*	- NO PARAMS
+	*
+	* Returns: double.
+	*/
+	double GetTruckPriority() const;
 
 	/*
 	* Function: SetID.

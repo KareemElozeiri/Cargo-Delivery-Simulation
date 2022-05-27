@@ -76,9 +76,10 @@ bool Truck::LoadCargo(Cargo* cargo)
 				this->max_distance_to_deliver = cargo->GetDeliveryDistance();
 			//checking minimumm time required for delivering a cargo
 
-
-			this->cargos.enqueue(cargo, -cargo->GetDeliveryDistance() / this->speed);
+			double cargo_priority = -cargo->GetDeliveryDistance() / this->speed;
+			this->cargos.enqueue(cargo, cargo_priority);
 			this->CalculateDeliveryInterval();
+			this->UpdateTruckPriority(cargo_priority);
 			return true;
 
 		}
@@ -89,6 +90,19 @@ bool Truck::LoadCargo(Cargo* cargo)
 	return false;
 
 }
+
+void Truck::UpdateTruckPriority(double cargo_priority) {
+	if (this->truck_priority == NULL) {
+		this->truck_priority = cargo_priority;
+		return;
+	}
+
+	if (cargo_priority < this->truck_priority) {
+		this->truck_priority = cargo_priority;
+		return;
+	}
+}
+
 
 Time Truck::GetMinimumDeliveryTime() const
 {
@@ -101,6 +115,12 @@ Time Truck::GetMinimumDeliveryTime() const
 	
 	return t;
 }
+
+
+double Truck::GetTruckPriority() const {
+	return this->truck_priority;
+}
+
 
 bool Truck::IsLoaded() const
 {
