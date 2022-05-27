@@ -103,7 +103,7 @@ public:
 	void LoadInputs();
 	
 	/*
-	* Function: LoadInputs.
+	* Function: SaveOutputs.
 	* Saves the program instance output upon exit.
 	*/
 	void SaveOutputs();

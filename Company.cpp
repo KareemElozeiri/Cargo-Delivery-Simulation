@@ -99,6 +99,14 @@ void Company::Simulate() {
 		//check break conditions
 		if (this->CheckExitStatus())
 		{
+
+			//making data for the output file
+
+
+
+			this->SaveOutputs();
+
+
 			this->pUI->PrintMsg("Simulation is done.");
 			break;
 		}
@@ -264,7 +272,11 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 }
 
 
+TRUCKTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
+
+
+}
 
 /// There was AddEvents function here and I replaced it with ReadEvents
 /// purpose: to read from files and then call the Event class
@@ -273,6 +285,18 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 
 void Company::SaveOutputs() {
 	// called on exit
+	Cargo* normal;
+	this->DeliveredNormalCargoList->peek(normal);
+	Cargo* vip;
+	this->DeliveredVIPCargoList->peek(vip);
+	Cargo* special;
+	this->DeliveredSpecialCargoList->peek(special);
+	whichIsFirst(normal, vip, special);
+
+
+
+
+
 }
 
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
