@@ -134,7 +134,7 @@ public:
 	*/
 	void SetID(int id);
 
-protected:
+private:
 	CARGOTYPE Cargo_type;
 	int cargoID;
 	Time* preparation_time;

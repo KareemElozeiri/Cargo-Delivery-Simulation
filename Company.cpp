@@ -58,12 +58,12 @@ Company::~Company() {
 	this->cleanQueueInnerPointers(this->NormalTrucksList);
 	this->cleanQueueInnerPointers(this->SpecialTrucksList);
 	this->cleanQueueInnerPointers(this->VIPTrucksList);
-	this->cleanPriorityQueueInnerPointers(this->inCheckUpTrucksList);
+	this->cleanPriorityQueueInnerPointers(this->InCheckUpTrucksList);
 	
 	delete this->NormalTrucksList;
 	delete this->SpecialTrucksList;
 	delete this->VIPTrucksList;
-	delete this->inCheckUpTrucksList;
+	delete this->InCheckUpTrucksList;
 }
 
 bool Company::CheckExitStatus() {
