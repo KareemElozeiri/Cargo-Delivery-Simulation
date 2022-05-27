@@ -446,7 +446,7 @@ bool Company::LoadVIPCargosToTruck()
 		//checks first for the availability of VIP trucks
 		Truck* vipTruck;
 		this->VIPTrucksList->peek(vipTruck);
-
+		
 		if (vipTruck != nullptr) {
 			if (this->VIPCargoList->getCount() < vipTruck->GetCapacity()) {
 				return false;
