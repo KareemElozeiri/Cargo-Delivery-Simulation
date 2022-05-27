@@ -103,7 +103,7 @@ public:
 	void LoadInputs();
 	
 	/*
-	* Function: LoadInputs.
+	* Function: SaveOutputs.
 	* Saves the program instance output upon exit.
 	*/
 	void SaveOutputs();
@@ -248,6 +248,7 @@ public:
 	bool isChangeableCargo(int ID);
 
 	void AutoPromote(Cargo* pCargo);
+	void checkForAutoPromote();
 
 	void CheckForCheckUp();
 

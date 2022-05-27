@@ -2,7 +2,7 @@
 #define Time_H
 
 #include <iostream>
-
+#include <string>
 class Time
 {
 public:
@@ -189,6 +189,9 @@ public:
 	* Returns: void.
 	*/
 	void PrintTime() const;
+
+
+	std::string StringifyTime() const;
 
 private:
 	int days;

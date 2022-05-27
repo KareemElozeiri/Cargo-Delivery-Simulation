@@ -26,6 +26,8 @@ private:
 	int ID;
 	double max_distance_to_deliver = 0;
 	Time total_load_time = 0;
+	bool Loaded = false;
+
 
 public:
 	
@@ -167,6 +169,11 @@ public:
 	* on the truck where this first cargo has the minimum time required to deliver
 	*/
 	Time GetMinimumDeliveryTime() const;
+
+
+	bool IsLoaded() const;
+
+	void SetLoaded(bool value);
 
 
 	void ResetJourneysCount();
