@@ -62,6 +62,8 @@ void Truck::SetID(int id)
 	this->ID = id;
 }
 
+
+
 bool Truck::LoadCargo(Cargo* cargo)
 {
 	if (this->cargos.getCount() < this->capacity) {
@@ -71,6 +73,8 @@ bool Truck::LoadCargo(Cargo* cargo)
 		//setting max distance that the truck will move to 
 		if (cargo->GetDeliveryDistance() > this->max_distance_to_deliver)
 			this->max_distance_to_deliver = cargo->GetDeliveryDistance();
+		//checking minimumm time required for delivering a cargo
+
 
 		this->cargos.enqueue(cargo,- cargo->GetDeliveryDistance()/this->speed);
 		this->CalculateDeliveryInterval();
@@ -81,6 +85,18 @@ bool Truck::LoadCargo(Cargo* cargo)
 		return false;
 	}
 
+}
+
+Time Truck::GetMinimumDeliveryTime() const
+{
+	Cargo* c;
+	this->cargos.peek(c);
+	Time t = 0;
+	if (c != nullptr) {
+		t = c->GetDeliveryDistance()/this->speed;
+	}
+	
+	return t;
 }
 
 std::ostream& operator<<(std::ostream& os , const Truck* truck)
