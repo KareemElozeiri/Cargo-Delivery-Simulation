@@ -181,4 +181,11 @@ void Time::PrintTime() const
 	std::cout << this->days << ":" << this->hours << std::endl;
 }
 
+std::string Time::StringifyTime() const
+{
+	return std::to_string(this->days) + ":" + std::to_string(this->hours) ;
+
+
+}
+
 #endif
