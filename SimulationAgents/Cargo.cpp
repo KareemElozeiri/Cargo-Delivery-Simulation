@@ -76,6 +76,16 @@ void Cargo::SetDeliveredTime(Time del_time)
 	this->delivered_time = del_time;
 }
 
+void Cargo::SetWaitTime(Time wait_time)
+{
+	this->Wait_time = wait_time;
+}
+
+void Cargo::SetTruckID(int truck_id)
+{
+	this->truck_ID = truck_ID;
+}
+
 void Cargo::SetDeliveryDistance(double delivery_distance) {
 	this->delivery_distance = delivery_distance;
 }

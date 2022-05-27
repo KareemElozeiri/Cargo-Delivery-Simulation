@@ -159,6 +159,28 @@ public:
 	void SetDeliveredTime(Time del_time);
 	
 	/*
+	* Function: SetWaitTime.
+	* Sets the time the cargo waited until moving
+	*
+	* Parameters:
+	*	- wait_time : the time the cargo waited until moving
+	*
+	* Returns: void.
+	*/
+	void SetWaitTime(Time wait_time);
+
+	/*
+	* Function: SetTruckID.
+	* Sets the ID of the truck that moved it.
+	*
+	* Parameters:
+	*	- id : the ID of the truck that moved it.
+	*
+	* Returns: void.
+	*/
+	void SetTruckID(int truck_id);
+
+	/*
 	* Function: SetDeliveryDistance.
 	* Sets the delivery distance of the Cargo.
 	*
