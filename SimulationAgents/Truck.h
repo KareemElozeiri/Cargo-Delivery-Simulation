@@ -152,9 +152,19 @@ public:
 	* Returns: void.
 	*/
 	void SetID(int id);
-
+	/*
+	*  Funtion: LoadCargo
+	*  Handles the logic of loading a certain cargo on it
+	*  Returns: true if the loading was done successfully false otherwise
+	*/
 
 	bool LoadCargo(Cargo* cargo);
+	/*
+	* Function: GetMinimumDeliveryTime
+	* Returns: the time required to deliver the first cargo
+	* on the truck where this first cargo has the minimum time required to deliver
+	*/
+	Time GetMinimumDeliveryTime() const;
 
 };
 
