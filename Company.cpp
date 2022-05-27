@@ -305,7 +305,8 @@ void Company::SaveOutputs() {
 
 	while (!DeliveredNormalCargoList->isEmpty() ||
 		!DeliveredVIPCargoList->isEmpty() ||
-		!DeliveredSpecialCargoList->isEmpty() ) {
+		!DeliveredSpecialCargoList->isEmpty() )
+	{
 
 		Cargo* normal;
 		this->DeliveredNormalCargoList->peek(normal);
@@ -330,7 +331,11 @@ void Company::SaveOutputs() {
 			break;
 		}
 
-		dataToOutput += cargo->GetDeliveredTime().PrintTime()
+		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
+			std::to_string(cargo->GetID()) + "\t" +
+			cargo->GetWaitTime().StringifyTime() + "\t" +
+			std::to_string(cargo->GetTruckID()) + "\n" ;
+
 	}
 
 
