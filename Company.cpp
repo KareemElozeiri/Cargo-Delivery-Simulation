@@ -340,27 +340,19 @@ void Company::SaveOutputs() {
 	// called on exit
 	std::ofstream outputFile(this->outputFileName);
 
-	//cargos stats
+	//cargos stats dec
 	int NumOfCargos, NumOfNormalCargos, NumOfVIPCargos, NumOfSpecialCargos;
 	Time TotalWaitTime;
 	int AutoPromotedCargosPercent;
 
-	//trucks stats
+	//trucks stats dec
 	int NumOfTrucks, NumOfNormalTrucks, NumOfVIPTrucks, NumOfSpecialTrucks;
 		//var
 		//var
 
 
-	/*int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
-		InCheckupTrucksCount, DeliveredCargosCount;
 
-	WaitingCargosCount = this->NormalCargoList->getCount() +
-		this->SpecialCargoList->getCount() +
-		this->VIPCargoList->getCount();
 
-	LoadingTrucksCount = this->NormalTrucksList->getCount() +
-		this->SpecialTrucksList->getCount() +
-		this->VIPTrucksList->getCount();*/
 
 	//putting cargo stats data
 	NumOfNormalCargos = this->DeliveredNormalCargoList->getCount();
@@ -368,11 +360,17 @@ void Company::SaveOutputs() {
 	NumOfVIPCargos = this->DeliveredVIPCargoList->getCount();
 	NumOfCargos = NumOfNormalCargos + NumOfVIPCargos + NumOfVIPCargos;
 
-
 	if (NumOfCargos==0)
 		AutoPromotedCargosPercent = 0;	//to prevent dividing by zero
 	else
 		AutoPromotedCargosPercent = AutoPromotedCargosNum / NumOfNormalCargos *100;
+
+
+	//putting cargo stats data
+	NumOfNormalTrucks = this->NormalTrucksList->getCount();
+	NumOfSpecialTrucks = this->SpecialTrucksList->getCount();
+	NumOfVIPTrucks = this->VIPTrucksList->getCount();
+	NumOfTrucks = NumOfNormalTrucks + NumOfVIPTrucks + NumOfVIPTrucks;
 
 
 
@@ -433,15 +431,22 @@ void Company::SaveOutputs() {
 		", S: " + to_string(NumOfSpecialCargos) +
 		", V: " + to_string(NumOfVIPCargos) + "]\n"; 
 	//line 2
-	statisticsStr += "Cargo Avg. Wait: " + AverageWaitTime.StringifyTime() + "\n";
+	statisticsStr += "Cargo Avg Wait = " + AverageWaitTime.StringifyTime() + "\n";
 	//line 3
-	statisticsStr += "Auto-promoted Cargos: " + to_string(AutoPromotedCargosPercent) + "%\n\n";
+	statisticsStr += "Auto-promoted Cargos = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
 
 	// Trucks statistics
 	//line 1
-	statisticsStr += ""
+	
+	statisticsStr += "Trucks: " + to_string(NumOfTrucks) +
+		" [N: " + to_string(NumOfNormalTrucks) +
+		", S: " + to_string(NumOfSpecialTrucks) +
+		", V: " + to_string(NumOfVIPTrucks) + "]\n";
+	//line 2
+	statisticsStr += "Avg Active time = " + AverageWaitTime.StringifyTime() + "\n";
+	//line 3
+	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
 
-		"";
 
 
 
@@ -585,10 +590,11 @@ void Company::DeleteNormalCargo(int ID) {
 */
 void Company::AddVIPCargo(Cargo* pCargo) {
 
-	double priority_calc = pCargo->GetCost() / 2000
-		- pCargo->GetDeliveryDistance() / 2000
-		- pCargo->GetPrepTime().GetTotalHours() / 5
-		- pCargo->GetLoadTime() / 10;
+	double priority_calc =
+		 3 * pCargo->GetCost() / 2000
+		-2 * pCargo->GetDeliveryDistance() / 2000
+		-1.5 * pCargo->GetPrepTime().GetTotalHours() / 5
+		-1.5 * pCargo->GetLoadTime() / 10;
 
 
 	this->VIPCargoList->enqueue(pCargo, priority_calc);
