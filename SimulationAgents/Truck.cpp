@@ -68,7 +68,7 @@ void Truck::SetID(int id)
 bool Truck::LoadCargo(Cargo* cargo)
 {
 	if (cargo != nullptr) {
-		if (this->cargos.getCount() <= this->capacity) {
+		if (this->cargos->getCount() <this->capacity) {
 			//adding load time of the cargo to the total time spent
 			//by the truck waiting for the cargos to be loaded
 			this->total_load_time = this->total_load_time + cargo->GetLoadTime();
@@ -78,15 +78,18 @@ bool Truck::LoadCargo(Cargo* cargo)
 			//checking minimumm time required for delivering a cargo
 
 			double cargo_priority = -cargo->GetDeliveryDistance() / this->speed;
-			this->cargos.enqueue(cargo, cargo_priority);
+			this->cargos->enqueue(cargo, cargo_priority);
+			this->cargos->incrementCount();
 			this->CalculateDeliveryInterval();
 			this->UpdateTruckPriority(cargo_priority);
+
+			if (this->cargos->getCount() == this->capacity) {
+				this->SetLoaded(true);
+				this->SetLoading(false);
+			}
+
 			return true;
 
-		}
-		else {
-			this->SetLoaded(true);
-			return false;
 		}
 	}
 	return false;
@@ -109,7 +112,7 @@ void Truck::UpdateTruckPriority(double cargo_priority) {
 Time Truck::GetMinimumDeliveryTime() const
 {
 	Cargo* c;
-	this->cargos.peek(c);
+	this->cargos->peek(c);
 	Time t = 0;
 	if (c != nullptr) {
 		t = c->GetDeliveryDistance()/this->speed;
@@ -138,12 +141,32 @@ void Truck::SetLoaded(bool value)
 	this->Loaded = true;
 }
 
+bool Truck::IsLoading() const
+{
+	return this->Loading;
+}
+
+void Truck::SetLoading(bool loading)
+{
+	this->Loading = loading;
+}
+
 Time Truck::getCheckUpOutTime() const {
 	return this->CheckUpOutTime;
 }
 
 void Truck::setCheckUpOutTime(Time time) {
 	this->CheckUpOutTime = time;
+}
+
+CARGOTYPE Truck::GetCargoType() const
+{
+	return this->cargo_type;
+}
+
+void Truck::SetCargoType(CARGOTYPE type)
+{
+	this->cargo_type = type;
 }
 
 std::ostream& operator<<(std::ostream& os , const Truck* truck)

@@ -14,20 +14,28 @@ class Truck
 {
 private:
 	TRUCKTYPE truck_type;
+	CARGOTYPE cargo_type;
+
 	int capacity;		// the number of cargos that the truck can carry at a time
-	Time checkUpTime;	// the time consumed by the truck during maintenance 
 	double speed;
+
+	Time checkUpTime;	// the time consumed by the truck during maintenance 
 	Time deliveryInterval; 
 	Time first_delivered_cargo;
+	Time CheckUpOutTime; // time to get out of the checkup
+	Time total_load_time = 0;
+
 	int maxjourneysBeforeCheckUp;
 	int journeysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
-	Time CheckUpOutTime; // time to get out of the checkup
-	PQueue<Cargo*> cargos;
 	int ID;
 	double max_distance_to_deliver = 0;
-	Time total_load_time = 0;
 	bool Loaded = false;
+	bool Loading = false;
 	double truck_priority = NULL;
+	
+
+	PQueue<Cargo*>* cargos = new PQueue<Cargo*>;
+
 
 public:
 	
@@ -197,10 +205,18 @@ public:
 	void SetLoaded(bool value);
 
 
+	bool IsLoading() const;
+	void SetLoading(bool loading);
+
+
 	void ResetJourneysCount();
 
 	Time getCheckUpOutTime() const;
 	void setCheckUpOutTime(Time time);
+
+
+	CARGOTYPE GetCargoType() const;
+	void SetCargoType(CARGOTYPE type);
 };
 
 #endif

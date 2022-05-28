@@ -256,6 +256,15 @@ public:
 	void LoadTruck(Truck*, LinkedList<Cargo*>* cargoList);
 
 	/*
+	* checks if a truck can load
+	*/
+	bool CanTruckLoad(Truck* truck, Queue<Cargo*>* givenQueue);
+	bool CanTruckLoad(Truck* truck, LinkedList<Cargo*>* givenList);
+
+
+	bool OtherTwoNotWorkingOnThat(Truck* truck1, Truck* truck2, CARGOTYPE c);
+
+	/*
 	*Checks if cargo is allowed to be promoted or canceled
 	*/
 	bool isChangeableCargo(int ID);
@@ -272,6 +281,9 @@ public:
 	void MoveCheckUpToAvailable();
 	bool CheckForMaintenance(Truck* pTruck);
 	void MoveMaintenanceToAvailable();
+
+
+
 
 	// TODO
 	TRUCKTYPE CheckTrucksNeeded(); // get what truck type needed

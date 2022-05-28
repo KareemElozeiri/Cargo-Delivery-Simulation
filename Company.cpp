@@ -566,42 +566,56 @@ bool Company::LoadVIPCargosToTruck()
 
 	if (this->VIPCargoList->getCount() != 0) {
 		
-		//checks first for the availability of VIP trucks
 		Truck* vipTruck;
 		this->VIPTrucksList->peek(vipTruck);
-		
+
+		Truck* normalTruck;
+		this->NormalTrucksList->peek(normalTruck);
+
+		Truck* specialTruck;
+		this->SpecialTrucksList->peek(specialTruck);
+
+		//checks first for the availability of VIP trucks
 		if (vipTruck != nullptr) {
-			if (this->VIPCargoList->getCount() < vipTruck->GetCapacity()) {
-				return false;
-			}
-			else {
-				this->LoadTruck(vipTruck, this->VIPCargoList);
-				return true;
+			if (OtherTwoNotWorkingOnThat(specialTruck, normalTruck, CARGOTYPE::V)==true) {
+				if ((vipTruck->IsLoading()==false) && (CanTruckLoad(vipTruck, this->VIPCargoList))) {
+					vipTruck->SetCargoType(CARGOTYPE::V);
+					vipTruck->SetLoading(true);
+				}
+
+
+				if ((vipTruck->IsLoading()==true) && (vipTruck->GetCargoType() == CARGOTYPE::V)) {
+					this->LoadTruck(vipTruck, this->VIPCargoList);
+					return true;
+				}
 			}
 		}
 
 		//checks second for the availability of normal trucks
-		Truck* normalTruck;
-		this->NormalTrucksList->peek(normalTruck);
 		if (normalTruck != nullptr) {
-			if (this->VIPCargoList->getCount() < normalTruck->GetCapacity()) {
-				return false;
-			}
-			else {
-				this->LoadTruck(normalTruck, this->VIPCargoList);
-				return true;
-			}
+			if (OtherTwoNotWorkingOnThat(vipTruck, specialTruck, CARGOTYPE::V)) {
+				if ((normalTruck->IsLoading()==false) && (CanTruckLoad(normalTruck, this->VIPCargoList))) {
+					normalTruck->SetCargoType(CARGOTYPE::V);
+					normalTruck->SetLoading(true);
+				}
 
+
+				if ((normalTruck->IsLoading()==true) && (normalTruck->GetCargoType() == CARGOTYPE::V)) {
+					this->LoadTruck(normalTruck, this->VIPCargoList);
+					return true;
+				}
+			}
 		}
 
 		//checks last for the availability of special trucks
-		Truck* specialTruck;
-		this->SpecialTrucksList->peek(specialTruck);
 		if (specialTruck != nullptr) {
-			if (this->VIPCargoList->getCount() < specialTruck->GetCapacity()) {
-				return false;
+			if ((specialTruck->IsLoading()==false) && (CanTruckLoad(specialTruck, this->VIPCargoList))) {
+				specialTruck->SetCargoType(CARGOTYPE::V);
+				specialTruck->SetLoading(true);
 			}
-			else {
+
+
+			if ((specialTruck->IsLoading()==true) && (specialTruck->GetCargoType() == CARGOTYPE::V)) {
 				this->LoadTruck(specialTruck, this->VIPCargoList);
 				return true;
 			}
@@ -616,15 +630,17 @@ bool Company::LoadSpecialCargosToTruck()
 	this->SpecialTrucksList->peek(specialTruck);
 
 	if (specialTruck != nullptr) {
-		if (this->SpecialCargoList->getCount() < specialTruck->GetCapacity()) {
-			return false;
+		if ((specialTruck->IsLoading()==false) && (CanTruckLoad(specialTruck, this->SpecialCargoList))) {
+			specialTruck->SetCargoType(CARGOTYPE::S);
+			specialTruck->SetLoading(true);
 		}
-		else {
+
+
+		if ((specialTruck->IsLoading()==true) && (specialTruck->GetCargoType() == CARGOTYPE::S)) {
 			this->LoadTruck(specialTruck, this->SpecialCargoList);
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -632,23 +648,39 @@ bool Company::LoadNormalCargosToTruck()
 {
 	Truck* normalTruck;
 	this->NormalTrucksList->peek(normalTruck);
+	Truck* vipTruck;
+	this->VIPTrucksList->peek(vipTruck);
+
 	if (normalTruck != nullptr) {
-		if (this->NormalCargoList->getCount() < normalTruck->GetCapacity()) {
-			return false;
-		}
-		else {
-			this->LoadTruck(normalTruck, this->NormalCargoList);
-			return true;
+
+		if ((vipTruck == nullptr) || (vipTruck->IsLoading() == false) || (vipTruck->GetCargoType() != CARGOTYPE::N)) {
+
+
+			if ((normalTruck->IsLoading()==false) && (CanTruckLoad(normalTruck, this->NormalCargoList))) {
+				
+				normalTruck->SetCargoType(CARGOTYPE::N);
+				normalTruck->SetLoading(true);
+			}
+
+
+			if ((normalTruck->IsLoading()==true) && (normalTruck->GetCargoType() == CARGOTYPE::N)) {
+				std::cout << normalTruck->GetCapacity() << endl;
+				std::cout << this->NormalCargoList->getCount() << endl;
+
+				this->LoadTruck(normalTruck, this->NormalCargoList);
+				return true;
+			}
 		}
 	}
 
-	Truck* vipTruck;
-	this->VIPTrucksList->peek(vipTruck);
 	if (vipTruck != nullptr) {
-		if (this->NormalCargoList->getCount() < vipTruck->GetCapacity()) {
-			return false;
+		if ((!(vipTruck->IsLoading())) && (CanTruckLoad(vipTruck, this->NormalCargoList))) {
+			vipTruck->SetCargoType(CARGOTYPE::N);
+			vipTruck->SetLoading(true);
 		}
-		else {
+
+
+		if ((vipTruck->IsLoading()) && (vipTruck->GetCargoType() == CARGOTYPE::N)) {
 			this->LoadTruck(vipTruck, this->NormalCargoList);
 			return true;
 		}
@@ -661,9 +693,8 @@ void Company::LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue)
 {
 	Cargo* c;
 	cargoQueue->peek(c);
-	truck->LoadCargo(c);
-	cargoQueue->peek(c);
-	if ((truck->LoadCargo(c)))
+	cout << "triggered";
+	if ((truck->LoadCargo(c)) == true)
 		cargoQueue->dequeue(c);
 		
 }
@@ -678,8 +709,40 @@ void Company::LoadTruck(Truck* truck, LinkedList<Cargo*>* cargoList)
 			cargoList->SetHead(tempNode->getNext());
 			tempNode->setNext(nullptr);
 			delete tempNode;
+
+			cargoList->setCount(cargoList->getCount()-1);
 		}
 	}
+}
+
+bool Company::CanTruckLoad(Truck* truck, Queue<Cargo*>* givenQueue)
+{
+	if (givenQueue->getCount() >= truck->GetCapacity())
+		return true;
+
+	return false;
+}
+
+bool Company::CanTruckLoad(Truck* truck, LinkedList<Cargo*>* givenList)
+{
+	if (givenList->getCount() >= truck->GetCapacity())
+		return true;
+
+	return false;
+}
+
+bool Company::OtherTwoNotWorkingOnThat(Truck* truck1, Truck* truck2, CARGOTYPE c)
+{
+	if ((truck1 == nullptr) && (truck2 == nullptr))
+		return true;
+	else if ((truck1 == nullptr) && ((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
+		return true;
+	else if ((truck2 == nullptr) && ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)))
+		return true;
+	else if (((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)) && ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)))
+		return true;
+
+	return false;
 }
 
 
