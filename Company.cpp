@@ -813,12 +813,14 @@ bool Company::CurrentCargoIsMaxWaiting(Queue<Cargo*>* givenQueue)
 
 bool Company::CurrentCargoIsMaxWaiting(LinkedList<Cargo*>* givenList)
 {
-	Cargo* c;
-	c = givenList->GetHead()->getItem();
-	if (c != nullptr) {
-		Time waitingTime = this->TimestepNum - c->GetPrepTime();
-		if (waitingTime >= this->MaxWaitingTime)
-			return true;
+	if (givenList->GetHead() != nullptr) {
+		Cargo* c;
+		c = givenList->GetHead()->getItem();
+		if (c != nullptr) {
+			Time waitingTime = this->TimestepNum - c->GetPrepTime();
+			if (waitingTime >= this->MaxWaitingTime)
+				return true;
+		}
 	}
 	return false;
 }
