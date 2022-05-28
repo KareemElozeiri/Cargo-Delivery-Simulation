@@ -283,9 +283,6 @@ public:
 	bool CheckForMaintenance(Truck* pTruck);
 	void MoveMaintenanceToAvailable();
 
-
-
-
 	// TODO
 	TRUCKTYPE CheckTrucksNeeded(); // get what truck type needed
 	void ForceMoveMaintenanceToAvailable(TRUCKTYPE type); // release one of the trucks in the list

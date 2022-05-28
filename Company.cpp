@@ -325,21 +325,8 @@ void Company::SaveOutputs() {
 
 	//cargos stats
 	int NumOfCargos, NumOfNormalCargos, NumOfVIPCargos, NumOfSpecialCargos;
-	Time AverageWaitTime;
+	Time TotalWaitTime;
 	int AutoPromotedCargosPercent;
-
-
-	NumOfCargos = 1; //just for not having error
-
-	try
-	{
-		AutoPromotedCargosPercent = AutoPromotedCargosNum / NumOfCargos;
-	}
-	catch (const std::exception&)
-	{
-		AutoPromotedCargosPercent = 0;
-	}
-		//var
 
 	//trucks stats
 	int NumOfTrucks, NumOfNormalTrucks, NumOfVIPTrucks, NumOfSpecialTrucks;
@@ -347,7 +334,7 @@ void Company::SaveOutputs() {
 		//var
 
 
-	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
+	/*int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
 		InCheckupTrucksCount, DeliveredCargosCount;
 
 	WaitingCargosCount = this->NormalCargoList->getCount() +
@@ -356,12 +343,19 @@ void Company::SaveOutputs() {
 
 	LoadingTrucksCount = this->NormalTrucksList->getCount() +
 		this->SpecialTrucksList->getCount() +
-		this->VIPTrucksList->getCount();
+		this->VIPTrucksList->getCount();*/
 
+	//putting cargo stats data
 	NumOfNormalCargos = this->DeliveredNormalCargoList->getCount();
 	NumOfSpecialCargos = this->DeliveredSpecialCargoList->getCount();
 	NumOfVIPCargos = this->DeliveredVIPCargoList->getCount();
 	NumOfCargos = NumOfNormalCargos + NumOfVIPCargos + NumOfVIPCargos;
+
+
+	if (NumOfCargos==0)
+		AutoPromotedCargosPercent = 0;	//to prevent dividing by zero
+	else
+		AutoPromotedCargosPercent = AutoPromotedCargosNum / NumOfNormalCargos *100;
 
 
 
@@ -394,7 +388,7 @@ void Company::SaveOutputs() {
 			break;
 		}
 
-		AverageWaitTime = AverageWaitTime + cargo->GetWaitingTime();
+		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
 		
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
@@ -406,15 +400,31 @@ void Company::SaveOutputs() {
 	//output the file here
 	outputFile << dataToOutput;
 	outputFile << "-----------------------------------------"<<endl;
+	outputFile << "-----------------------------------------" << endl;
 
 
+	//calculating statistics...
+	int totalWaitHours = TotalWaitTime.GetTotalHours();
+	Time AverageWaitTime(totalWaitHours / 24, totalWaitHours % 24);
 
-	//statistics
-	statisticsStr = statisticsStr + "Cargos: " +
-		
+
+	using std::to_string;
+	// Cargo statistics
+	//line 1
+	statisticsStr += "Cargos: " + to_string(NumOfCargos) +
+		" [N: " + to_string(NumOfNormalCargos) +
+		", S: " + to_string(NumOfSpecialCargos) +
+		", V: " + to_string(NumOfVIPCargos) + "]\n"; 
+	//line 2
+	statisticsStr += "Cargo Avg. Wait: " + AverageWaitTime.StringifyTime() + "\n";
+	//line 3
+	statisticsStr += "Auto-promoted Cargos: " + to_string(AutoPromotedCargosPercent) + "%\n\n";
+
+	// Trucks statistics
+	//line 1
+	statisticsStr += ""
+
 		"";
-
-
 
 
 
