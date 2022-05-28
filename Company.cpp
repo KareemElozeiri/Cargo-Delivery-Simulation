@@ -700,6 +700,21 @@ bool Company::LoadSpecialCargosToTruck()
 			specialTruck->SetCargoType(CARGOTYPE::S);
 			specialTruck->SetLoading(true);
 		}
+		else if ((specialTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->SpecialCargoList) == true)) {
+
+			specialTruck->SetCargoType(CARGOTYPE::S);
+
+			Cargo* c;
+			this->SpecialCargoList->peek(c);
+
+			if (specialTruck->LoadCargo(c) == true) {
+				this->SpecialCargoList->dequeue(c);
+			}
+
+			specialTruck->SetLoaded(true);
+			specialTruck->SetLoading(false);
+			return true;
+		}
 
 
 		if ((specialTruck->IsLoading()==true) && (specialTruck->GetCargoType() == CARGOTYPE::S)) {
@@ -719,6 +734,9 @@ bool Company::LoadNormalCargosToTruck()
 
 	if (normalTruck != nullptr) {
 
+		if (normalTruck->IsLoading())
+			cout << "it is loading" << endl;
+
 		if ((vipTruck == nullptr) || (vipTruck->IsLoading() == false) || (vipTruck->GetCargoType() != CARGOTYPE::N)) {
 
 
@@ -728,7 +746,21 @@ bool Company::LoadNormalCargosToTruck()
 				normalTruck->SetLoading(true);
 			}
 			else if ((normalTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList)==true)) {
+				cout << "triggered"<<endl;
+				normalTruck->SetCargoType(CARGOTYPE::N);
 				
+				Cargo* c = this->NormalCargoList->GetHead()->getItem();
+				
+				Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();
+				if (normalTruck->LoadCargo(c)==true) {
+					this->NormalCargoList->SetHead(tempNode->getNext());
+					tempNode->setNext(nullptr);
+					delete tempNode;
+					this->NormalCargoList->setCount(this->NormalCargoList->getCount() - 1);
+				}
+
+				normalTruck->SetLoaded(true);
+				normalTruck->SetLoading(false);
 				return true;
 			}
 
@@ -744,6 +776,24 @@ bool Company::LoadNormalCargosToTruck()
 		if ((!(vipTruck->IsLoading())) && (CanTruckLoad(vipTruck, this->NormalCargoList))) {
 			vipTruck->SetCargoType(CARGOTYPE::N);
 			vipTruck->SetLoading(true);
+		}
+		else if ((vipTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList) == true)) {
+
+			vipTruck->SetCargoType(CARGOTYPE::N);
+
+			Cargo* c = this->NormalCargoList->GetHead()->getItem();
+
+			Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();
+			if (vipTruck->LoadCargo(c) == true) {
+				this->NormalCargoList->SetHead(tempNode->getNext());
+				tempNode->setNext(nullptr);
+				delete tempNode;
+				this->NormalCargoList->setCount(this->NormalCargoList->getCount() - 1);
+			}
+
+			vipTruck->SetLoaded(true);
+			vipTruck->SetLoading(false);
+			return true;
 		}
 
 
