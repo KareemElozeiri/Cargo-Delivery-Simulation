@@ -51,6 +51,7 @@ private:
 	string inputFileName;
 	string outputFileName;
 	int NumOfEvents;
+	int AutoPromotedCargosNum;
 
 	/*
 	* takes a given queue whose inner values are pointers
@@ -285,9 +286,6 @@ public:
 	void MoveCheckUpToAvailable();
 	bool CheckForMaintenance(Truck* pTruck);
 	void MoveMaintenanceToAvailable();
-
-
-
 
 	// TODO
 	TRUCKTYPE CheckTrucksNeeded(); // get what truck type needed
