@@ -686,10 +686,9 @@ void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
 
 void Company::checkForAutoPromote() {
 	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
-	
 	while (Head != nullptr) {
 		Cargo* pCargo = Head->getItem();
-		Time res = (pCargo->GetPrepTime() - this->TimestepNum);
+		Time res = (this->TimestepNum - pCargo->GetPrepTime());
 		if (this->AutoPromotionLimit <= res) {
 			AutoPromote(pCargo);
 		}
