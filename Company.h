@@ -265,6 +265,10 @@ public:
 
 	bool OtherTwoNotWorkingOnThat(Truck* truck1, Truck* truck2, CARGOTYPE c);
 
+	bool CurrentCargoIsMaxWaiting(Queue<Cargo*>* givenQueue);
+
+	bool CurrentCargoIsMaxWaiting(LinkedList<Cargo*>* givenList);
+
 	/*
 	*Checks if cargo is allowed to be promoted or canceled
 	*/

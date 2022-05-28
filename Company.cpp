@@ -721,6 +721,10 @@ bool Company::LoadNormalCargosToTruck()
 				normalTruck->SetCargoType(CARGOTYPE::N);
 				normalTruck->SetLoading(true);
 			}
+			else if ((normalTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList)==true)) {
+				
+				return true;
+			}
 
 
 			if ((normalTruck->IsLoading()==true) && (normalTruck->GetCargoType() == CARGOTYPE::N)) {
@@ -806,9 +810,35 @@ bool Company::OtherTwoNotWorkingOnThat(Truck* truck1, Truck* truck2, CARGOTYPE c
 		return true;
 	else if ((truck2 == nullptr) && ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)))
 		return true;
-	else if (((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)) && ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)))
+	else if (((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)) && ((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
 		return true;
 
+	return false;
+}
+
+bool Company::CurrentCargoIsMaxWaiting(Queue<Cargo*>* givenQueue)
+{
+	Cargo* c;
+	givenQueue->peek(c);
+	if (c != nullptr) {
+		Time waitingTime = this->TimestepNum - c->GetPrepTime();
+		if (waitingTime >= this->MaxWaitingTime)
+			return true;
+	}
+	return false;
+}
+
+bool Company::CurrentCargoIsMaxWaiting(LinkedList<Cargo*>* givenList)
+{
+	if (givenList->GetHead() != nullptr) {
+		Cargo* c;
+		c = givenList->GetHead()->getItem();
+		if (c != nullptr) {
+			Time waitingTime = this->TimestepNum - c->GetPrepTime();
+			if (waitingTime >= this->MaxWaitingTime)
+				return true;
+		}
+	}
 	return false;
 }
 
