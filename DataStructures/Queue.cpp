@@ -85,4 +85,10 @@ std::string Queue<T>::getData() const {
 	return QueueData;
 }
 
+
+template <typename T>
+void Queue<T>::incrementCount() {
+	this->count += 1;
+}
+
 #endif

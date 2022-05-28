@@ -70,6 +70,10 @@ public:
 	int getCount() const;
 
 	/*
+	* incrementer for the count
+	*/
+	void incrementCount();
+	/*
 	* Function: getData.
 	* Returns the data in the queue separated by commas.
 	*
