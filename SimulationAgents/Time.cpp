@@ -176,6 +176,13 @@ bool Time::operator>=(Time other_time) {
 	return (other_time <= *this);
 }
 
+bool Time::operator==(Time other_time)
+{
+	if ((this->GetDay() == other_time.GetDay()) && (this->GetHour() == other_time.GetHour()))
+		return true;
+	return false;
+}
+
 void Time::PrintTime() const
 {
 	std::cout << this->days << ":" << this->hours << std::endl;

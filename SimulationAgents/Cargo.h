@@ -15,6 +15,7 @@ private:
 	double cost;
 	Time delivered_time;
 	Time Waiting_time;
+	Time load_on_truck_time = 0;
 	int truck_ID;
 
 public:
@@ -209,6 +210,10 @@ public:
 
 	Time GetWaitingTime() const;
 	void SetWaitingTime(Time t);
+
+
+	Time GetLoadOnTruckTime() const;
+	void SetLoadOnTruckTime(Time t);
 
 };
 
