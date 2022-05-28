@@ -48,6 +48,9 @@ bool Queue<T>::dequeue(T& value) {
 	delete tempNode;
 	this->count -= 1;
 
+	if (this->Head == nullptr)
+		this->Tail = nullptr;
+
 	return true;
 }
 
@@ -62,7 +65,7 @@ void Queue<T>::peek(T& value) const {
 
 template <typename T>
 bool Queue<T>::isEmpty() const {
-	return (this->Head == nullptr);
+	return (this->Head == nullptr && this->Tail == nullptr);
 }
 
 template <typename T>

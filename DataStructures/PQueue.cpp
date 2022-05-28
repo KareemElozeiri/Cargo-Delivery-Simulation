@@ -25,28 +25,42 @@ void PQueue<T>::enqueue(T value, double priority) {
 	newNode->setItem(value);
 	newNode->setPriority(priority);
 
-	if (this->Tail == nullptr)
+	if (this->Tail == nullptr) {
 		this->Tail = newNode;
+		this->Head = newNode;
+		this->count += 1;
+		return;
+	}
 
 	if (this->Head == nullptr || this->Head->getPriority() <= priority) {
 		newNode->setNext(this->Head);
 		this->Head = newNode;
+		this->count += 1;
 		return;
 	}
 	
 	Node<T>* currentPtr = this->Head;
 	Node<T>* loopingPtr = this->Head->getNext();
+
+	if (loopingPtr == nullptr) {
+		this->count += 1;
+		newNode->setNext(nullptr);
+		this->Head->setNext(newNode);
+		return;
+	}
 	
 	while (loopingPtr) {
+		if (loopingPtr->getPriority() <= priority) {
+			newNode->setNext(loopingPtr);
+			currentPtr->setNext(newNode);
+			this->count += 1;
+			return;
+		}
 		if (loopingPtr->getNext() == nullptr) {
 			loopingPtr->setNext(newNode);
 			newNode->setNext(nullptr);
 			this->Tail = newNode;
-			return;
-		}
-		if (loopingPtr->getPriority() <= priority) {
-			newNode->setNext(loopingPtr);
-			currentPtr->setNext(newNode);
+			this->count += 1;
 			return;
 		}
 		currentPtr = loopingPtr;
