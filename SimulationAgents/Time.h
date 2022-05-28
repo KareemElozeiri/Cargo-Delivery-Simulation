@@ -188,6 +188,16 @@ public:
 	*/
 	bool operator==(Time other_time);
 	/*
+	* Function: operator overloading (!=).
+	* overloading not equal operator to compare time objects.
+	*
+	* Parameters:
+	*	- other_time : the time to be compared with the current one.
+	*
+	* Returns: Boolean.
+	*/
+	bool operator!=(Time other_time);
+	/*
 	* Function: PrintTime.
 	* printing the time in days and hours
 	* ex: -->  5:15

@@ -664,9 +664,6 @@ bool Company::LoadNormalCargosToTruck()
 
 
 			if ((normalTruck->IsLoading()==true) && (normalTruck->GetCargoType() == CARGOTYPE::N)) {
-				std::cout << normalTruck->GetCapacity() << endl;
-				std::cout << this->NormalCargoList->getCount() << endl;
-
 				this->LoadTruck(normalTruck, this->NormalCargoList);
 				return true;
 			}
@@ -693,10 +690,15 @@ void Company::LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue)
 {
 	Cargo* c;
 	cargoQueue->peek(c);
-	cout << "triggered";
-	if ((truck->LoadCargo(c)) == true)
-		cargoQueue->dequeue(c);
-		
+	if (c != nullptr) {
+		if (c->GetLoadOnTruckTime() == Time(0, 0))
+			c->SetLoadOnTruckTime(Time(c->GetLoadTime()) + this->TimestepNum);
+
+		if (c->GetLoadOnTruckTime() == this->TimestepNum) {
+			if ((truck->LoadCargo(c)) == true)
+				cargoQueue->dequeue(c);
+		}
+	}
 }
 
 void Company::LoadTruck(Truck* truck, LinkedList<Cargo*>* cargoList)
@@ -705,12 +707,17 @@ void Company::LoadTruck(Truck* truck, LinkedList<Cargo*>* cargoList)
 		Cargo* c = cargoList->GetHead()->getItem();
 		Node<Cargo*>* tempNode = cargoList->GetHead();
 		
-		if (truck->LoadCargo(c)) {
-			cargoList->SetHead(tempNode->getNext());
-			tempNode->setNext(nullptr);
-			delete tempNode;
+		if (c->GetLoadOnTruckTime() == Time(0, 0))
+			c->SetLoadOnTruckTime(Time(c->GetLoadTime()) + this->TimestepNum);
+		
+		if (c->GetLoadOnTruckTime() == this->TimestepNum) {
+			if (truck->LoadCargo(c)) {
+				cargoList->SetHead(tempNode->getNext());
+				tempNode->setNext(nullptr);
+				delete tempNode;
 
-			cargoList->setCount(cargoList->getCount()-1);
+				cargoList->setCount(cargoList->getCount() - 1);
+			}
 		}
 	}
 }
