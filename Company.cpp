@@ -17,6 +17,9 @@ Company::Company() {
 
 	// initialize load function
 	this->LoadInputs();
+
+	//to calc num of auto-promoted cargos
+	AutoPromotedCargosNum = 0;
 }
 
 Company::~Company() {
@@ -119,10 +122,7 @@ void Company::Simulate() {
 		if (this->CheckExitStatus())
 		{
 
-			//making data for the output file
-
-
-
+			//making data for the output file and saving it
 			this->SaveOutputs();
 
 
@@ -317,10 +317,35 @@ CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
 void Company::SaveOutputs() {
 
+	string dataToOutput = "";
+	string statisticsStr = "";
+
 	// called on exit
 	std::ofstream outputFile(this->outputFileName);
 
-	Time avgWaitinngTime;
+	//cargos stats
+	int NumOfCargos, NumOfNormalCargos, NumOfVIPCargos, NumOfSpecialCargos;
+	Time AverageWaitTime;
+	int AutoPromotedCargosPercent;
+
+
+	NumOfCargos = 1; //just for not having error
+
+	try
+	{
+		AutoPromotedCargosPercent = AutoPromotedCargosNum / NumOfCargos;
+	}
+	catch (const std::exception&)
+	{
+		AutoPromotedCargosPercent = 0;
+	}
+		//var
+
+	//trucks stats
+	int NumOfTrucks, NumOfNormalTrucks, NumOfVIPTrucks, NumOfSpecialTrucks;
+		//var
+		//var
+
 
 	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
 		InCheckupTrucksCount, DeliveredCargosCount;
@@ -333,13 +358,12 @@ void Company::SaveOutputs() {
 		this->SpecialTrucksList->getCount() +
 		this->VIPTrucksList->getCount();
 
-	DeliveredCargosCount = this->DeliveredNormalCargoList->getCount() +
-		this->DeliveredSpecialCargoList->getCount() +
-		this->DeliveredVIPCargoList->getCount();
+	NumOfNormalCargos = this->DeliveredNormalCargoList->getCount();
+	NumOfSpecialCargos = this->DeliveredSpecialCargoList->getCount();
+	NumOfVIPCargos = this->DeliveredVIPCargoList->getCount();
+	NumOfCargos = NumOfNormalCargos + NumOfVIPCargos + NumOfVIPCargos;
 
 
-
-	string dataToOutput = "";
 
 	while (!DeliveredNormalCargoList->isEmpty() ||
 		!DeliveredVIPCargoList->isEmpty() ||
@@ -370,7 +394,7 @@ void Company::SaveOutputs() {
 			break;
 		}
 
-		avgWaitinngTime = avgWaitinngTime + cargo->GetWaitingTime();
+		AverageWaitTime = AverageWaitTime + cargo->GetWaitingTime();
 		
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
@@ -379,9 +403,18 @@ void Company::SaveOutputs() {
 			"";
 	}
 
-
 	//output the file here
+	outputFile << dataToOutput;
 	outputFile << "-----------------------------------------"<<endl;
+
+
+
+	//statistics
+	statisticsStr = statisticsStr + "Cargos: " +
+		
+		"";
+
+
 
 
 
@@ -783,6 +816,7 @@ void Company::checkForAutoPromote() {
 		Time res = (this->TimestepNum - pCargo->GetPrepTime());
 		if (this->AutoPromotionLimit <= res) {
 			AutoPromote(pCargo);
+			AutoPromotedCargosNum += 1;
 		}
 		Head = Head->getNext();
 	}

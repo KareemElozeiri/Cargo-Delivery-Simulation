@@ -51,6 +51,7 @@ private:
 	string inputFileName;
 	string outputFileName;
 	int NumOfEvents;
+	int AutoPromotedCargosNum;
 
 	/*
 	* takes a given queue whose inner values are pointers
