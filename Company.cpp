@@ -695,7 +695,6 @@ bool Company::LoadSpecialCargosToTruck()
 			specialTruck->SetLoading(true);
 		}
 		else if ((specialTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->SpecialCargoList) == true)) {
-
 			specialTruck->SetCargoType(CARGOTYPE::S);
 
 			Cargo* c;
@@ -728,9 +727,6 @@ bool Company::LoadNormalCargosToTruck()
 
 	if (normalTruck != nullptr) {
 
-		if (normalTruck->IsLoading())
-			cout << "it is loading" << endl;
-
 		if ((vipTruck == nullptr) || (vipTruck->IsLoading() == false) || (vipTruck->GetCargoType() != CARGOTYPE::N)) {
 
 
@@ -740,7 +736,6 @@ bool Company::LoadNormalCargosToTruck()
 				normalTruck->SetLoading(true);
 			}
 			else if ((normalTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList)==true)) {
-				cout << "triggered"<<endl;
 				normalTruck->SetCargoType(CARGOTYPE::N);
 				
 				Cargo* c = this->NormalCargoList->GetHead()->getItem();
