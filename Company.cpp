@@ -85,7 +85,24 @@ bool Company::CheckExitStatus() {
 	// check for application status 
 	// The simulation function stops when there are no more events and all cargos are in delivered list
 
-	return (this->NormalCargoList->isEmpty() && this->SpecialCargoList->isEmpty() && this->VIPCargoList->isEmpty() && this->EventList->isEmpty());
+	return (
+		this->EventList->isEmpty() &&
+
+		this->NormalCargoList->isEmpty()&&
+		this->SpecialCargoList->isEmpty() &&
+		this->VIPCargoList->isEmpty() &&
+
+		this->MovingTrucks->isEmpty() &&
+		this->NormalMaintenanceTrucksList->isEmpty() &&
+		this->VIPMaintenanceTrucksList->isEmpty() &&
+		this->SpecialMaintenanceTrucksList->isEmpty()
+
+		//if there a loading or unloading list done, add its condition here.
+		//we may need to add intial value to the trucks to make sure they are home
+		//can all cargo be delivered and no moving truck and still no exit status???
+
+		//that checks if all cargos are out then checks that aren't moving so that they are home
+		);
 }
 
 void Company::Simulate() {
