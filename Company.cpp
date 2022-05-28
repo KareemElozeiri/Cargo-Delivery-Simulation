@@ -662,29 +662,23 @@ void Company::LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue)
 	Cargo* c;
 	cargoQueue->peek(c);
 	truck->LoadCargo(c);
-	while (cargoQueue->dequeue(c)) {
-		cargoQueue->peek(c);
-		if(!(truck->LoadCargo(c)))
-			break;
-	}
+	cargoQueue->peek(c);
+	if ((truck->LoadCargo(c)))
+		cargoQueue->dequeue(c);
+		
 }
 
 void Company::LoadTruck(Truck* truck, LinkedList<Cargo*>* cargoList)
 {
-	Cargo* c = nullptr;
-	Node<Cargo*>* tempNode;
-	while (cargoList->GetHead() != nullptr) {
-
-		if (c != nullptr) {
-			if (!(truck->LoadCargo(c)))
-				break;
+	if (cargoList->GetHead() != nullptr) {
+		Cargo* c = cargoList->GetHead()->getItem();
+		Node<Cargo*>* tempNode = cargoList->GetHead();
+		
+		if (truck->LoadCargo(c)) {
+			cargoList->SetHead(tempNode->getNext());
+			tempNode->setNext(nullptr);
+			delete tempNode;
 		}
-		c = cargoList->GetHead()->getItem();
-		tempNode = cargoList->GetHead();
-
-		cargoList->SetHead(cargoList->GetHead()->getNext());
-		cargoList->setCount(cargoList->getCount() - 1);
-		delete tempNode;
 	}
 }
 

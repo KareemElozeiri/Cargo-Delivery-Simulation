@@ -255,7 +255,7 @@ public:
 	*/
 	void LoadTruck(Truck*, LinkedList<Cargo*>* cargoList);
 
-  /*
+	/*
 	*Checks if cargo is allowed to be promoted or canceled
 	*/
 	bool isChangeableCargo(int ID);
