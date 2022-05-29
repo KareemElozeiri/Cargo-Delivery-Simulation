@@ -110,8 +110,9 @@ void Company::Simulate() {
 		this->TimestepNum = this->TimestepNum + 1;
 
 		// Execute the upcoming event
-		this->ExecuteUpcomingEvent();
-
+		if ((this->TimestepNum >= Time(this->TimestepNum.GetDay(), 5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
+			this->ExecuteUpcomingEvent();
+		}
 		// move trucks from checkup to available
 		//this->MoveCheckUpToAvailable();
 
@@ -121,11 +122,12 @@ void Company::Simulate() {
 		// move trucks from maintenance to available
 		//this->MoveMaintenanceToAvailable();
 
-		// Todo: account for the max time waiting rule
-		this->LoadVIPCargosToTruck();
-		this->LoadSpecialCargosToTruck();
-		this->LoadNormalCargosToTruck();
-
+		//handling cargos loading into proper trucks
+		if ((this->TimestepNum>=Time(this->TimestepNum.GetDay(),5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
+			this->LoadVIPCargosToTruck();
+			this->LoadSpecialCargosToTruck();
+			this->LoadNormalCargosToTruck();
+		}
 		// Move Trucks to the moving trucks list if applicable
 		this->MoveTrucks();
 
@@ -133,8 +135,9 @@ void Company::Simulate() {
 		this->UpdateInterface();
 
 		//check for Auto Promote
-		this->checkForAutoPromote();
-
+		if ((this->TimestepNum >= Time(this->TimestepNum.GetDay(), 5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
+			this->checkForAutoPromote();
+		}
 		//check break conditions
 		if (this->CheckExitStatus())
 		{
@@ -340,27 +343,19 @@ void Company::SaveOutputs() {
 	// called on exit
 	std::ofstream outputFile(this->outputFileName);
 
-	//cargos stats
+	//cargos stats dec
 	int NumOfCargos, NumOfNormalCargos, NumOfVIPCargos, NumOfSpecialCargos;
 	Time TotalWaitTime;
 	int AutoPromotedCargosPercent;
 
-	//trucks stats
+	//trucks stats dec
 	int NumOfTrucks, NumOfNormalTrucks, NumOfVIPTrucks, NumOfSpecialTrucks;
 		//var
 		//var
 
 
-	/*int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCout,
-		InCheckupTrucksCount, DeliveredCargosCount;
 
-	WaitingCargosCount = this->NormalCargoList->getCount() +
-		this->SpecialCargoList->getCount() +
-		this->VIPCargoList->getCount();
 
-	LoadingTrucksCount = this->NormalTrucksList->getCount() +
-		this->SpecialTrucksList->getCount() +
-		this->VIPTrucksList->getCount();*/
 
 	//putting cargo stats data
 	NumOfNormalCargos = this->DeliveredNormalCargoList->getCount();
@@ -368,11 +363,17 @@ void Company::SaveOutputs() {
 	NumOfVIPCargos = this->DeliveredVIPCargoList->getCount();
 	NumOfCargos = NumOfNormalCargos + NumOfVIPCargos + NumOfVIPCargos;
 
-
 	if (NumOfCargos==0)
 		AutoPromotedCargosPercent = 0;	//to prevent dividing by zero
 	else
 		AutoPromotedCargosPercent = AutoPromotedCargosNum / NumOfNormalCargos *100;
+
+
+	//putting cargo stats data
+	NumOfNormalTrucks = this->NormalTrucksList->getCount();
+	NumOfSpecialTrucks = this->SpecialTrucksList->getCount();
+	NumOfVIPTrucks = this->VIPTrucksList->getCount();
+	NumOfTrucks = NumOfNormalTrucks + NumOfVIPTrucks + NumOfVIPTrucks;
 
 
 
@@ -433,15 +434,22 @@ void Company::SaveOutputs() {
 		", S: " + to_string(NumOfSpecialCargos) +
 		", V: " + to_string(NumOfVIPCargos) + "]\n"; 
 	//line 2
-	statisticsStr += "Cargo Avg. Wait: " + AverageWaitTime.StringifyTime() + "\n";
+	statisticsStr += "Cargo Avg Wait = " + AverageWaitTime.StringifyTime() + "\n";
 	//line 3
-	statisticsStr += "Auto-promoted Cargos: " + to_string(AutoPromotedCargosPercent) + "%\n\n";
+	statisticsStr += "Auto-promoted Cargos = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
 
 	// Trucks statistics
 	//line 1
-	statisticsStr += ""
+	
+	statisticsStr += "Trucks: " + to_string(NumOfTrucks) +
+		" [N: " + to_string(NumOfNormalTrucks) +
+		", S: " + to_string(NumOfSpecialTrucks) +
+		", V: " + to_string(NumOfVIPTrucks) + "]\n";
+	//line 2
+	statisticsStr += "Avg Active time = " + AverageWaitTime.StringifyTime() + "\n";
+	//line 3
+	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
 
-		"";
 
 
 
@@ -627,10 +635,11 @@ void Company::DeleteNormalCargo(int ID) {
 */
 void Company::AddVIPCargo(Cargo* pCargo) {
 
-	double priority_calc = pCargo->GetCost() / 2000
-		- pCargo->GetDeliveryDistance() / 2000
-		- pCargo->GetPrepTime().GetTotalHours() / 5
-		- pCargo->GetLoadTime() / 10;
+	double priority_calc =
+		 3 * pCargo->GetCost() / 2000
+		-2 * pCargo->GetDeliveryDistance() / 2000
+		-1.5 * pCargo->GetPrepTime().GetTotalHours() / 5
+		-1.5 * pCargo->GetLoadTime() / 10;
 
 
 	this->VIPCargoList->enqueue(pCargo, priority_calc);
@@ -736,6 +745,20 @@ bool Company::LoadSpecialCargosToTruck()
 			specialTruck->SetCargoType(CARGOTYPE::S);
 			specialTruck->SetLoading(true);
 		}
+		else if ((specialTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->SpecialCargoList) == true)) {
+			specialTruck->SetCargoType(CARGOTYPE::S);
+
+			Cargo* c;
+			this->SpecialCargoList->peek(c);
+
+			if (specialTruck->LoadCargo(c) == true) {
+				this->SpecialCargoList->dequeue(c);
+			}
+
+			specialTruck->SetLoaded(true);
+			specialTruck->SetLoading(false);
+			return true;
+		}
 
 
 		if ((specialTruck->IsLoading()==true) && (specialTruck->GetCargoType() == CARGOTYPE::S)) {
@@ -764,7 +787,21 @@ bool Company::LoadNormalCargosToTruck()
 				normalTruck->SetLoading(true);
 			}
 			else if ((normalTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList)==true)) {
+				normalTruck->SetCargoType(CARGOTYPE::N);
 				
+
+				Cargo* c = this->NormalCargoList->GetHead()->getItem();
+				
+				Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();
+				if (normalTruck->LoadCargo(c)==true) {
+					this->NormalCargoList->SetHead(tempNode->getNext());
+					tempNode->setNext(nullptr);
+					delete tempNode;
+					this->NormalCargoList->setCount(this->NormalCargoList->getCount() - 1);
+				}
+
+				normalTruck->SetLoaded(true);
+				normalTruck->SetLoading(false);
 				return true;
 			}
 
@@ -780,6 +817,24 @@ bool Company::LoadNormalCargosToTruck()
 		if ((!(vipTruck->IsLoading())) && (CanTruckLoad(vipTruck, this->NormalCargoList))) {
 			vipTruck->SetCargoType(CARGOTYPE::N);
 			vipTruck->SetLoading(true);
+		}
+		else if ((vipTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList) == true)) {
+
+			vipTruck->SetCargoType(CARGOTYPE::N);
+
+			Cargo* c = this->NormalCargoList->GetHead()->getItem();
+
+			Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();
+			if (vipTruck->LoadCargo(c) == true) {
+				this->NormalCargoList->SetHead(tempNode->getNext());
+				tempNode->setNext(nullptr);
+				delete tempNode;
+				this->NormalCargoList->setCount(this->NormalCargoList->getCount() - 1);
+			}
+
+			vipTruck->SetLoaded(true);
+			vipTruck->SetLoading(false);
+			return true;
 		}
 
 
