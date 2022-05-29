@@ -196,4 +196,16 @@ std::string Truck::GetCargosData() {
 	return this->cargos->getData();
 }
 
+void Truck::PeekCargos(Cargo*& toPeekCargo) {
+	this->cargos->peek(toPeekCargo);
+}
+
+void Truck::DequeueTopCargo(Cargo*& toDequeueCargo) {
+	this->cargos->dequeue(toDequeueCargo);
+}
+
+void Truck::IncrementJourneysCompleted() {
+	this->journeysCompleted += 1;
+}
+
 #endif
