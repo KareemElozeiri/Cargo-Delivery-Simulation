@@ -110,8 +110,9 @@ void Company::Simulate() {
 		this->TimestepNum = this->TimestepNum + 1;
 
 		// Execute the upcoming event
-		this->ExecuteUpcomingEvent();
-
+		if ((this->TimestepNum >= Time(this->TimestepNum.GetDay(), 5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
+			this->ExecuteUpcomingEvent();
+		}
 		// move trucks from checkup to available
 		this->MoveCheckUpToAvailable();
 
@@ -121,11 +122,12 @@ void Company::Simulate() {
 		// move trucks from maintenance to available
 		this->MoveMaintenanceToAvailable();
 
-		// Todo: account for the max time waiting rule
-		this->LoadVIPCargosToTruck();
-		this->LoadSpecialCargosToTruck();
-		this->LoadNormalCargosToTruck();
-
+		//handling cargos loading into proper trucks
+		if ((this->TimestepNum>=Time(this->TimestepNum.GetDay(),5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
+			this->LoadVIPCargosToTruck();
+			this->LoadSpecialCargosToTruck();
+			this->LoadNormalCargosToTruck();
+		}
 		// Move Trucks to the moving trucks list if applicable
 		this->MoveTrucks();
 
@@ -133,8 +135,9 @@ void Company::Simulate() {
 		this->UpdateInterface();
 
 		//check for Auto Promote
-		this->checkForAutoPromote();
-
+		if ((this->TimestepNum >= Time(this->TimestepNum.GetDay(), 5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
+			this->checkForAutoPromote();
+		}
 		//check break conditions
 		if (this->CheckExitStatus())
 		{
@@ -744,6 +747,7 @@ bool Company::LoadNormalCargosToTruck()
 			else if ((normalTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList)==true)) {
 				normalTruck->SetCargoType(CARGOTYPE::N);
 				
+
 				Cargo* c = this->NormalCargoList->GetHead()->getItem();
 				
 				Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();

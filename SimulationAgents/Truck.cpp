@@ -79,7 +79,6 @@ bool Truck::LoadCargo(Cargo* cargo)
 
 			double cargo_priority = -cargo->GetDeliveryDistance() / this->speed;
 			this->cargos->enqueue(cargo, cargo_priority);
-			this->cargos->incrementCount();
 			this->CalculateDeliveryInterval();
 			this->UpdateTruckPriority(cargo_priority);
 
