@@ -948,6 +948,13 @@ void Company::AutoPromote(Cargo* pCargo) {
 	
 }
 
+void Company::MoveMovingToAvilable()
+{
+
+
+
+}
+
 void Company::MoveTrucks() {
 	Truck* checkingTruck = nullptr;
 
