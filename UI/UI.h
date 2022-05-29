@@ -81,7 +81,7 @@ public:
 	* Function: StepInterfaceUpdate.
 	* Updates the interface when the AppMode is set to Step-By-Step.
 	*/
-	void StepInterfaceUpdate() const;
+	void StepInterfaceUpdate(string currentTime, string InteractiveData) const;
 
 	/*
 	* Function: SilentInterfaceUpdate.

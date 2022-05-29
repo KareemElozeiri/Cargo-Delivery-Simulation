@@ -484,7 +484,7 @@ void Company::UpdateInterface() {
 		pUI->InteractiveInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
 		break;
 	case MODE::STEP:
-		pUI->StepInterfaceUpdate();
+		pUI->StepInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
 		break;
 	case MODE::SILENT:
 		pUI->SilentInterfaceUpdate();
