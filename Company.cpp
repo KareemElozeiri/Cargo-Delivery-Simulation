@@ -976,14 +976,14 @@ void Company::cleanPriorityQueueInnerPointers(PQueue<T*>* pqueue)
 
 void Company::checkForAutoPromote() {
 	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
+
 	while (Head != nullptr) {
-		Cargo* pCargo = Head->getItem();
+ 		Cargo* pCargo = Head->getItem();
 		Time res = (this->TimestepNum - pCargo->GetPrepTime());
 		Head = Head->getNext();
 		if (this->AutoPromotionLimit <= res) {
 			AutoPromote(pCargo);
 			AutoPromotedCargosNum += 1;
-		}	
 	}
 
 }
@@ -999,6 +999,13 @@ void Company::AutoPromote(Cargo* pCargo) {
 		this->DeleteNormalCargo(pCargo->GetID());
 		this->AddVIPCargo(pCargo);
 	
+}
+
+void Company::MoveMovingToAvilable()
+{
+
+
+
 }
 
 void Company::MoveTrucks() {
