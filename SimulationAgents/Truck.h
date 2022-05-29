@@ -25,6 +25,8 @@ private:
 	Time CheckUpOutTime; // time to get out of the checkup
 	Time total_load_time = 0;
 
+	Time MovingStartTime = NULL;
+
 	int maxjourneysBeforeCheckUp;
 	int journeysBeforeCheckUp; // the number of journeys that the truck can make before its need of checkup
 	int ID;
@@ -198,6 +200,50 @@ public:
 	* on the truck where this first cargo has the minimum time required to deliver
 	*/
 	Time GetMinimumDeliveryTime() const;
+
+	/*
+	* Function: SetMovingStartTime.
+	* Sets the Starting Moving Time of the Truck.
+	*
+	* Parameters:
+	*	- MovingStartTime : The Starting Moving Time of The Truck.
+	*
+	* Returns: void.
+	*/
+	void SetMovingStartTime(Time MovingStartTime);
+
+	/*
+	* Function: GetMovingStartTime.
+	* Gets the Starting Moving Time of the Truck.
+	*
+	* Parameters:
+	*	- NO PARAMS.
+	*
+	* Returns: void.
+	*/
+	Time GetMovingStartTime();
+
+	/*
+	* Function: GetCargosCount.
+	* Gets the Number of Cargos in the Truck.
+	*
+	* Parameters:
+	*	- NO PARAMS.
+	*
+	* Returns: int.
+	*/
+	int GetCargosCount();
+
+	/*
+	* Function: GetCargosData.
+	* Gets the Data of Truck's Cargos.
+	*
+	* Parameters:
+	*	- NO PARAMS.
+	*
+	* Returns: string.
+	*/
+	std::string GetCargosData();
 
 
 	bool IsLoaded() const;
