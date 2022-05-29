@@ -79,7 +79,6 @@ bool Truck::LoadCargo(Cargo* cargo)
 
 			double cargo_priority = -cargo->GetDeliveryDistance() / this->speed;
 			this->cargos->enqueue(cargo, cargo_priority);
-			this->cargos->incrementCount();
 			this->CalculateDeliveryInterval();
 			this->UpdateTruckPriority(cargo_priority);
 
@@ -179,6 +178,22 @@ std::ostream& operator<<(std::ostream& os, const Truck truck)
 {
 	os << truck.GetID();
 	return os;
+}
+
+void Truck::SetMovingStartTime(Time MovingStartTime) {
+	this->MovingStartTime = MovingStartTime;
+}
+
+Time Truck::GetMovingStartTime() {
+	return this->MovingStartTime;
+}
+
+int Truck::GetCargosCount() {
+	return this->cargos->getCount();
+}
+
+std::string Truck::GetCargosData() {
+	return this->cargos->getData();
 }
 
 #endif
