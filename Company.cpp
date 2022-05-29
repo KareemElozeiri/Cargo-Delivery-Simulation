@@ -134,6 +134,9 @@ void Company::Simulate() {
 		// print current info
 		this->UpdateInterface();
 
+		// Deliver Cargos
+		this->DeliverCargos();
+
 		//check for Auto Promote
 		if ((this->TimestepNum >= Time(this->TimestepNum.GetDay(), 5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
 			this->checkForAutoPromote();
@@ -481,7 +484,7 @@ void Company::UpdateInterface() {
 		pUI->InteractiveInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
 		break;
 	case MODE::STEP:
-		pUI->StepInterfaceUpdate();
+		pUI->StepInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
 		break;
 	case MODE::SILENT:
 		pUI->SilentInterfaceUpdate();
@@ -500,6 +503,8 @@ std::string Company::GetInteractiveModeData() const {
 		this->SpecialCargoList->getCount() +
 		this->VIPCargoList->getCount();
 
+
+
 	LoadingTrucksCount = this->NormalTrucksList->getCount() +
 		this->SpecialTrucksList->getCount() +
 		this->VIPTrucksList->getCount();
@@ -512,10 +517,13 @@ std::string Company::GetInteractiveModeData() const {
 
 
 	// Waiting Cargos Line:
-	interactive_mode_data += WaitingCargosCount + " Waiting Cargos: ";
-	interactive_mode_data += "[" + this->NormalCargoList->getData() + "] ";
-	interactive_mode_data += "(" + this->SpecialCargoList->getData() + ") ";
-	interactive_mode_data += "{" + this->VIPCargoList->getData() + "}";
+	interactive_mode_data += std::to_string(WaitingCargosCount) + " Waiting Cargos: ";
+	if (NormalCargoList->getCount() > 0)
+		interactive_mode_data += "[" + this->NormalCargoList->getData() + "] ";
+	if (SpecialCargoList->getCount() > 0)
+		interactive_mode_data += "(" + this->SpecialCargoList->getData() + ") ";
+	if (VIPCargoList->getCount() > 0)
+		interactive_mode_data += "{" + this->VIPCargoList->getData() + "}";
 	interactive_mode_data += separator;
 
 	// Moving Cargo Line:
@@ -559,11 +567,14 @@ std::string Company::GetInteractiveModeData() const {
 
 	interactive_mode_data += MovingTrucksLine;
 
-
-	interactive_mode_data += DeliveredCargosCount + " Delivered Cargos: ";
-	interactive_mode_data += "[" + this->DeliveredNormalCargoList->getData() + "] ";
-	interactive_mode_data += "(" + this->DeliveredSpecialCargoList->getData() + ") ";
-	interactive_mode_data += "{" + this->DeliveredVIPCargoList->getData() + "}";
+	// Delivered Cargos Line:
+	interactive_mode_data += std::to_string(DeliveredCargosCount) + " Delivered Cargos: ";
+	if (this->DeliveredNormalCargoList->getCount() > 0)
+		interactive_mode_data += "[" + this->DeliveredNormalCargoList->getData() + "] ";
+	if (this->DeliveredSpecialCargoList->getCount() > 0)
+		interactive_mode_data += "(" + this->DeliveredSpecialCargoList->getData() + ") ";
+	if (this->DeliveredVIPCargoList->getCount() > 0)
+		interactive_mode_data += "{" + this->DeliveredVIPCargoList->getData() + "}";
 	interactive_mode_data += separator;
 
 	return interactive_mode_data;
@@ -969,16 +980,15 @@ void Company::checkForAutoPromote() {
 	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
 
 	while (Head != nullptr) {
- 		Cargo* pCargo = Head->getItem();
+		Cargo* pCargo = Head->getItem();
 		Time res = (this->TimestepNum - pCargo->GetPrepTime());
 		Head = Head->getNext();
 		if (this->AutoPromotionLimit <= res) {
 			AutoPromote(pCargo);
 			AutoPromotedCargosNum += 1;
 		}
-		
-	}
 
+	}
 }
 
 bool Company::isChangeableCargo(int ID) {
@@ -1174,6 +1184,59 @@ void Company::MoveMaintenanceToAvailable() {
 			this->VIPMaintenanceTrucksList->dequeue(pTruck);
 		}
 		else break;
+	}
+}
+
+void Company::DeliverCargos() {
+	Truck* TempTruck = nullptr;
+	Cargo* TempCargo = nullptr;
+	this->MovingTrucks->peek(TempTruck);
+
+	if (!TempTruck) {
+		return;
+	}
+
+	TempTruck->PeekCargos(TempCargo);
+	Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime());
+
+	if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() >= this->TimestepNum) {
+		TempTruck->DequeueTopCargo(TempCargo);
+		switch (TempCargo->GetType())
+		{
+			case CARGOTYPE::N:
+				this->DeliveredNormalCargoList->enqueue(TempCargo);
+				break;
+			case CARGOTYPE::S:
+				this->DeliveredSpecialCargoList->enqueue(TempCargo);
+				break;
+			case CARGOTYPE::V:
+				this->DeliveredVIPCargoList->enqueue(TempCargo);
+				break;
+		}
+	}
+	TempTruck->PeekCargos(TempCargo);
+	// If the Truck Delivered All The Cargos.
+	if (!TempCargo) {
+		TempTruck->IncrementJourneysCompleted();
+		this->MovingTrucks->dequeue(TempTruck);
+		switch (TempTruck->GetTruckType())
+		{
+			case TRUCKTYPE::NT:
+				this->NormalTrucksList->enqueue(TempTruck);
+				break;
+			case TRUCKTYPE::ST:
+				this->SpecialTrucksList->enqueue(TempTruck);
+				break;
+			case TRUCKTYPE::VT:
+				this->VIPTrucksList->enqueue(TempTruck);
+				break;
+		}
+	}
+	else {
+		this->MovingTrucks->dequeue(TempTruck);
+		TempTruck->PeekCargos(TempCargo);
+		TempTruck->UpdateTruckPriority(TempTruck->GetSpeed() / TempCargo->GetDeliveryDistance());
+		this->MovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
 	}
 }
 
