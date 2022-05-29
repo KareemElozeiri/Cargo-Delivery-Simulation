@@ -131,11 +131,11 @@ void Company::Simulate() {
 		// Move Trucks to the moving trucks list if applicable
 		this->MoveTrucks();
 
-		// Deliver Cargos
-		this->DeliverCargos();
-
 		// print current info
 		this->UpdateInterface();
+
+		// Deliver Cargos
+		this->DeliverCargos();
 
 		//check for Auto Promote
 		if ((this->TimestepNum >= Time(this->TimestepNum.GetDay(), 5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
@@ -1187,9 +1187,9 @@ void Company::DeliverCargos() {
 	}
 
 	TempTruck->PeekCargos(TempCargo);
-	Time TruckAfterMovingTime(TempTruck->GetSpeed() / TempCargo->GetDeliveryDistance());
+	Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime());
 
-	if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() == this->TimestepNum) {
+	if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() >= this->TimestepNum) {
 		TempTruck->DequeueTopCargo(TempCargo);
 		switch (TempCargo->GetType())
 		{
@@ -1204,10 +1204,10 @@ void Company::DeliverCargos() {
 				break;
 		}
 	}
-	TempTruck->IncrementJourneysCompleted();
 	TempTruck->PeekCargos(TempCargo);
 	// If the Truck Delivered All The Cargos.
 	if (!TempCargo) {
+		TempTruck->IncrementJourneysCompleted();
 		this->MovingTrucks->dequeue(TempTruck);
 		switch (TempTruck->GetTruckType())
 		{
@@ -1221,6 +1221,12 @@ void Company::DeliverCargos() {
 				this->VIPTrucksList->enqueue(TempTruck);
 				break;
 		}
+	}
+	else {
+		this->MovingTrucks->dequeue(TempTruck);
+		TempTruck->PeekCargos(TempCargo);
+		TempTruck->UpdateTruckPriority(TempTruck->GetSpeed() / TempCargo->GetDeliveryDistance());
+		this->MovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
 	}
 }
 
