@@ -114,13 +114,13 @@ void Company::Simulate() {
 			this->ExecuteUpcomingEvent();
 		}
 		// move trucks from checkup to available
-		this->MoveCheckUpToAvailable();
+		//this->MoveCheckUpToAvailable();
 
 		// move trucks from available to checkup
-		this->CheckForCheckUp();
+		//this->CheckForCheckUp();
 
 		// move trucks from maintenance to available
-		this->MoveMaintenanceToAvailable();
+		//this->MoveMaintenanceToAvailable();
 
 		//handling cargos loading into proper trucks
 		if ((this->TimestepNum>=Time(this->TimestepNum.GetDay(),5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
@@ -504,7 +504,7 @@ std::string Company::GetInteractiveModeData() const {
 		this->SpecialTrucksList->getCount() +
 		this->VIPTrucksList->getCount();
 
-	MovingCargosCount = this->MovingTrucks->getCount();
+	
 
 	DeliveredCargosCount = this->DeliveredNormalCargoList->getCount() +
 		this->DeliveredSpecialCargoList->getCount() +
@@ -517,6 +517,48 @@ std::string Company::GetInteractiveModeData() const {
 	interactive_mode_data += "(" + this->SpecialCargoList->getData() + ") ";
 	interactive_mode_data += "{" + this->VIPCargoList->getData() + "}";
 	interactive_mode_data += separator;
+
+	// Moving Cargo Line:
+	string MovingTrucksLine = "";
+	MovingCargosCount = 0;
+	PQueue<Truck*>* TempMovingTrucks = new PQueue<Truck*>;
+	Truck* TempTruck = nullptr;
+
+	while (this->MovingTrucks->dequeue(TempTruck)) {
+		string TruckOpenBracket = "{";
+		string TruckEndBracket = "}";
+
+		switch (TempTruck->GetCargoType())
+		{
+			case CARGOTYPE::N:
+				TruckOpenBracket = "[";
+				TruckEndBracket = "]";
+				break;
+			case CARGOTYPE::S:
+				TruckOpenBracket = "(";
+				TruckEndBracket = ")";
+				break;
+		}
+
+		MovingTrucksLine += std::to_string(TempTruck->GetID()) + 
+			TruckOpenBracket + 
+			TempTruck->GetCargosData() + 
+			TruckEndBracket + " ";
+		TempMovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
+
+		MovingCargosCount += TempTruck->GetCargosCount();
+	}
+
+	while (TempMovingTrucks->dequeue(TempTruck)) {
+		MovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
+	}
+
+	delete TempMovingTrucks;
+
+	MovingTrucksLine = std::to_string(MovingCargosCount) + " Moving Cargos: " + MovingTrucksLine + separator;
+
+	interactive_mode_data += MovingTrucksLine;
+
 
 	interactive_mode_data += DeliveredCargosCount + " Delivered Cargos: ";
 	interactive_mode_data += "[" + this->DeliveredNormalCargoList->getData() + "] ";
@@ -962,18 +1004,21 @@ void Company::MoveTrucks() {
 	if (checkingTruck->IsLoaded()) {
 		NormalTrucksList->dequeue(checkingTruck);
 		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+		checkingTruck->SetMovingStartTime(TimestepNum);
 	}
 
 	this->SpecialTrucksList->peek(checkingTruck);
 	if (checkingTruck->IsLoaded()) {
 		SpecialTrucksList->dequeue(checkingTruck);
 		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+		checkingTruck->SetMovingStartTime(TimestepNum);
 	}
 
 	this->VIPTrucksList->peek(checkingTruck);
 	if (checkingTruck->IsLoaded()) {
 		VIPTrucksList->dequeue(checkingTruck);
 		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+		checkingTruck->SetMovingStartTime(TimestepNum);
 	}
 }
 

@@ -180,4 +180,20 @@ std::ostream& operator<<(std::ostream& os, const Truck truck)
 	return os;
 }
 
+void Truck::SetMovingStartTime(Time MovingStartTime) {
+	this->MovingStartTime = MovingStartTime;
+}
+
+Time Truck::GetMovingStartTime() {
+	return this->MovingStartTime;
+}
+
+int Truck::GetCargosCount() {
+	return this->cargos->getCount();
+}
+
+std::string Truck::GetCargosData() {
+	return this->cargos->getData();
+}
+
 #endif
