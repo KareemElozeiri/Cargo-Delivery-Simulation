@@ -83,6 +83,7 @@ bool Truck::LoadCargo(Cargo* cargo)
 			this->UpdateTruckPriority(cargo_priority);
 
 			if (this->cargos->getCount() == this->capacity) {
+				std::cout << "done!" << std::endl;
 				this->SetLoaded(true);
 				this->SetLoading(false);
 			}

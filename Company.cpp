@@ -756,6 +756,7 @@ bool Company::LoadNormalCargosToTruck()
 					tempNode->setNext(nullptr);
 					delete tempNode;
 					this->NormalCargoList->setCount(this->NormalCargoList->getCount() - 1);
+					std::cout << normalTruck->GetID() << std::endl;
 				}
 
 				normalTruck->SetLoaded(true);
@@ -836,6 +837,7 @@ void Company::LoadTruck(Truck* truck, LinkedList<Cargo*>* cargoList)
 				delete tempNode;
 
 				cargoList->setCount(cargoList->getCount() - 1);
+				std::cout << truck->GetID()<<std::endl;
 			}
 		}
 	}
