@@ -1194,10 +1194,10 @@ void Company::DeliverCargos() {
 	}
 
 	TempTruck->PeekCargos(TempCargo);
-	if (TempCargo) {
+	while (TempCargo) {
 		Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime());
 
-		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() <= this->TimestepNum) {
+		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() == this->TimestepNum) {
 			TempTruck->DequeueTopCargo(TempCargo);
 			switch (TempCargo->GetType())
 			{
@@ -1212,8 +1212,12 @@ void Company::DeliverCargos() {
 				break;
 			}
 		}
-	}
+		else {
+			break;
+		}
 
+		TempTruck->PeekCargos(TempCargo);
+	}
 
 	// If the Truck Delivered All The Cargos.
 	if (TempTruck->GetCargosCount() == 0) {
@@ -1241,7 +1245,7 @@ void Company::DeliverCargos() {
 	else {
 		TempTruck->PeekCargos(TempCargo);
 		this->MovingTrucks->dequeue(TempTruck);
-		TempTruck->UpdateTruckPriority(-(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime()));
+		TempTruck->UpdateTruckPriority();
 		this->MovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
 	}
 }
