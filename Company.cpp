@@ -451,8 +451,8 @@ string Company::OutputString() {
 		}
 
 		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
-		TotalAllTime = TotalAllTime + 0;		///////////////////////////////////need to be calc.
-		TotalActiveTime = TotalActiveTime + 0;	///////////////////////////////////need to be calc.
+		TotalAllTime = TotalAllTime + 1;		///////////////////////////////////need to be calc.
+		TotalActiveTime = TotalActiveTime + 1;	///////////////////////////////////need to be calc.
 
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
@@ -481,6 +481,13 @@ string Company::OutputString() {
 	statisticsStr += "Cargo Avg Wait = " + AverageWaitTime.StringifyTime() + "\n";
 	//line 3
 	statisticsStr += "Auto-promoted Cargos = " + to_string(00000000000000000) + "%\n\n";//////////calc
+
+
+
+	//move truck --> loaded and then start move when timestep come
+	//timestep
+	//delivered cargos
+
 
 	// Trucks statistics
 	//line 1
