@@ -131,6 +131,18 @@ void Truck::ResetJourneysCount() {
 	this->journeysBeforeCheckUp = this->maxjourneysBeforeCheckUp;
 }
 
+void Truck::DecreaseJourneyBeforeCheckUp() {
+	this->journeysBeforeCheckUp -= 1;
+}
+
+int Truck::GetTotalCompletedJourneys() {
+	return this->journeysCompleted;
+}
+
+int Truck::GetMaxJourneysBeforeCheckUp() {
+	return this->maxjourneysBeforeCheckUp;
+}
+
 bool Truck::IsLoaded() const
 {
 	return this->Loaded;
@@ -203,6 +215,10 @@ void Truck::PeekCargos(Cargo*& toPeekCargo) {
 
 void Truck::DequeueTopCargo(Cargo*& toDequeueCargo) {
 	this->cargos->dequeue(toDequeueCargo);
+}
+
+bool Truck::DequeueTopCargo_bool(Cargo*& toDequeueCargo) {
+	return this->cargos->dequeue(toDequeueCargo);
 }
 
 void Truck::IncrementJourneysCompleted() {
