@@ -281,7 +281,10 @@ public:
 	bool CurrentCargoIsMaxWaiting(Queue<Cargo*>* givenQueue);
 
 	bool CurrentCargoIsMaxWaiting(LinkedList<Cargo*>* givenList);
-
+	/*
+	* handles the off-hours condition
+	*/
+	bool IsWorkingHours();
 	/*
 	*Checks if cargo is allowed to be promoted or canceled
 	*/
@@ -294,7 +297,6 @@ public:
 	* Function: CheckMaxWaitingTime
 	* Checks if a given cargo has waited for the maximum waiting time
 	*/
-	bool CheckMaxWaitingTime(Cargo* c);
 	bool CheckForCheckUp(Truck* pTruck);
 	void MoveToCheckUp(Truck* pTruck);
 

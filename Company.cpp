@@ -119,7 +119,7 @@ void Company::Simulate() {
 		this->TimestepNum = this->TimestepNum + 1;
 
 		// Execute the upcoming event
-		if ((this->TimestepNum >= Time(this->TimestepNum.GetDay(), 5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
+		if (this->IsWorkingHours()) {
 			this->ExecuteUpcomingEvent();
 		}
 		// move trucks from checkup to available
@@ -129,7 +129,7 @@ void Company::Simulate() {
 		this->MoveMaintenanceToAvailable();
 
 		//handling cargos loading into proper trucks
-		if ((this->TimestepNum>=Time(this->TimestepNum.GetDay(),5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
+		if (this->IsWorkingHours()) {
 			this->LoadVIPCargosToTruck();
 			this->LoadSpecialCargosToTruck();
 			this->LoadNormalCargosToTruck();
@@ -145,7 +145,7 @@ void Company::Simulate() {
 		this->DeliverCargos();
 
 		//check for Auto Promote
-		if ((this->TimestepNum >= Time(this->TimestepNum.GetDay(), 5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
+		if (this->IsWorkingHours()) {
 			this->checkForAutoPromote();
 		}
 
@@ -1012,6 +1012,11 @@ bool Company::CurrentCargoIsMaxWaiting(LinkedList<Cargo*>* givenList)
 		}
 	}
 	return false;
+}
+
+bool Company::IsWorkingHours()
+{
+	return (this->TimestepNum >= Time(this->TimestepNum.GetDay(), 5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23));
 }
 
 
