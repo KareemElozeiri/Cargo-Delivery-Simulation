@@ -111,6 +111,11 @@ public:
 	*/
 	void LoadInputs();
 	
+
+	string OutputString();
+
+
+
 	/*
 	* Function: SaveOutputs.
 	* Saves the program instance output upon exit.

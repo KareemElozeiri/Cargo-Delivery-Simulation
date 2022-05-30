@@ -344,16 +344,11 @@ CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 /// purpose: to read from files and then call the Event class
 /// if it has different purpose, add it again 
 
-
-void Company::SaveOutputs() {
-
+string Company::OutputString() {
 
 
 	string dataToOutput = "";
 	string statisticsStr = "";
-
-	// called on exit
-	std::ofstream outputFile(this->outputFileName);
 
 	//cargos stats dec
 	int NumOfCargos, NumOfNormalCargos, NumOfVIPCargos, NumOfSpecialCargos;
@@ -430,10 +425,8 @@ void Company::SaveOutputs() {
 			"";
 	}
 
-	//output the file here
-	outputFile << dataToOutput;
-	outputFile << "-----------------------------------------" << endl;
-	outputFile << "-----------------------------------------" << endl;
+	dataToOutput += "-----------------------------------------\n" ;
+	dataToOutput += "-----------------------------------------\n";
 
 
 	//calculating statistics...
@@ -466,9 +459,31 @@ void Company::SaveOutputs() {
 	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
 
 
+	
+
+	////////could be changed to be just set a member Output string
+	return (dataToOutput + statisticsStr);
 
 
-	outputFile.close();
+}
+
+
+
+
+
+void Company::SaveOutputs() {
+	// called on exit
+	std::ofstream outputFile(this->outputFileName);
+
+
+	string outputText = this->OutputString();
+
+
+	outputFile << outputText;
+
+
+
+	//outputFile.close();
 
 }
 
