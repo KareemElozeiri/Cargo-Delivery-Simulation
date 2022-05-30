@@ -15,6 +15,7 @@
 #include "custom/customs.h" //to get split function
 #include <iostream>
 #include <fstream>
+#include <time.h>
 
 class Company
 {
@@ -37,7 +38,10 @@ private:
 	Queue<Truck*>* NormalTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* SpecialTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* VIPTrucksList = new Queue<Truck*>;
-	PQueue<Truck*>* InCheckUpTrucksList = new PQueue<Truck*>;
+
+	Queue<Truck*>* InCheckUpNormalTrucks = new Queue<Truck*>;
+	Queue<Truck*>* InCheckUpSpecialTrucks = new Queue<Truck*>;
+	Queue<Truck*>* InCheckUpVIPTrucks = new Queue<Truck*>;
 
 	Queue<Truck*>* NormalMaintenanceTrucksList = new Queue<Truck*>;
 	Queue<Truck*>* SpecialMaintenanceTrucksList = new Queue<Truck*>;
@@ -291,14 +295,19 @@ public:
 	* Checks if a given cargo has waited for the maximum waiting time
 	*/
 	bool CheckMaxWaitingTime(Cargo* c);
-	void CheckForCheckUp();
+	bool CheckForCheckUp(Truck* pTruck);
+	void MoveToCheckUp(Truck* pTruck);
+
 	void MoveCheckUpToAvailable();
 	bool CheckForMaintenance(Truck* pTruck);
 	void MoveMaintenanceToAvailable();
 	void MoveMovingToAvilable();
+
 	// TODO
-	TRUCKTYPE CheckTrucksNeeded(); // get what truck type needed
-	void ForceMoveMaintenanceToAvailable(TRUCKTYPE type); // release one of the trucks in the list
+	bool ForceMoveMaintenanceToAvailable(TRUCKTYPE type); // release one of the trucks in the list
+
+	void ExecuteFailure();
+	void DropTruck();
 };
 #endif
 

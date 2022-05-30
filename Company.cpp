@@ -63,12 +63,20 @@ Company::~Company() {
 	this->cleanQueueInnerPointers(this->NormalTrucksList);
 	this->cleanQueueInnerPointers(this->SpecialTrucksList);
 	this->cleanQueueInnerPointers(this->VIPTrucksList);
-	this->cleanPriorityQueueInnerPointers(this->InCheckUpTrucksList);
 	
 	delete this->NormalTrucksList;
 	delete this->SpecialTrucksList;
 	delete this->VIPTrucksList;
-	delete this->InCheckUpTrucksList;
+
+
+	// Delete Checkup Trcuks List
+	this->cleanQueueInnerPointers(this->InCheckUpNormalTrucks);
+	this->cleanQueueInnerPointers(this->InCheckUpSpecialTrucks);
+	this->cleanQueueInnerPointers(this->InCheckUpVIPTrucks);
+
+	delete this->InCheckUpNormalTrucks;
+	delete this->InCheckUpSpecialTrucks;
+	delete this->InCheckUpVIPTrucks;
 
 
 	// Delete The Maintenance Lists
@@ -116,9 +124,6 @@ void Company::Simulate() {
 		// move trucks from checkup to available
 		//this->MoveCheckUpToAvailable();
 
-		// move trucks from available to checkup
-		//this->CheckForCheckUp();
-
 		// move trucks from maintenance to available
 		//this->MoveMaintenanceToAvailable();
 
@@ -128,8 +133,12 @@ void Company::Simulate() {
 			this->LoadSpecialCargosToTruck();
 			this->LoadNormalCargosToTruck();
 		}
+
 		// Move Trucks to the moving trucks list if applicable
 		this->MoveTrucks();
+
+		// applies probability for a truck to fail delivering while moving
+		this->ExecuteFailure();
 
 		// print current info
 		this->UpdateInterface();
@@ -144,6 +153,7 @@ void Company::Simulate() {
 		//check break conditions
 		if (this->CheckExitStatus())
 		{
+
 
 			//making data for the output file and saving it
 			this->SaveOutputs();
@@ -210,7 +220,7 @@ void Company::LoadInputs() {
 
 
 
-
+	
 	/// loops on each event and takes the letter to check which event function to call.
 	/// based on this the event function will take the right number of params for it
 	/// Ready : 6 params
@@ -319,7 +329,7 @@ CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 	Cargo* first_delivered_Cargo = normal;
 	CARGOTYPE type = CARGOTYPE::N;
 	
-	if (vip->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+ 	if (vip->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
 		first_delivered_Cargo = vip;
 		type = CARGOTYPE::V;
 	}
@@ -353,8 +363,9 @@ void Company::SaveOutputs() {
 
 	//trucks stats dec
 	int NumOfTrucks, NumOfNormalTrucks, NumOfVIPTrucks, NumOfSpecialTrucks;
-		//var
-		//var
+	Time TotalActiveTime;	//used to calc avg active time
+	Time TotalAllTime;		//used to calc avg active time
+	double TruckUtillization;/////////////////////////////////////////////////////////////////calc
 
 
 
@@ -410,7 +421,9 @@ void Company::SaveOutputs() {
 		}
 
 		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
-		
+		TotalAllTime = TotalAllTime + 0;		///////////////////////////////////need to be calc.
+		TotalActiveTime = TotalActiveTime + 0;	///////////////////////////////////need to be calc.
+
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
 			cargo->GetWaitingTime().StringifyTime() + "\t" +
@@ -427,7 +440,7 @@ void Company::SaveOutputs() {
 	//calculating statistics...
 	int totalWaitHours = TotalWaitTime.GetTotalHours();
 	Time AverageWaitTime(totalWaitHours / 24, totalWaitHours % 24);
-
+	double AvgActiveTime = TotalActiveTime.GetTotalHours() / TotalAllTime.GetTotalHours() *100;
 
 	using std::to_string;
 	// Cargo statistics
@@ -439,7 +452,7 @@ void Company::SaveOutputs() {
 	//line 2
 	statisticsStr += "Cargo Avg Wait = " + AverageWaitTime.StringifyTime() + "\n";
 	//line 3
-	statisticsStr += "Auto-promoted Cargos = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
+	statisticsStr += "Auto-promoted Cargos = " + to_string(00000000000000000) + "%\n\n";//////////calc
 
 	// Trucks statistics
 	//line 1
@@ -449,7 +462,7 @@ void Company::SaveOutputs() {
 		", S: " + to_string(NumOfSpecialTrucks) +
 		", V: " + to_string(NumOfVIPTrucks) + "]\n";
 	//line 2
-	statisticsStr += "Avg Active time = " + AverageWaitTime.StringifyTime() + "\n";
+	statisticsStr += "Avg Active time = " + to_string(AvgActiveTime) + "%\n";
 	//line 3
 	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
 
@@ -914,10 +927,12 @@ bool Company::OtherTwoNotWorkingOnThat(Truck* truck1, Truck* truck2, CARGOTYPE c
 {
 	if ((truck1 == nullptr) && (truck2 == nullptr))
 		return true;
-	else if ((truck1 == nullptr) && ((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
-		return true;
-	else if ((truck2 == nullptr) && ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)))
-		return true;
+	else if ((truck1 == nullptr))
+		if(((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
+				return true;
+	else if ((truck2 == nullptr))
+			if ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c))
+					return true;
 	else if (((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)) && ((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
 		return true;
 
@@ -985,6 +1000,7 @@ void Company::checkForAutoPromote() {
 			AutoPromote(pCargo);
 			AutoPromotedCargosNum += 1;
 		}
+
 	}
 }
 
@@ -1012,119 +1028,111 @@ void Company::MoveTrucks() {
 	Truck* checkingTruck = nullptr;
 
 	this->NormalTrucksList->peek(checkingTruck);
-	if (checkingTruck->IsLoaded()) {
-		NormalTrucksList->dequeue(checkingTruck);
-		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
-		checkingTruck->SetMovingStartTime(TimestepNum);
+	if (checkingTruck != nullptr) {
+		if (checkingTruck->IsLoaded()) {
+			NormalTrucksList->dequeue(checkingTruck);
+			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+			checkingTruck->SetMovingStartTime(TimestepNum);
+		}
 	}
 
 	this->SpecialTrucksList->peek(checkingTruck);
-	if (checkingTruck->IsLoaded()) {
-		SpecialTrucksList->dequeue(checkingTruck);
-		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
-		checkingTruck->SetMovingStartTime(TimestepNum);
+	if (checkingTruck != nullptr) {
+		if (checkingTruck->IsLoaded()) {
+			SpecialTrucksList->dequeue(checkingTruck);
+			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+			checkingTruck->SetMovingStartTime(TimestepNum);
+		}
 	}
-
 	this->VIPTrucksList->peek(checkingTruck);
-	if (checkingTruck->IsLoaded()) {
-		VIPTrucksList->dequeue(checkingTruck);
-		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
-		checkingTruck->SetMovingStartTime(TimestepNum);
+	if (checkingTruck != nullptr) {
+		if (checkingTruck->IsLoaded()) {
+			VIPTrucksList->dequeue(checkingTruck);
+			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+			checkingTruck->SetMovingStartTime(TimestepNum);
+		}
 	}
 }
 
-void Company::CheckForCheckUp() {
-	
-	// check for normal trucks
-	Truck* pTruck;
-	while (true) {
-		this->NormalTrucksList->peek(pTruck);
-		if (pTruck == nullptr) break;
-		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
-			pTruck->ResetJourneysCount();
-			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
-			if (this->CheckForMaintenance(pTruck)) {
-				OutTime = OutTime + 10;
-				pTruck->setCheckUpOutTime(OutTime);
-				this->NormalMaintenanceTrucksList->enqueue(pTruck);
-			}
-			else {
-				pTruck->setCheckUpOutTime(OutTime);
-				this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
-			}
-			
-			
-			this->NormalTrucksList->dequeue(pTruck);
-		}
-		else break;
+bool Company::CheckForCheckUp(Truck* pTruck){
+	if (pTruck->GetJourneysBeforeCheckUp() == 0) {
+		this->MoveToCheckUp(pTruck);
+		return true;
 	}
-
-	// check for special trucks
-	while (true) {
-		this->SpecialTrucksList->peek(pTruck);
-		if (pTruck == nullptr) break;
-		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
-			pTruck->ResetJourneysCount();
-			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
-			if (this->CheckForMaintenance(pTruck)) {
-				OutTime = OutTime + 10;
-				pTruck->setCheckUpOutTime(OutTime);
-				this->SpecialMaintenanceTrucksList->enqueue(pTruck);
-			}
-			else {
-				pTruck->setCheckUpOutTime(OutTime);
-				this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
-			}
-			this->SpecialTrucksList->dequeue(pTruck);
-
-		}
-		else break;
-	}
-
-	// check for vip trucks
-	while (true) {
-		this->VIPTrucksList->peek(pTruck);
-		if (pTruck == nullptr) break;
-		if (pTruck->GetJourneysBeforeCheckUp() == 0) {
-			pTruck->ResetJourneysCount();
-			Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
-			if (this->CheckForMaintenance(pTruck)) {
-				OutTime = OutTime + 10;
-				pTruck->setCheckUpOutTime(OutTime);
-				this->VIPMaintenanceTrucksList->enqueue(pTruck);
-			}
-			else {
-				pTruck->setCheckUpOutTime(OutTime);
-				this->InCheckUpTrucksList->enqueue(pTruck, -OutTime.GetTotalHours());
-			}
-			this->VIPTrucksList->dequeue(pTruck);
-		}
-		else break;
-	}
+	return false;
 }
+void Company::MoveToCheckUp(Truck* pTruck) {
+
+	Queue<Truck*>* MaintenanceList;
+	Queue<Truck*>* CheckUpList;
+
+	switch (pTruck->GetTruckType())
+	{
+	case (TRUCKTYPE::NT):
+		MaintenanceList = this->NormalMaintenanceTrucksList;
+		CheckUpList = this->InCheckUpNormalTrucks;
+		break;
+	case (TRUCKTYPE::ST):
+		MaintenanceList = this->SpecialMaintenanceTrucksList;
+		CheckUpList = this->InCheckUpSpecialTrucks;
+		break;
+	default:
+		MaintenanceList = this->VIPMaintenanceTrucksList;
+		CheckUpList = this->InCheckUpVIPTrucks;
+		break;
+	}
+
+	pTruck->ResetJourneysCount();
+	Time OutTime = pTruck->GetCheckUpTime() + this->TimestepNum;
+
+	if (this->CheckForMaintenance(pTruck)) {
+		OutTime = OutTime + 10;
+		pTruck->setCheckUpOutTime(OutTime);
+		MaintenanceList->enqueue(pTruck);
+	}
+	else {
+		pTruck->setCheckUpOutTime(OutTime);
+		CheckUpList->enqueue(pTruck);
+	}
+
+}
+
 
 void Company::MoveCheckUpToAvailable() {
 	Truck* pTruck;
+
+	// Move normal trucks
 	while (true) {
-		this->InCheckUpTrucksList->peek(pTruck);
+		this->InCheckUpNormalTrucks->peek(pTruck);
 		if (pTruck == nullptr) break;
 
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
-			
-			switch (pTruck->GetTruckType())
-			{
-			case (TRUCKTYPE::NT):
-				this->NormalTrucksList->enqueue(pTruck);
-				break;
-			case (TRUCKTYPE::ST):
-				this->SpecialTrucksList->enqueue(pTruck);
-				break;
-			case (TRUCKTYPE::VT):
-				this->VIPTrucksList->enqueue(pTruck);
-				break;
-			}
+			this->NormalTrucksList->enqueue(pTruck);
+			this->InCheckUpNormalTrucks->dequeue(pTruck);
+		}
+		else break;
+	}
 
-			this->InCheckUpTrucksList->dequeue(pTruck);
+	// Move special trucks
+	while (true) {
+		this->InCheckUpSpecialTrucks->peek(pTruck);
+		if (pTruck == nullptr) break;
+
+		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			this->SpecialTrucksList->enqueue(pTruck);
+			this->InCheckUpSpecialTrucks->dequeue(pTruck);
+		}
+		else break;
+	}
+
+	// Move vip trucks
+	while (true) {
+		this->InCheckUpVIPTrucks->peek(pTruck);
+		if (pTruck == nullptr) break;
+
+		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			this->VIPTrucksList->enqueue(pTruck);
+			this->InCheckUpVIPTrucks->dequeue(pTruck);
 		}
 		else break;
 	}
@@ -1132,11 +1140,9 @@ void Company::MoveCheckUpToAvailable() {
 
 bool Company::CheckForMaintenance(Truck* pTruck) {
 	// maintenance factors ::
-	// - tiers have completed a total number of trips
-	// - total distance more than 10000 KM
-	// - delivery time spent
+	// - checks if truck has completed a total number of journeys more than double of its max checkup journeys
 
-	if (1 == 2) {
+	if (pTruck->GetTotalCompletedJourneys() >= (pTruck->GetMaxJourneysBeforeCheckUp()*2)) {
 		return true;
 	}
 	else {
@@ -1189,17 +1195,18 @@ void Company::DeliverCargos() {
 	Cargo* TempCargo = nullptr;
 	this->MovingTrucks->peek(TempTruck);
 
-	if (!TempTruck) {
+	if ((!TempTruck)) {
 		return;
 	}
 
 	TempTruck->PeekCargos(TempCargo);
-	Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime());
+	if (TempCargo) {
+		Time TruckAfterMovingTime(-(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime()));
 
-	if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() >= this->TimestepNum) {
-		TempTruck->DequeueTopCargo(TempCargo);
-		switch (TempCargo->GetType())
-		{
+		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() <= this->TimestepNum) {
+			TempTruck->DequeueTopCargo(TempCargo);
+			switch (TempCargo->GetType())
+			{
 			case CARGOTYPE::N:
 				this->DeliveredNormalCargoList->enqueue(TempCargo);
 				break;
@@ -1209,15 +1216,21 @@ void Company::DeliverCargos() {
 			case CARGOTYPE::V:
 				this->DeliveredVIPCargoList->enqueue(TempCargo);
 				break;
+			}
 		}
 	}
-	TempTruck->PeekCargos(TempCargo);
+
 	// If the Truck Delivered All The Cargos.
-	if (!TempCargo) {
+	if (TempTruck->GetCargosCount() == 0) {
 		TempTruck->IncrementJourneysCompleted();
+		TempTruck->DecreaseJourneyBeforeCheckUp();
+
 		this->MovingTrucks->dequeue(TempTruck);
-		switch (TempTruck->GetTruckType())
-		{
+		TempTruck->SetLoaded(false);
+		//!this->CheckForCheckUp(TempTruck)
+		if (true) {
+			switch (TempTruck->GetTruckType())
+			{
 			case TRUCKTYPE::NT:
 				this->NormalTrucksList->enqueue(TempTruck);
 				break;
@@ -1227,14 +1240,70 @@ void Company::DeliverCargos() {
 			case TRUCKTYPE::VT:
 				this->VIPTrucksList->enqueue(TempTruck);
 				break;
+			}
 		}
 	}
 	else {
-		this->MovingTrucks->dequeue(TempTruck);
 		TempTruck->PeekCargos(TempCargo);
-		TempTruck->UpdateTruckPriority(TempTruck->GetSpeed() / TempCargo->GetDeliveryDistance());
+		this->MovingTrucks->dequeue(TempTruck);
+		TempTruck->UpdateTruckPriority(-(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime()));
 		this->MovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
 	}
 }
 
-#endif 
+void Company::ExecuteFailure() {
+	double probability = 0; // probability of dropping a truck
+	int numtodrop = 0;
+
+	if (this->MovingTrucks->getCount() == 0) {
+		return;
+	}
+
+	if ((rand() % 100) < probability) {
+		numtodrop = rand() % this->MovingTrucks->getCount() + 1;
+		for (int i = 0; i < numtodrop; i++) {
+			this->DropTruck();
+		}
+	}
+}
+
+void Company::DropTruck() {
+	Truck* pTruck;
+	this->MovingTrucks->dequeue(pTruck);
+	
+	Cargo* pCargo = nullptr;
+
+	;
+	switch (pTruck->GetCargoType())
+	{
+	case (CARGOTYPE::N):
+		while (pTruck->DequeueTopCargo_bool(pCargo)) {
+			this->NormalCargoList->Insert(pCargo);
+			//pTruck->DequeueTopCargo(pCargo);
+		}
+		break;
+	case (CARGOTYPE::S):
+		while (pTruck->DequeueTopCargo_bool(pCargo)) {
+			this->SpecialCargoList->enqueue(pCargo);
+			//pTruck->DequeueTopCargo(pCargo);
+		}
+		break;
+	case (CARGOTYPE::V):
+		while (pTruck->DequeueTopCargo_bool(pCargo)) {
+			this->AddVIPCargo(pCargo);
+			//pTruck->DequeueTopCargo(pCargo);
+		}
+		break;
+	}
+
+	this->MoveToCheckUp(pTruck);
+}
+
+bool Company::ForceMoveMaintenanceToAvailable(TRUCKTYPE type) {
+
+
+	return false;
+}
+
+
+#endif	
