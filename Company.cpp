@@ -90,6 +90,7 @@ Company::~Company() {
 }
 
 bool Company::CheckExitStatus() {
+	
 	// check for application status 
 	// The simulation function stops when there are no more events and all cargos are in delivered list
 
@@ -103,7 +104,7 @@ bool Company::CheckExitStatus() {
 		this->MovingTrucks->isEmpty() &&
 		this->NormalMaintenanceTrucksList->isEmpty() &&
 		this->VIPMaintenanceTrucksList->isEmpty() &&
-		this->SpecialMaintenanceTrucksList->isEmpty()
+		this->SpecialMaintenanceTrucksList->isEmpty() 
 
 		//if there a loading or unloading list done, add its condition here.
 		//we may need to add intial value to the trucks to make sure they are home
@@ -154,6 +155,7 @@ void Company::Simulate() {
 		//check break conditions
 		if (this->CheckExitStatus())
 		{
+			this->SaveOutputs();
 			this->pUI->PrintMsg("Simulation is done.");
 			break;
 		}
@@ -385,57 +387,52 @@ void Company::SaveOutputs() {
 	NumOfTrucks = NumOfNormalTrucks + NumOfVIPTrucks + NumOfVIPTrucks;
 
 
+	Cargo* pCargo;
 
-	while (!DeliveredNormalCargoList->isEmpty() ||
-		!DeliveredVIPCargoList->isEmpty() ||
-		!DeliveredSpecialCargoList->isEmpty() )
-	{
-
-		Cargo* normal;
-		this->DeliveredNormalCargoList->peek(normal);
-		Cargo* vip;
-		this->DeliveredVIPCargoList->peek(vip);
-		Cargo* special;
-		this->DeliveredSpecialCargoList->peek(special);
-
-		CARGOTYPE type = whichIsFirst(normal, vip, special);
-
-		Cargo* cargo;
-		switch (type)
-		{
-		case CARGOTYPE::S:
-			this->DeliveredSpecialCargoList->dequeue(cargo);
-			break;
-		case CARGOTYPE::V:
-			this->DeliveredVIPCargoList->dequeue(cargo);
-			break;
-
-		default://case CARGOTYPE::N:
-			this->DeliveredNormalCargoList->dequeue(cargo);
-			break;
-		}
-
-		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
-		TotalAllTime = TotalAllTime + 0;		///////////////////////////////////need to be calc.
-		TotalActiveTime = TotalActiveTime + 0;	///////////////////////////////////need to be calc.
-
-		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
-			std::to_string(cargo->GetID()) + "\t" +
-			cargo->GetWaitingTime().StringifyTime() + "\t" +
-			std::to_string(cargo->GetTruckID()) + "\n" +
-			"";
+	// normal truck move to available
+	while (this->DeliveredNormalCargoList->dequeue(pCargo)) {
+		TotalWaitTime = TotalWaitTime + pCargo->GetWaitingTime();
+		std::cout << pCargo->GetDeliveredTime().StringifyTime() << std::endl;
+		outputFile << pCargo->GetDeliveredTime().StringifyTime() +
+			std::to_string(pCargo->GetID())  +
+			pCargo->GetWaitingTime().StringifyTime()  +
+			std::to_string(pCargo->GetTruckID()) +
+			"" << endl;
 	}
 
+	// special truck move to available
+	while (this->DeliveredSpecialCargoList->dequeue(pCargo)) {
+		TotalWaitTime = TotalWaitTime + pCargo->GetWaitingTime();
+
+		outputFile << pCargo->GetDeliveredTime().StringifyTime() + "\t" +
+			std::to_string(pCargo->GetID()) + "\t" +
+			pCargo->GetWaitingTime().StringifyTime() + "\t" +
+			std::to_string(pCargo->GetTruckID()) + "\n" +
+			"" << endl;
+	}
+
+	// vip truck move to available
+	while (this->DeliveredVIPCargoList->dequeue(pCargo)) {
+
+		TotalWaitTime = TotalWaitTime + pCargo->GetWaitingTime();
+
+		outputFile << pCargo->GetDeliveredTime().StringifyTime() + "\t" +
+			std::to_string(pCargo->GetID()) + "\t" +
+			pCargo->GetWaitingTime().StringifyTime() + "\t" +
+			std::to_string(pCargo->GetTruckID()) + "\n" +
+			"" << endl;
+	}
+
+
 	//output the file here
-	outputFile << dataToOutput;
+	
 	outputFile << "-----------------------------------------"<<endl;
 	outputFile << "-----------------------------------------" << endl;
-
 
 	//calculating statistics...
 	int totalWaitHours = TotalWaitTime.GetTotalHours();
 	Time AverageWaitTime(totalWaitHours / 24, totalWaitHours % 24);
-	double AvgActiveTime = TotalActiveTime.GetTotalHours() / TotalAllTime.GetTotalHours() *100;
+	//double AvgActiveTime = TotalActiveTime.GetTotalHours() / TotalAllTime.GetTotalHours() *100;
 
 	using std::to_string;
 	// Cargo statistics
@@ -457,14 +454,14 @@ void Company::SaveOutputs() {
 		", S: " + to_string(NumOfSpecialTrucks) +
 		", V: " + to_string(NumOfVIPTrucks) + "]\n";
 	//line 2
-	statisticsStr += "Avg Active time = " + to_string(AvgActiveTime) + "%\n";
+	//	statisticsStr += "Avg Active time = " + to_string(AvgActiveTime) + "%\n";
 	//line 3
 	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
 
 
+	return;
 
-
-	outputFile.close();
+	//outputFile.close();
 }
 
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
@@ -1332,7 +1329,6 @@ void Company::DropTruck() {
 	
 	Cargo* pCargo = nullptr;
 
-	;
 	switch (pTruck->GetCargoType())
 	{
 	case (CARGOTYPE::N):
