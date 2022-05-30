@@ -125,7 +125,7 @@ void Company::Simulate() {
 		this->MoveCheckUpToAvailable();
 
 		// move trucks from available to checkup
-		this->CheckForCheckUp();
+		//this->CheckForCheckUp();
 
 		// move trucks from maintenance to available
 		this->MoveMaintenanceToAvailable();
@@ -136,6 +136,7 @@ void Company::Simulate() {
 			this->LoadSpecialCargosToTruck();
 			this->LoadNormalCargosToTruck();
 		}
+
 		// Move Trucks to the moving trucks list if applicable
 		this->MoveTrucks();
 
@@ -1061,7 +1062,7 @@ bool Company::CheckForCheckUp(Truck* pTruck){
 			MaintenanceList = this->SpecialMaintenanceTrucksList;
 			CheckUpList = this->InCheckUpSpecialTrucks;
 			break;
-		case (TRUCKTYPE::VT):
+		default:
 			MaintenanceList = this->VIPMaintenanceTrucksList;
 			CheckUpList = this->InCheckUpVIPTrucks;
 			break;
@@ -1231,5 +1232,4 @@ void Company::DeliverCargos() {
 	}
 }
 
-#endif 
 #endif	
