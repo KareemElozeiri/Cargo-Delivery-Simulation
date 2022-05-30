@@ -141,8 +141,6 @@ void Company::Simulate() {
 		// applies probability for a truck to fail delivering while moving
 		this->ExecuteFailure();
 
-
-
 		// Deliver Cargos
 		this->DeliverCargos();
 
@@ -510,13 +508,7 @@ std::string Company::GetInteractiveModeData() const {
 		this->SpecialCargoList->getCount() +
 		this->VIPCargoList->getCount();
 
-
-
-	LoadingTrucksCount = this->NormalTrucksList->getCount() +
-		this->SpecialTrucksList->getCount() +
-		this->VIPTrucksList->getCount();
-
-	
+	LoadingTrucksCount = 0;
 
 	DeliveredCargosCount = this->DeliveredNormalCargoList->getCount() +
 		this->DeliveredSpecialCargoList->getCount() +
@@ -533,11 +525,74 @@ std::string Company::GetInteractiveModeData() const {
 		interactive_mode_data += "{" + this->VIPCargoList->getData() + "}";
 	interactive_mode_data += separator;
 
+	// Loading Trucks Line:
+	Truck* TempTruck;
+	string loading_trucks_line = "";
+
+	this->NormalTrucksList->peek(TempTruck);
+	if (TempTruck && TempTruck->GetCargosCount() > 0) {
+		loading_trucks_line += TempTruck->GetID();
+		loading_trucks_line += "[" + TempTruck->GetCargosData() + "] ";
+		LoadingTrucksCount += 1;
+	}
+
+	this->SpecialTrucksList->peek(TempTruck);
+	if (TempTruck && TempTruck->GetCargosCount() > 0) {
+		loading_trucks_line += TempTruck->GetID();
+		loading_trucks_line += "(" + TempTruck->GetCargosData() + ") ";
+		LoadingTrucksCount += 1;
+	}
+
+	this->VIPTrucksList->peek(TempTruck);
+	if (TempTruck && TempTruck->GetCargosCount() > 0) {
+		loading_trucks_line += TempTruck->GetID();
+		loading_trucks_line += "{" + TempTruck->GetCargosData() + "} ";
+		LoadingTrucksCount += 1;
+	}
+
+	interactive_mode_data += std::to_string(LoadingTrucksCount) + " Loading Trucks: " + loading_trucks_line + separator;
+
+	// Empty Trucks Line:
+	string empty_trucks_line = "";
+	EmptyTrucksCount = this->NormalTrucksList->getCount() +
+		this->SpecialTrucksList->getCount() +
+		this->VIPTrucksList->getCount() - LoadingTrucksCount;
+	
+	Queue<Truck*>* TempTrucksQueue = new Queue<Truck*>;
+	while (this->NormalTrucksList->dequeue(TempTruck)) {
+		if (TempTruck->GetCargosCount() == 0)
+			empty_trucks_line += "[" + std::to_string(TempTruck->GetID()) + "]";
+		TempTrucksQueue->enqueue(TempTruck);
+	}
+	while (TempTrucksQueue->dequeue(TempTruck)) {
+		NormalTrucksList->enqueue(TempTruck);
+	}
+
+	while (this->SpecialTrucksList->dequeue(TempTruck)) {
+		if (TempTruck->GetCargosCount() == 0)
+			empty_trucks_line += "(" + std::to_string(TempTruck->GetID()) + ")";
+		TempTrucksQueue->enqueue(TempTruck);
+	}
+	while (TempTrucksQueue->dequeue(TempTruck)) {
+		SpecialTrucksList->enqueue(TempTruck);
+	}
+
+	while (this->VIPTrucksList->dequeue(TempTruck)) {
+		if (TempTruck->GetCargosCount() == 0)
+			empty_trucks_line += "{" + std::to_string(TempTruck->GetID()) + "}";
+		TempTrucksQueue->enqueue(TempTruck);
+	}
+	while (TempTrucksQueue->dequeue(TempTruck)) {
+		VIPTrucksList->enqueue(TempTruck);
+	}
+
+	interactive_mode_data += std::to_string(EmptyTrucksCount) + " Empty Trucks: " + empty_trucks_line + separator;
+
 	// Moving Cargo Line:
 	string MovingTrucksLine = "";
 	MovingCargosCount = 0;
 	PQueue<Truck*>* TempMovingTrucks = new PQueue<Truck*>;
-	Truck* TempTruck = nullptr;
+	TempTruck = nullptr;
 
 	while (this->MovingTrucks->dequeue(TempTruck)) {
 		string TruckOpenBracket = "{";
