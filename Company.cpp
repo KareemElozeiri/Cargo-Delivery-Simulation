@@ -464,6 +464,9 @@ string Company::OutputString() {
 	//calculating statistics...
 	int totalWaitHours = TotalWaitTime.GetTotalHours();
 	Time AverageWaitTime(totalWaitHours / 24, totalWaitHours % 24);
+
+
+
 	double AvgActiveTime = TotalActiveTime.GetTotalHours() / TotalAllTime.GetTotalHours() * 100;
 
 	using std::to_string;
@@ -962,7 +965,7 @@ bool Company::LoadSpecialCargosToTruck()
 				Cargo* c;
 				this->SpecialCargoList->peek(c);
 
-				if (specialTruck->LoadCargo(c) == true) {
+				if (specialTruck->LoadCargo(c)) {
 					this->SpecialCargoList->dequeue(c);
 				}
 
@@ -1009,7 +1012,7 @@ bool Company::LoadNormalCargosToTruck()
 					Cargo* c = this->NormalCargoList->GetHead()->getItem();
 
 					Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();
-					if (normalTruck->LoadCargo(c) == true) {
+					if (normalTruck->LoadCargo(c)) {
 						this->NormalCargoList->SetHead(tempNode->getNext());
 						tempNode->setNext(nullptr);
 						delete tempNode;
@@ -1044,7 +1047,7 @@ bool Company::LoadNormalCargosToTruck()
 				Cargo* c = this->NormalCargoList->GetHead()->getItem();
 
 				Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();
-				if (vipTruck->LoadCargo(c) == true) {
+				if (vipTruck->LoadCargo(c)) {
 					this->NormalCargoList->SetHead(tempNode->getNext());
 					tempNode->setNext(nullptr);
 					delete tempNode;
@@ -1234,8 +1237,9 @@ void Company::MoveTrucks() {
 	if (checkingTruck != nullptr) {
 		if (checkingTruck->IsLoaded()) {
 			NormalTrucksList->dequeue(checkingTruck);
-			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
 			checkingTruck->SetMovingStartTime(TimestepNum);
+			checkingTruck->UpdateTruckPriority();
+			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
 		}
 	}
 
@@ -1243,16 +1247,19 @@ void Company::MoveTrucks() {
 	if (checkingTruck != nullptr) {
 		if (checkingTruck->IsLoaded()) {
 			SpecialTrucksList->dequeue(checkingTruck);
-			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
 			checkingTruck->SetMovingStartTime(TimestepNum);
+			checkingTruck->UpdateTruckPriority();
+			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
 		}
 	}
+
 	this->VIPTrucksList->peek(checkingTruck);
 	if (checkingTruck != nullptr) {
 		if (checkingTruck->IsLoaded()) {
 			VIPTrucksList->dequeue(checkingTruck);
-			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
 			checkingTruck->SetMovingStartTime(TimestepNum);
+			checkingTruck->UpdateTruckPriority();
+			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
 		}
 	}
 }
@@ -1402,67 +1409,75 @@ void Company::MoveMaintenanceToAvailable() {
 void Company::DeliverCargos() {
 	Truck* TempTruck = nullptr;
 	Cargo* TempCargo = nullptr;
-	this->MovingTrucks->peek(TempTruck);
 
-	if ((!TempTruck)) {
-		return;
-	}
+	Queue<Truck*> TempTruckQ;
 
-	// Get all the Cargos to be delievered at the current timestep.
-	TempTruck->PeekCargos(TempCargo);
-	while (TempCargo) {
-		Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + 
-			TempCargo->GetLoadTime());
-		// Checking if Cargo is to be delievered (including its unloading time).
-		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() <= this->TimestepNum) {
-			TempTruck->DequeueTopCargo(TempCargo);
-			switch (TempCargo->GetType())
-			{
-			case CARGOTYPE::N:
-				this->DeliveredNormalCargoList->enqueue(TempCargo);
+	while (this->MovingTrucks->dequeue(TempTruck)) {
+		bool willDeliver = false;
+		TempTruck->PeekCargos(TempCargo);
+		while (TempCargo) {
+			Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / 
+				TempTruck->GetSpeed() +
+				TempCargo->GetLoadTime());
+			std::cout << "Cargo ID: " << TempCargo->GetID() << ", Delivery Time: "
+				<< (TruckAfterMovingTime + TempTruck->GetMovingStartTime()).GetDay() << ":"
+				<< (TruckAfterMovingTime + TempTruck->GetMovingStartTime()).GetHour()
+				<< ", Priority: " << TempTruck->GetTruckPriority() << std::endl;
+			if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() == this->TimestepNum) {
+				willDeliver = true;
+				TempTruck->DequeueTopCargo(TempCargo);
+				switch (TempCargo->GetType())
+				{
+				case CARGOTYPE::N:
+					this->DeliveredNormalCargoList->enqueue(TempCargo);
+					break;
+				case CARGOTYPE::S:
+					this->DeliveredSpecialCargoList->enqueue(TempCargo);
+					break;
+				case CARGOTYPE::V:
+					this->DeliveredVIPCargoList->enqueue(TempCargo);
+					break;
+				}
+			}
+			else {
 				break;
-			case CARGOTYPE::S:
-				this->DeliveredSpecialCargoList->enqueue(TempCargo);
-				break;
-			case CARGOTYPE::V:
-				this->DeliveredVIPCargoList->enqueue(TempCargo);
-				break;
+			}
+			TempTruck->PeekCargos(TempCargo);
+		}
+
+		// If the Truck delivered all the Cargos.
+		if (TempTruck->GetCargosCount() == 0) {
+			// Setting the journeys counters.
+			TempTruck->IncrementJourneysCompleted();
+			TempTruck->DecreaseJourneyBeforeCheckUp();
+			TempTruck->SetLoaded(false);
+			// Handling the truck location after delivering the cargos.
+			if (!this->CheckForCheckUp(TempTruck)) {
+				switch (TempTruck->GetTruckType())
+				{
+				case TRUCKTYPE::NT:
+					this->NormalTrucksList->enqueue(TempTruck);
+					break;
+				case TRUCKTYPE::ST:
+					this->SpecialTrucksList->enqueue(TempTruck);
+					break;
+				case TRUCKTYPE::VT:
+					this->VIPTrucksList->enqueue(TempTruck);
+					break;
+				}
 			}
 		}
 		else {
+			TempTruck->UpdateTruckPriority();
+			TempTruckQ.enqueue(TempTruck);
+		}
+
+		if (!willDeliver) {
 			break;
 		}
-		TempTruck->PeekCargos(TempCargo);
 	}
 
-	// If the Truck delivered all the Cargos.
-	if (TempTruck->GetCargosCount() == 0) {
-		// Setting the journeys counters.
-		TempTruck->IncrementJourneysCompleted();
-		TempTruck->DecreaseJourneyBeforeCheckUp();
-		// Removing the truck from the MovingTrucks queue and changing its status.
-		this->MovingTrucks->dequeue(TempTruck);
-		TempTruck->SetLoaded(false);
-		// Handling the truck location after delivering the cargos.
-		if (!this->CheckForCheckUp(TempTruck)) {
-			switch (TempTruck->GetTruckType())
-			{
-			case TRUCKTYPE::NT:
-				this->NormalTrucksList->enqueue(TempTruck);
-				break;
-			case TRUCKTYPE::ST:
-				this->SpecialTrucksList->enqueue(TempTruck);
-				break;
-			case TRUCKTYPE::VT:
-				this->VIPTrucksList->enqueue(TempTruck);
-				break;
-			}
-		}
-	}
-	else {
-		// Rearranging the queue after delivering the cargos.
-		this->MovingTrucks->dequeue(TempTruck);
-		TempTruck->UpdateTruckPriority();
+	while (TempTruckQ.dequeue(TempTruck)) {
 		this->MovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
 	}
 }
