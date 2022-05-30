@@ -1357,7 +1357,7 @@ void Company::DeliverCargos() {
 		Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + 
 			TempCargo->GetLoadTime());
 		// Checking if Cargo is to be delievered (including its unloading time).
-		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() == this->TimestepNum) {
+		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() <= this->TimestepNum) {
 			TempTruck->DequeueTopCargo(TempCargo);
 			switch (TempCargo->GetType())
 			{
