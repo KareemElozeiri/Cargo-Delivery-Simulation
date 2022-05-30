@@ -77,10 +77,11 @@ bool Truck::LoadCargo(Cargo* cargo)
 				this->max_distance_to_deliver = cargo->GetDeliveryDistance();
 			//checking minimumm time required for delivering a cargo
 
-			double cargo_priority = -(cargo->GetDeliveryDistance() / this->speed + cargo->GetLoadTime());
+			double cargo_priority = -(cargo->GetDeliveryDistance() / this->speed +
+				cargo->GetLoadTime());
 			this->cargos->enqueue(cargo, cargo_priority);
 			this->CalculateDeliveryInterval();
-			this->UpdateTruckPriority();
+			this->truck_priority = cargo_priority;
 
 			if (this->cargos->getCount() == this->capacity) {
 				this->SetLoaded(true);
@@ -100,7 +101,9 @@ void Truck::UpdateTruckPriority() {
 	this->cargos->peek(TempCargo);
 
 	if (TempCargo) {
-		this->truck_priority = -(TempCargo->GetDeliveryDistance() / this->speed + TempCargo->GetLoadTime());
+		this->truck_priority = -(TempCargo->GetDeliveryDistance() / this->speed
+			+ TempCargo->GetLoadTime()
+			+ this->GetMovingStartTime().GetTotalHours());
 	}
 }
 
