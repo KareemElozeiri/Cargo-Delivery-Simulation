@@ -57,6 +57,10 @@ private:
 	int NumOfEvents;
 	int AutoPromotedCargosNum;
 
+	string CargosOutputLines;
+	string statisticsForOutput;
+
+
 	/*
 	* takes a given queue whose inner values are pointers
 	* delete these inner pointers one by one
@@ -315,6 +319,10 @@ public:
 
 	void ExecuteFailure();
 	void DropTruck();
+
+	string getStatisticsForOutput();
+
+	string getCargoOutputLines();
 };
 #endif
 

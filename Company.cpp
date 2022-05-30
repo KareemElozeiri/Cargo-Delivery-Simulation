@@ -24,7 +24,7 @@ Company::Company() {
 
 Company::~Company() {
 
-	this->SaveOutputs();
+	// this->SaveOutputs();
 
 	delete this->pUI;
 
@@ -398,9 +398,6 @@ string Company::OutputString() {
 	double TruckUtillization;/////////////////////////////////////////////////////////////////calc
 
 
-
-
-
 	//putting cargo stats data
 	NumOfNormalCargos = this->DeliveredNormalCargoList->getCount();
 	NumOfSpecialCargos = this->DeliveredSpecialCargoList->getCount();
@@ -420,7 +417,7 @@ string Company::OutputString() {
 	NumOfTrucks = NumOfNormalTrucks + NumOfVIPTrucks + NumOfVIPTrucks;
 
 
-
+	dataToOutput += "CDT\tID\tPT\tWT\tTID\n";
 	while (!DeliveredNormalCargoList->isEmpty() ||
 		!DeliveredVIPCargoList->isEmpty() ||
 		!DeliveredSpecialCargoList->isEmpty())
@@ -451,19 +448,18 @@ string Company::OutputString() {
 		}
 
 		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
-		TotalAllTime = TotalAllTime + 0;		///////////////////////////////////need to be calc.
-		TotalActiveTime = TotalActiveTime + 0;	///////////////////////////////////need to be calc.
+		TotalAllTime = TotalAllTime + 1;		///////////////////////////////////need to be calc.
+		TotalActiveTime = TotalActiveTime + 1;	///////////////////////////////////need to be calc.
 
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
+			cargo->GetPrepTime().StringifyTime() + "\t" +
 			cargo->GetWaitingTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetTruckID()) + "\n" +
 			"";
 	}
 
 	dataToOutput += "-----------------------------------------\n" ;
-	dataToOutput += "-----------------------------------------\n";
-
 
 	//calculating statistics...
 	int totalWaitHours = TotalWaitTime.GetTotalHours();
@@ -483,7 +479,14 @@ string Company::OutputString() {
 	//line 2
 	statisticsStr += "Cargo Avg Wait = " + AverageWaitTime.StringifyTime() + "\n";
 	//line 3
-	statisticsStr += "Auto-promoted Cargos = " + to_string(00000000000000000) + "%\n\n";//////////calc
+	statisticsStr += "Auto-promoted Cargos = " + to_string(00000000000000000) + "%\n";//////////calc
+
+
+
+	//move truck --> loaded and then start move when timestep come
+	//timestep
+	//delivered cargos
+
 
 	// Trucks statistics
 	//line 1
@@ -495,10 +498,12 @@ string Company::OutputString() {
 	//line 2
 	statisticsStr += "Avg Active time = " + to_string(AvgActiveTime) + "%\n";
 	//line 3
-	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
+	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%";
 
 
-	
+
+	this->CargosOutputLines = CargosOutputLines;
+	this->statisticsForOutput = statisticsStr;
 
 	////////could be changed to be just set a member Output string
 	return (dataToOutput + statisticsStr);
@@ -512,7 +517,6 @@ void Company::SaveOutputs() {
 	std::ofstream outputFile(this->outputFileName);
 
 	string outputText = this->OutputString();
-
 	outputFile << outputText;
 
 	//outputFile.close();
@@ -1524,6 +1528,16 @@ void Company::DropTruck() {
 	}
 
 	this->MoveToCheckUp(pTruck);
+}
+
+string Company::getStatisticsForOutput()
+{
+	return this->statisticsForOutput;
+}
+
+string Company::getCargoOutputLines()
+{
+	return this->CargosOutputLines;
 }
 
 bool Company::ForceMoveMaintenanceToAvailable(TRUCKTYPE type) {
