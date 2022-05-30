@@ -347,6 +347,8 @@ CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 
 void Company::SaveOutputs() {
 
+
+
 	string dataToOutput = "";
 	string statisticsStr = "";
 
@@ -374,10 +376,10 @@ void Company::SaveOutputs() {
 	NumOfVIPCargos = this->DeliveredVIPCargoList->getCount();
 	NumOfCargos = NumOfNormalCargos + NumOfVIPCargos + NumOfVIPCargos;
 
-	if (NumOfCargos==0)
+	if (NumOfCargos == 0)
 		AutoPromotedCargosPercent = 0;	//to prevent dividing by zero
 	else
-		AutoPromotedCargosPercent = AutoPromotedCargosNum / NumOfNormalCargos *100;
+		AutoPromotedCargosPercent = AutoPromotedCargosNum / NumOfNormalCargos * 100;
 
 
 	//putting cargo stats data
@@ -387,51 +389,57 @@ void Company::SaveOutputs() {
 	NumOfTrucks = NumOfNormalTrucks + NumOfVIPTrucks + NumOfVIPTrucks;
 
 
-	Cargo* pCargo;
 
-	// normal truck move to available
-	while (this->DeliveredNormalCargoList->dequeue(pCargo)) {
-		TotalWaitTime = TotalWaitTime + pCargo->GetWaitingTime();
-		outputFile << pCargo->GetDeliveredTime().StringifyTime() +
-			std::to_string(pCargo->GetID())  +
-			pCargo->GetWaitingTime().StringifyTime()  +
-			std::to_string(pCargo->GetTruckID()) +
-			"" << endl;
+	while (!DeliveredNormalCargoList->isEmpty() ||
+		!DeliveredVIPCargoList->isEmpty() ||
+		!DeliveredSpecialCargoList->isEmpty())
+	{
+
+		Cargo* normal;
+		this->DeliveredNormalCargoList->peek(normal);
+		Cargo* vip;
+		this->DeliveredVIPCargoList->peek(vip);
+		Cargo* special;
+		this->DeliveredSpecialCargoList->peek(special);
+
+		CARGOTYPE type = whichIsFirst(normal, vip, special);
+
+		Cargo* cargo;
+		switch (type)
+		{
+		case CARGOTYPE::S:
+			this->DeliveredSpecialCargoList->dequeue(cargo);
+			break;
+		case CARGOTYPE::V:
+			this->DeliveredVIPCargoList->dequeue(cargo);
+			break;
+
+		default://case CARGOTYPE::N:
+			this->DeliveredNormalCargoList->dequeue(cargo);
+			break;
+		}
+
+		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
+		TotalAllTime = TotalAllTime + 0;		///////////////////////////////////need to be calc.
+		TotalActiveTime = TotalActiveTime + 0;	///////////////////////////////////need to be calc.
+
+		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
+			std::to_string(cargo->GetID()) + "\t" +
+			cargo->GetWaitingTime().StringifyTime() + "\t" +
+			std::to_string(cargo->GetTruckID()) + "\n" +
+			"";
 	}
-
-	// special truck move to available
-	while (this->DeliveredSpecialCargoList->dequeue(pCargo)) {
-		TotalWaitTime = TotalWaitTime + pCargo->GetWaitingTime();
-
-		outputFile << pCargo->GetDeliveredTime().StringifyTime() + "\t" +
-			std::to_string(pCargo->GetID()) + "\t" +
-			pCargo->GetWaitingTime().StringifyTime() + "\t" +
-			std::to_string(pCargo->GetTruckID()) + "\n" +
-			"" << endl;
-	}
-
-	// vip truck move to available
-	while (this->DeliveredVIPCargoList->dequeue(pCargo)) {
-
-		TotalWaitTime = TotalWaitTime + pCargo->GetWaitingTime();
-
-		outputFile << pCargo->GetDeliveredTime().StringifyTime() + "\t" +
-			std::to_string(pCargo->GetID()) + "\t" +
-			pCargo->GetWaitingTime().StringifyTime() + "\t" +
-			std::to_string(pCargo->GetTruckID()) + "\n" +
-			"" << endl;
-	}
-
 
 	//output the file here
-	
-	outputFile << "-----------------------------------------"<<endl;
+	outputFile << dataToOutput;
 	outputFile << "-----------------------------------------" << endl;
+	outputFile << "-----------------------------------------" << endl;
+
 
 	//calculating statistics...
 	int totalWaitHours = TotalWaitTime.GetTotalHours();
 	Time AverageWaitTime(totalWaitHours / 24, totalWaitHours % 24);
-	//double AvgActiveTime = TotalActiveTime.GetTotalHours() / TotalAllTime.GetTotalHours() *100;
+	double AvgActiveTime = TotalActiveTime.GetTotalHours() / TotalAllTime.GetTotalHours() * 100;
 
 	using std::to_string;
 	// Cargo statistics
@@ -439,7 +447,7 @@ void Company::SaveOutputs() {
 	statisticsStr += "Cargos: " + to_string(NumOfCargos) +
 		" [N: " + to_string(NumOfNormalCargos) +
 		", S: " + to_string(NumOfSpecialCargos) +
-		", V: " + to_string(NumOfVIPCargos) + "]\n"; 
+		", V: " + to_string(NumOfVIPCargos) + "]\n";
 	//line 2
 	statisticsStr += "Cargo Avg Wait = " + AverageWaitTime.StringifyTime() + "\n";
 	//line 3
@@ -447,20 +455,21 @@ void Company::SaveOutputs() {
 
 	// Trucks statistics
 	//line 1
-	
+
 	statisticsStr += "Trucks: " + to_string(NumOfTrucks) +
 		" [N: " + to_string(NumOfNormalTrucks) +
 		", S: " + to_string(NumOfSpecialTrucks) +
 		", V: " + to_string(NumOfVIPTrucks) + "]\n";
 	//line 2
-	//	statisticsStr += "Avg Active time = " + to_string(AvgActiveTime) + "%\n";
+	statisticsStr += "Avg Active time = " + to_string(AvgActiveTime) + "%\n";
 	//line 3
 	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
 
 
-	return;
 
-	//outputFile.close();
+
+	outputFile.close();
+
 }
 
 void Company::AddTruck(TRUCKTYPE truck_type, int capacity, Time checkUpTime, int journeysBeforeCheckUp, double speed, int id)
