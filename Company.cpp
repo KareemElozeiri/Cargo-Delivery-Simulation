@@ -321,23 +321,59 @@ void Company::ReadPromotionEvent(std::ifstream& inputFile)
 }
 
 
-CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
+CARGOTYPE whichIsFirst(Cargo* c1, Cargo* c2, Cargo* c3) {
 
-	Cargo* first_delivered_Cargo = normal;
-	CARGOTYPE type = CARGOTYPE::N;
-	
- 	if (vip->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
-		first_delivered_Cargo = vip;
-		type = CARGOTYPE::V;
+
+	if (c1 == nullptr && c2 != nullptr && c3 != nullptr) {
+		if (c2->GetDeliveredTime() < c3->GetDeliveredTime())
+			return c2->GetType();
+		else
+			return c3->GetType();
+
 	}
-	if (special->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
-		first_delivered_Cargo = special;
-		type = CARGOTYPE::S;
+
+	else if (c2 == nullptr && c1 != nullptr && c3 != nullptr) {
+		if (c1->GetDeliveredTime() < c3->GetDeliveredTime())
+			return c1->GetType();
+		else
+			return c3->GetType();
+
+	}
+
+	else if (c3 == nullptr && c1 != nullptr && c2 != nullptr) {
+		if (c1->GetDeliveredTime() < c1->GetDeliveredTime())
+			return c1->GetType();
+		else
+			return c2->GetType();
+
+	}
+
+	else if (c1 == nullptr && c2 == nullptr) {
+		return c3->GetType();
+	}
+	else if (c3 == nullptr && c2 == nullptr) {
+		return c1->GetType();
+	}
+	else if (c1 == nullptr && c3 == nullptr) {
+		return c2->GetType();
+	}
+
+	else {
+
+	
+	Cargo* first_delivered_Cargo = c1;
+	CARGOTYPE type = c1->GetType();
+	
+ 	if (c2->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+		first_delivered_Cargo = c2;
+	}
+	if (c3->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+		first_delivered_Cargo = c3;
 	}
 
 	return type;
 
-	return CARGOTYPE::N;
+	}
 }
 
 /// There was AddEvents function here and I replaced it with ReadEvents
@@ -468,20 +504,13 @@ string Company::OutputString() {
 }
 
 
-
-
-
 void Company::SaveOutputs() {
 	// called on exit
 	std::ofstream outputFile(this->outputFileName);
 
-
 	string outputText = this->OutputString();
 
-
 	outputFile << outputText;
-
-
 
 	//outputFile.close();
 
