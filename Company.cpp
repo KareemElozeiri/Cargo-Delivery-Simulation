@@ -210,7 +210,7 @@ void Company::LoadInputs() {
 
 
 
-
+	
 	/// loops on each event and takes the letter to check which event function to call.
 	/// based on this the event function will take the right number of params for it
 	/// Ready : 6 params
@@ -319,14 +319,14 @@ CARGOTYPE whichIsFirst(Cargo* normal, Cargo* vip, Cargo* special) {
 	Cargo* first_delivered_Cargo = normal;
 	CARGOTYPE type = CARGOTYPE::N;
 	
-	if (vip->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
-		first_delivered_Cargo = vip;
-		type = CARGOTYPE::V;
-	}
-	if (special->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
-		first_delivered_Cargo = special;
-		type = CARGOTYPE::S;
-	}
+		if (vip->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+			first_delivered_Cargo = vip;
+			type = CARGOTYPE::V;
+		}
+		if (special->GetDeliveredTime() < first_delivered_Cargo->GetDeliveredTime()) {
+			first_delivered_Cargo = special;
+			type = CARGOTYPE::S;
+		}
 
 	return type;
 
