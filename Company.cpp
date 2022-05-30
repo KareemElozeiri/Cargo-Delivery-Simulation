@@ -153,12 +153,6 @@ void Company::Simulate() {
 		//check break conditions
 		if (this->CheckExitStatus())
 		{
-
-
-			//making data for the output file and saving it
-			this->SaveOutputs();
-
-
 			this->pUI->PrintMsg("Simulation is done.");
 			break;
 		}
@@ -1201,7 +1195,7 @@ void Company::DeliverCargos() {
 
 	TempTruck->PeekCargos(TempCargo);
 	if (TempCargo) {
-		Time TruckAfterMovingTime(-(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime()));
+		Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime());
 
 		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() <= this->TimestepNum) {
 			TempTruck->DequeueTopCargo(TempCargo);
@@ -1219,6 +1213,7 @@ void Company::DeliverCargos() {
 			}
 		}
 	}
+
 
 	// If the Truck Delivered All The Cargos.
 	if (TempTruck->GetCargosCount() == 0) {

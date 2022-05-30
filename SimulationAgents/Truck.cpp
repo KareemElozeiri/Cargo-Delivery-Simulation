@@ -149,7 +149,7 @@ bool Truck::IsLoaded() const
 
 void Truck::SetLoaded(bool value)
 {
-	this->Loaded = true;
+	this->Loaded = value;
 }
 
 bool Truck::IsLoading() const
