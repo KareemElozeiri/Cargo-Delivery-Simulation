@@ -122,10 +122,10 @@ void Company::Simulate() {
 			this->ExecuteUpcomingEvent();
 		}
 		// move trucks from checkup to available
-		this->MoveCheckUpToAvailable();
+		//this->MoveCheckUpToAvailable();
 
 		// move trucks from maintenance to available
-		this->MoveMaintenanceToAvailable();
+		//this->MoveMaintenanceToAvailable();
 
 		//handling cargos loading into proper trucks
 		if ((this->TimestepNum>=Time(this->TimestepNum.GetDay(),5)) && (this->TimestepNum <= Time(this->TimestepNum.GetDay(), 23))) {
@@ -1227,7 +1227,8 @@ void Company::DeliverCargos() {
 		TempTruck->DecreaseJourneyBeforeCheckUp();
 
 		this->MovingTrucks->dequeue(TempTruck);
-		if (!this->CheckForCheckUp(TempTruck)) {
+		//!this->CheckForCheckUp(TempTruck)
+		if (true) {
 			switch (TempTruck->GetTruckType())
 			{
 			case TRUCKTYPE::NT:
@@ -1296,6 +1297,12 @@ void Company::DropTruck() {
 	}
 
 	this->MoveToCheckUp(pTruck);
+}
+
+bool Company::ForceMoveMaintenanceToAvailable(TRUCKTYPE type) {
+
+
+	return false;
 }
 
 
