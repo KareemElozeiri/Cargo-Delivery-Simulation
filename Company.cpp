@@ -1225,10 +1225,10 @@ void Company::DeliverCargos() {
 		// Setting the journeys counters.
 		TempTruck->IncrementJourneysCompleted();
 		TempTruck->DecreaseJourneyBeforeCheckUp();
-
+		// Removing the truck from the MovingTrucks queue and changing its status.
 		this->MovingTrucks->dequeue(TempTruck);
 		TempTruck->SetLoaded(false);
-		
+		// Handling the truck location after delivering the cargos.
 		if (!this->CheckForCheckUp(TempTruck)) {
 			switch (TempTruck->GetTruckType())
 			{
@@ -1245,7 +1245,7 @@ void Company::DeliverCargos() {
 		}
 	}
 	else {
-		TempTruck->PeekCargos(TempCargo);
+		// Rearranging the queue after delivering the cargos.
 		this->MovingTrucks->dequeue(TempTruck);
 		TempTruck->UpdateTruckPriority();
 		this->MovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
