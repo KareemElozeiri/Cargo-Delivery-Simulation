@@ -749,7 +749,7 @@ bool Company::LoadVIPCargosToTruck()
 {	
 
 	if (this->VIPCargoList->getCount() != 0) {
-		
+
 		Truck* vipTruck;
 		this->VIPTrucksList->peek(vipTruck);
 
@@ -761,34 +761,40 @@ bool Company::LoadVIPCargosToTruck()
 
 		//checks first for the availability of VIP trucks
 		if (vipTruck != nullptr) {
-			if (OtherTwoNotWorkingOnThat(specialTruck, normalTruck, CARGOTYPE::V)==true) {
-				if ((vipTruck->IsLoading()==false) && (CanTruckLoad(vipTruck, this->VIPCargoList))) {
+			if (OtherTwoNotWorkingOnThat(specialTruck, normalTruck, CARGOTYPE::V) == true) {
+				if ((vipTruck->IsLoading() == false) && (CanTruckLoad(vipTruck, this->VIPCargoList))) {
 					vipTruck->SetCargoType(CARGOTYPE::V);
 					vipTruck->SetLoading(true);
 				}
 
 
-				if ((vipTruck->IsLoading()==true) && (vipTruck->GetCargoType() == CARGOTYPE::V)) {
+				if ((vipTruck->IsLoading() == true) && (vipTruck->GetCargoType() == CARGOTYPE::V)) {
 					this->LoadTruck(vipTruck, this->VIPCargoList);
 					return true;
 				}
 			}
 		}
+		else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::VT)) {
+			return this->LoadVIPCargosToTruck();
+		}
 
 		//checks second for the availability of normal trucks
 		if (normalTruck != nullptr) {
 			if (OtherTwoNotWorkingOnThat(vipTruck, specialTruck, CARGOTYPE::V)) {
-				if ((normalTruck->IsLoading()==false) && (CanTruckLoad(normalTruck, this->VIPCargoList))) {
+				if ((normalTruck->IsLoading() == false) && (CanTruckLoad(normalTruck, this->VIPCargoList))) {
 					normalTruck->SetCargoType(CARGOTYPE::V);
 					normalTruck->SetLoading(true);
 				}
 
 
-				if ((normalTruck->IsLoading()==true) && (normalTruck->GetCargoType() == CARGOTYPE::V)) {
+				if ((normalTruck->IsLoading() == true) && (normalTruck->GetCargoType() == CARGOTYPE::V)) {
 					this->LoadTruck(normalTruck, this->VIPCargoList);
 					return true;
 				}
 			}
+		}
+		else if (this-ForceMoveMaintenanceToAvailable(TRUCKTYPE::NT)) {
+			return this->LoadVIPCargosToTruck();
 		}
 
 		//checks last for the availability of special trucks
@@ -803,6 +809,9 @@ bool Company::LoadVIPCargosToTruck()
 				this->LoadTruck(specialTruck, this->VIPCargoList);
 				return true;
 			}
+		}
+		else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::ST)) {
+			return this->LoadVIPCargosToTruck();
 		}
 	}
 	return false;
