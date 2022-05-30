@@ -219,7 +219,7 @@ void Company::LoadInputs() {
 
 
 
-
+	
 	/// loops on each event and takes the letter to check which event function to call.
 	/// based on this the event function will take the right number of params for it
 	/// Ready : 6 params
