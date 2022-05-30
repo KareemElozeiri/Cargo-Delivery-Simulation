@@ -87,6 +87,9 @@ Company::~Company() {
 	delete this->NormalMaintenanceTrucksList;
 	delete this->SpecialMaintenanceTrucksList;
 	delete this->VIPMaintenanceTrucksList;
+
+	// Delete The Moving Trukcs Lists
+	this->cleanPriorityQueueInnerPointers(this->MovingTrucks);
 }
 
 bool Company::CheckExitStatus() {
@@ -1419,10 +1422,6 @@ void Company::DeliverCargos() {
 			Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / 
 				TempTruck->GetSpeed() +
 				TempCargo->GetLoadTime());
-			std::cout << "Cargo ID: " << TempCargo->GetID() << ", Delivery Time: "
-				<< (TruckAfterMovingTime + TempTruck->GetMovingStartTime()).GetDay() << ":"
-				<< (TruckAfterMovingTime + TempTruck->GetMovingStartTime()).GetHour()
-				<< ", Priority: " << TempTruck->GetTruckPriority() << std::endl;
 			if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() == this->TimestepNum) {
 				willDeliver = true;
 				TempTruck->DequeueTopCargo(TempCargo);
