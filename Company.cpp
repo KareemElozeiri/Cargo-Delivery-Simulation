@@ -810,122 +810,125 @@ bool Company::LoadVIPCargosToTruck()
 
 bool Company::LoadSpecialCargosToTruck()
 {
-	Truck* specialTruck;
-	this->SpecialTrucksList->peek(specialTruck);
+	if(this->SpecialCargoList->getCount() != 0){
+		Truck* specialTruck;
+		this->SpecialTrucksList->peek(specialTruck);
 
-	if (specialTruck != nullptr) {
-		if ((specialTruck->IsLoading()==false) && (CanTruckLoad(specialTruck, this->SpecialCargoList))) {
-			specialTruck->SetCargoType(CARGOTYPE::S);
-			specialTruck->SetLoading(true);
-		}
-		else if ((specialTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->SpecialCargoList) == true)) {
-			specialTruck->SetCargoType(CARGOTYPE::S);
+		if (specialTruck != nullptr) {
+			if ((specialTruck->IsLoading() == false) && (CanTruckLoad(specialTruck, this->SpecialCargoList))) {
+				specialTruck->SetCargoType(CARGOTYPE::S);
+				specialTruck->SetLoading(true);
+			}
+			else if ((specialTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->SpecialCargoList) == true)) {
+				specialTruck->SetCargoType(CARGOTYPE::S);
 
-			Cargo* c;
-			this->SpecialCargoList->peek(c);
+				Cargo* c;
+				this->SpecialCargoList->peek(c);
 
-			if (specialTruck->LoadCargo(c) == true) {
-				this->SpecialCargoList->dequeue(c);
+				if (specialTruck->LoadCargo(c) == true) {
+					this->SpecialCargoList->dequeue(c);
+				}
+
+				specialTruck->SetLoaded(true);
+				specialTruck->SetLoading(false);
+				return true;
 			}
 
-			specialTruck->SetLoaded(true);
-			specialTruck->SetLoading(false);
-			return true;
-		}
 
-
-		if ((specialTruck->IsLoading()==true) && (specialTruck->GetCargoType() == CARGOTYPE::S)) {
-			this->LoadTruck(specialTruck, this->SpecialCargoList);
-			return true;
+			if ((specialTruck->IsLoading() == true) && (specialTruck->GetCargoType() == CARGOTYPE::S)) {
+				this->LoadTruck(specialTruck, this->SpecialCargoList);
+				return true;
+			}
 		}
-	}
-	else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::ST)) {
-		return this->LoadSpecialCargosToTruck();
+		else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::ST)) {
+			return this->LoadSpecialCargosToTruck();
+		}
 	}
 	return false;
 }
 
 bool Company::LoadNormalCargosToTruck()
 {
-	Truck* normalTruck;
-	this->NormalTrucksList->peek(normalTruck);
-	Truck* vipTruck;
-	this->VIPTrucksList->peek(vipTruck);
+	if (this->NormalCargoList->getCount() != 0) {
+		Truck* normalTruck;
+		this->NormalTrucksList->peek(normalTruck);
+		Truck* vipTruck;
+		this->VIPTrucksList->peek(vipTruck);
 
-	if (normalTruck != nullptr) {
+		if (normalTruck != nullptr) {
 
-		if ((vipTruck == nullptr) || (vipTruck->IsLoading() == false) || (vipTruck->GetCargoType() != CARGOTYPE::N)) {
+			if ((vipTruck == nullptr) || (vipTruck->IsLoading() == false) || (vipTruck->GetCargoType() != CARGOTYPE::N)) {
 
 
-			if ((normalTruck->IsLoading()==false) && (CanTruckLoad(normalTruck, this->NormalCargoList))) {
-				
-				normalTruck->SetCargoType(CARGOTYPE::N);
-				normalTruck->SetLoading(true);
+				if ((normalTruck->IsLoading() == false) && (CanTruckLoad(normalTruck, this->NormalCargoList))) {
+
+					normalTruck->SetCargoType(CARGOTYPE::N);
+					normalTruck->SetLoading(true);
+				}
+				else if ((normalTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList) == true)) {
+					normalTruck->SetCargoType(CARGOTYPE::N);
+
+
+					Cargo* c = this->NormalCargoList->GetHead()->getItem();
+
+					Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();
+					if (normalTruck->LoadCargo(c) == true) {
+						this->NormalCargoList->SetHead(tempNode->getNext());
+						tempNode->setNext(nullptr);
+						delete tempNode;
+						this->NormalCargoList->setCount(this->NormalCargoList->getCount() - 1);
+					}
+
+					normalTruck->SetLoaded(true);
+					normalTruck->SetLoading(false);
+					return true;
+				}
+
+
+				if ((normalTruck->IsLoading() == true) && (normalTruck->GetCargoType() == CARGOTYPE::N)) {
+					this->LoadTruck(normalTruck, this->NormalCargoList);
+					return true;
+				}
 			}
-			else if ((normalTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList)==true)) {
-				normalTruck->SetCargoType(CARGOTYPE::N);
-				
+		}
+		else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::NT)) {
+			return this->LoadNormalCargosToTruck();
+		}
+
+		if (vipTruck != nullptr) {
+			if ((!(vipTruck->IsLoading())) && (CanTruckLoad(vipTruck, this->NormalCargoList))) {
+				vipTruck->SetCargoType(CARGOTYPE::N);
+				vipTruck->SetLoading(true);
+			}
+			else if ((vipTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList) == true)) {
+
+				vipTruck->SetCargoType(CARGOTYPE::N);
 
 				Cargo* c = this->NormalCargoList->GetHead()->getItem();
-				
+
 				Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();
-				if (normalTruck->LoadCargo(c)==true) {
+				if (vipTruck->LoadCargo(c) == true) {
 					this->NormalCargoList->SetHead(tempNode->getNext());
 					tempNode->setNext(nullptr);
 					delete tempNode;
 					this->NormalCargoList->setCount(this->NormalCargoList->getCount() - 1);
 				}
 
-				normalTruck->SetLoaded(true);
-				normalTruck->SetLoading(false);
+				vipTruck->SetLoaded(true);
+				vipTruck->SetLoading(false);
 				return true;
 			}
 
 
-			if ((normalTruck->IsLoading()==true) && (normalTruck->GetCargoType() == CARGOTYPE::N)) {
-				this->LoadTruck(normalTruck, this->NormalCargoList);
+			if ((vipTruck->IsLoading()) && (vipTruck->GetCargoType() == CARGOTYPE::N)) {
+				this->LoadTruck(vipTruck, this->NormalCargoList);
 				return true;
 			}
 		}
-	}
-	else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::NT)) {
-		return this->LoadNormalCargosToTruck();
-	}
-
-	if (vipTruck != nullptr) {
-		if ((!(vipTruck->IsLoading())) && (CanTruckLoad(vipTruck, this->NormalCargoList))) {
-			vipTruck->SetCargoType(CARGOTYPE::N);
-			vipTruck->SetLoading(true);
-		}
-		else if ((vipTruck->IsLoading() == false) && (CurrentCargoIsMaxWaiting(this->NormalCargoList) == true)) {
-
-			vipTruck->SetCargoType(CARGOTYPE::N);
-
-			Cargo* c = this->NormalCargoList->GetHead()->getItem();
-
-			Node<Cargo*>* tempNode = this->NormalCargoList->GetHead();
-			if (vipTruck->LoadCargo(c) == true) {
-				this->NormalCargoList->SetHead(tempNode->getNext());
-				tempNode->setNext(nullptr);
-				delete tempNode;
-				this->NormalCargoList->setCount(this->NormalCargoList->getCount() - 1);
-			}
-
-			vipTruck->SetLoaded(true);
-			vipTruck->SetLoading(false);
-			return true;
-		}
-
-
-		if ((vipTruck->IsLoading()) && (vipTruck->GetCargoType() == CARGOTYPE::N)) {
-			this->LoadTruck(vipTruck, this->NormalCargoList);
-			return true;
+		else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::VT)) {
+			return this->LoadNormalCargosToTruck();
 		}
 	}
-	else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::VT)) {
-		return this->LoadNormalCargosToTruck();
-	}
-
 	return false;
 }
 
