@@ -978,14 +978,14 @@ void Company::checkForAutoPromote() {
 	Node<Cargo*>* Head = this->NormalCargoList->GetHead();
 
 	while (Head != nullptr) {
- 		Cargo* pCargo = Head->getItem();
+		Cargo* pCargo = Head->getItem();
 		Time res = (this->TimestepNum - pCargo->GetPrepTime());
 		Head = Head->getNext();
 		if (this->AutoPromotionLimit <= res) {
 			AutoPromote(pCargo);
 			AutoPromotedCargosNum += 1;
+		}
 	}
-
 }
 
 bool Company::isChangeableCargo(int ID) {
