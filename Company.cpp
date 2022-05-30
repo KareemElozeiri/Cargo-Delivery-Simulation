@@ -362,8 +362,9 @@ void Company::SaveOutputs() {
 
 	//trucks stats dec
 	int NumOfTrucks, NumOfNormalTrucks, NumOfVIPTrucks, NumOfSpecialTrucks;
-		//var
-		//var
+	Time TotalActiveTime;	//used to calc avg active time
+	Time TotalAllTime;		//used to calc avg active time
+	double TruckUtillization;/////////////////////////////////////////////////////////////////calc
 
 
 
@@ -419,7 +420,9 @@ void Company::SaveOutputs() {
 		}
 
 		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
-		
+		TotalAllTime = TotalAllTime + 0;		///////////////////////////////////need to be calc.
+		TotalActiveTime = TotalActiveTime + 0;	///////////////////////////////////need to be calc.
+
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
 			cargo->GetWaitingTime().StringifyTime() + "\t" +
@@ -436,7 +439,7 @@ void Company::SaveOutputs() {
 	//calculating statistics...
 	int totalWaitHours = TotalWaitTime.GetTotalHours();
 	Time AverageWaitTime(totalWaitHours / 24, totalWaitHours % 24);
-
+	double AvgActiveTime = TotalActiveTime.GetTotalHours() / TotalAllTime.GetTotalHours() *100;
 
 	using std::to_string;
 	// Cargo statistics
@@ -448,7 +451,7 @@ void Company::SaveOutputs() {
 	//line 2
 	statisticsStr += "Cargo Avg Wait = " + AverageWaitTime.StringifyTime() + "\n";
 	//line 3
-	statisticsStr += "Auto-promoted Cargos = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
+	statisticsStr += "Auto-promoted Cargos = " + to_string(00000000000000000) + "%\n\n";//////////calc
 
 	// Trucks statistics
 	//line 1
@@ -458,7 +461,7 @@ void Company::SaveOutputs() {
 		", S: " + to_string(NumOfSpecialTrucks) +
 		", V: " + to_string(NumOfVIPTrucks) + "]\n";
 	//line 2
-	statisticsStr += "Avg Active time = " + AverageWaitTime.StringifyTime() + "\n";
+	statisticsStr += "Avg Active time = " + to_string(AvgActiveTime) + "%\n";
 	//line 3
 	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%\n\n";
 
