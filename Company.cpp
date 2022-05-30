@@ -153,11 +153,6 @@ void Company::Simulate() {
 		//check break conditions
 		if (this->CheckExitStatus())
 		{
-
-			//making data for the output file and saving it
-			this->SaveOutputs();
-
-
 			this->pUI->PrintMsg("Simulation is done.");
 			break;
 		}
@@ -821,7 +816,6 @@ bool Company::LoadNormalCargosToTruck()
 					tempNode->setNext(nullptr);
 					delete tempNode;
 					this->NormalCargoList->setCount(this->NormalCargoList->getCount() - 1);
-					std::cout << normalTruck->GetID() << std::endl;
 				}
 
 				normalTruck->SetLoaded(true);
@@ -902,7 +896,6 @@ void Company::LoadTruck(Truck* truck, LinkedList<Cargo*>* cargoList)
 				delete tempNode;
 
 				cargoList->setCount(cargoList->getCount() - 1);
-				std::cout << truck->GetID()<<std::endl;
 			}
 		}
 	}
@@ -1222,14 +1215,13 @@ void Company::DeliverCargos() {
 	}
 
 
-
-	TempTruck->PeekCargos(TempCargo);
 	// If the Truck Delivered All The Cargos.
-	if (!TempCargo) {
+	if (TempTruck->GetCargosCount() == 0) {
 		TempTruck->IncrementJourneysCompleted();
 		TempTruck->DecreaseJourneyBeforeCheckUp();
 
 		this->MovingTrucks->dequeue(TempTruck);
+		TempTruck->SetLoaded(false);
 		//!this->CheckForCheckUp(TempTruck)
 		if (true) {
 			switch (TempTruck->GetTruckType())
@@ -1247,9 +1239,9 @@ void Company::DeliverCargos() {
 		}
 	}
 	else {
-		this->MovingTrucks->dequeue(TempTruck);
 		TempTruck->PeekCargos(TempCargo);
-		TempTruck->UpdateTruckPriority(TempTruck->GetSpeed() / TempCargo->GetDeliveryDistance());
+		this->MovingTrucks->dequeue(TempTruck);
+		TempTruck->UpdateTruckPriority(-(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime()));
 		this->MovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
 	}
 }
