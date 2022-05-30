@@ -925,10 +925,12 @@ bool Company::OtherTwoNotWorkingOnThat(Truck* truck1, Truck* truck2, CARGOTYPE c
 {
 	if ((truck1 == nullptr) && (truck2 == nullptr))
 		return true;
-	else if ((truck1 == nullptr) && ((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
-		return true;
-	else if ((truck2 == nullptr) && ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)))
-		return true;
+	else if ((truck1 == nullptr))
+		if(((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
+				return true;
+	else if ((truck2 == nullptr))
+			if ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c))
+					return true;
 	else if (((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)) && ((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
 		return true;
 
@@ -1191,17 +1193,18 @@ void Company::DeliverCargos() {
 	Cargo* TempCargo = nullptr;
 	this->MovingTrucks->peek(TempTruck);
 
-	if (!TempTruck) {
+	if ((!TempTruck)) {
 		return;
 	}
 
 	TempTruck->PeekCargos(TempCargo);
-	Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime());
+	if (TempCargo) {
+		Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime());
 
-	if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() >= this->TimestepNum) {
-		TempTruck->DequeueTopCargo(TempCargo);
-		switch (TempCargo->GetType())
-		{
+		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() <= this->TimestepNum) {
+			TempTruck->DequeueTopCargo(TempCargo);
+			switch (TempCargo->GetType())
+			{
 			case CARGOTYPE::N:
 				this->DeliveredNormalCargoList->enqueue(TempCargo);
 				break;
@@ -1211,8 +1214,12 @@ void Company::DeliverCargos() {
 			case CARGOTYPE::V:
 				this->DeliveredVIPCargoList->enqueue(TempCargo);
 				break;
+			}
 		}
 	}
+
+
+
 	TempTruck->PeekCargos(TempCargo);
 	// If the Truck Delivered All The Cargos.
 	if (!TempCargo) {
