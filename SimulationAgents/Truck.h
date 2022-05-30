@@ -265,10 +265,9 @@ public:
 	* Parameters:
 	*	- NO PARAMS.
 	*
-	* Returns: void.
+	* Returns: bool.
 	*/
-	void DequeueTopCargo(Cargo*& toDequeueCargo);
-	bool DequeueTopCargo_bool(Cargo*& toDequeueCargo);
+	bool DequeueTopCargo(Cargo*& toDequeueCargo);
 
 	/*
 	* Function: IncrementJourneysCompleted.
