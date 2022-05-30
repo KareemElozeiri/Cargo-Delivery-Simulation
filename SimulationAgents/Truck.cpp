@@ -213,11 +213,7 @@ void Truck::PeekCargos(Cargo*& toPeekCargo) {
 	this->cargos->peek(toPeekCargo);
 }
 
-void Truck::DequeueTopCargo(Cargo*& toDequeueCargo) {
-	this->cargos->dequeue(toDequeueCargo);
-}
-
-bool Truck::DequeueTopCargo_bool(Cargo*& toDequeueCargo) {
+bool Truck::DequeueTopCargo(Cargo*& toDequeueCargo) {
 	return this->cargos->dequeue(toDequeueCargo);
 }
 
