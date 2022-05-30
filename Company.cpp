@@ -1024,24 +1024,29 @@ void Company::MoveTrucks() {
 	Truck* checkingTruck = nullptr;
 
 	this->NormalTrucksList->peek(checkingTruck);
-	if (checkingTruck->IsLoaded()) {
-		NormalTrucksList->dequeue(checkingTruck);
-		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
-		checkingTruck->SetMovingStartTime(TimestepNum);
+	if (checkingTruck != nullptr) {
+		if (checkingTruck->IsLoaded()) {
+			NormalTrucksList->dequeue(checkingTruck);
+			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+			checkingTruck->SetMovingStartTime(TimestepNum);
+		}
 	}
 
 	this->SpecialTrucksList->peek(checkingTruck);
-	if (checkingTruck->IsLoaded()) {
-		SpecialTrucksList->dequeue(checkingTruck);
-		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
-		checkingTruck->SetMovingStartTime(TimestepNum);
+	if (checkingTruck != nullptr) {
+		if (checkingTruck->IsLoaded()) {
+			SpecialTrucksList->dequeue(checkingTruck);
+			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+			checkingTruck->SetMovingStartTime(TimestepNum);
+		}
 	}
-
 	this->VIPTrucksList->peek(checkingTruck);
-	if (checkingTruck->IsLoaded()) {
-		VIPTrucksList->dequeue(checkingTruck);
-		MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
-		checkingTruck->SetMovingStartTime(TimestepNum);
+	if (checkingTruck != nullptr) {
+		if (checkingTruck->IsLoaded()) {
+			VIPTrucksList->dequeue(checkingTruck);
+			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
+			checkingTruck->SetMovingStartTime(TimestepNum);
+		}
 	}
 }
 
