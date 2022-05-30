@@ -392,7 +392,6 @@ void Company::SaveOutputs() {
 	// normal truck move to available
 	while (this->DeliveredNormalCargoList->dequeue(pCargo)) {
 		TotalWaitTime = TotalWaitTime + pCargo->GetWaitingTime();
-		std::cout << pCargo->GetDeliveredTime().StringifyTime() << std::endl;
 		outputFile << pCargo->GetDeliveredTime().StringifyTime() +
 			std::to_string(pCargo->GetID())  +
 			pCargo->GetWaitingTime().StringifyTime()  +
@@ -501,8 +500,8 @@ std::string Company::GetInteractiveModeData() const {
 	string interactive_mode_data;
 	string separator = "\n--------------------------------------------------\n";
 
-	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, MovingCargosCount,
-		InCheckupTrucksCount, DeliveredCargosCount;
+	int WaitingCargosCount, LoadingTrucksCount, EmptyTrucksCount, IncheckUpTrucksCount, InMaintainanceTrucksCount,
+		MovingCargosCount, InCheckupTrucksCount, DeliveredCargosCount;
 
 	WaitingCargosCount = this->NormalCargoList->getCount() +
 		this->SpecialCargoList->getCount() +
@@ -587,6 +586,78 @@ std::string Company::GetInteractiveModeData() const {
 	}
 
 	interactive_mode_data += std::to_string(EmptyTrucksCount) + " Empty Trucks: " + empty_trucks_line + separator;
+
+
+	// InCheckup Trucks Line:
+	string incheckup_trucks_line = "";
+	InMaintainanceTrucksCount = this->InCheckUpNormalTrucks->getCount() +
+		this->InCheckUpSpecialTrucks->getCount() +
+		this->InCheckUpVIPTrucks->getCount();
+
+	while (this->InCheckUpNormalTrucks->dequeue(TempTruck)) {
+		if (TempTruck->GetCargosCount() == 0)
+			incheckup_trucks_line += "[" + std::to_string(TempTruck->GetID()) + "]";
+		TempTrucksQueue->enqueue(TempTruck);
+	}
+	while (TempTrucksQueue->dequeue(TempTruck)) {
+		InCheckUpNormalTrucks->enqueue(TempTruck);
+	}
+
+	while (this->InCheckUpSpecialTrucks->dequeue(TempTruck)) {
+		if (TempTruck->GetCargosCount() == 0)
+			incheckup_trucks_line += "(" + std::to_string(TempTruck->GetID()) + ")";
+		TempTrucksQueue->enqueue(TempTruck);
+	}
+	while (TempTrucksQueue->dequeue(TempTruck)) {
+		InCheckUpSpecialTrucks->enqueue(TempTruck);
+	}
+
+	while (this->InCheckUpVIPTrucks->dequeue(TempTruck)) {
+		if (TempTruck->GetCargosCount() == 0)
+			incheckup_trucks_line += "{" + std::to_string(TempTruck->GetID()) + "}";
+		TempTrucksQueue->enqueue(TempTruck);
+	}
+	while (TempTrucksQueue->dequeue(TempTruck)) {
+		InCheckUpVIPTrucks->enqueue(TempTruck);
+	}
+
+	interactive_mode_data += std::to_string(InMaintainanceTrucksCount) + " In-Checkup Trucks: " + incheckup_trucks_line + separator;
+
+	// InMaintainance Trucks Line:
+	string in_maintainance_trucks_line = "";
+	IncheckUpTrucksCount = this->NormalMaintenanceTrucksList->getCount() +
+		this->SpecialMaintenanceTrucksList->getCount() +
+		this->VIPMaintenanceTrucksList->getCount();
+
+	while (this->NormalMaintenanceTrucksList->dequeue(TempTruck)) {
+		if (TempTruck->GetCargosCount() == 0)
+			in_maintainance_trucks_line += "[" + std::to_string(TempTruck->GetID()) + "]";
+		TempTrucksQueue->enqueue(TempTruck);
+	}
+	while (TempTrucksQueue->dequeue(TempTruck)) {
+		NormalMaintenanceTrucksList->enqueue(TempTruck);
+	}
+
+	while (this->SpecialMaintenanceTrucksList->dequeue(TempTruck)) {
+		if (TempTruck->GetCargosCount() == 0)
+			in_maintainance_trucks_line += "(" + std::to_string(TempTruck->GetID()) + ")";
+		TempTrucksQueue->enqueue(TempTruck);
+	}
+	while (TempTrucksQueue->dequeue(TempTruck)) {
+		SpecialMaintenanceTrucksList->enqueue(TempTruck);
+	}
+
+	while (this->VIPMaintenanceTrucksList->dequeue(TempTruck)) {
+		if (TempTruck->GetCargosCount() == 0)
+			in_maintainance_trucks_line += "{" + std::to_string(TempTruck->GetID()) + "}";
+		TempTrucksQueue->enqueue(TempTruck);
+	}
+	while (TempTrucksQueue->dequeue(TempTruck)) {
+		VIPMaintenanceTrucksList->enqueue(TempTruck);
+	}
+
+	interactive_mode_data += std::to_string(IncheckUpTrucksCount) + " In-Maintainance Trucks: " + in_maintainance_trucks_line + separator;
+
 
 	// Moving Cargo Line:
 	string MovingTrucksLine = "";
@@ -1182,6 +1253,7 @@ void Company::MoveCheckUpToAvailable() {
 		if (pTruck == nullptr) break;
 
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			pTruck->SetMovingStartTime(NULL);
 			this->NormalTrucksList->enqueue(pTruck);
 			this->InCheckUpNormalTrucks->dequeue(pTruck);
 		}
@@ -1194,6 +1266,7 @@ void Company::MoveCheckUpToAvailable() {
 		if (pTruck == nullptr) break;
 
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			pTruck->SetMovingStartTime(NULL);
 			this->SpecialTrucksList->enqueue(pTruck);
 			this->InCheckUpSpecialTrucks->dequeue(pTruck);
 		}
@@ -1206,6 +1279,7 @@ void Company::MoveCheckUpToAvailable() {
 		if (pTruck == nullptr) break;
 
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			pTruck->SetMovingStartTime(NULL);
 			this->VIPTrucksList->enqueue(pTruck);
 			this->InCheckUpVIPTrucks->dequeue(pTruck);
 		}
@@ -1234,6 +1308,7 @@ void Company::MoveMaintenanceToAvailable() {
 		if (pTruck == nullptr) break;
 
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			pTruck->SetMovingStartTime(NULL);
 			this->NormalTrucksList->enqueue(pTruck);
 			this->NormalMaintenanceTrucksList->dequeue(pTruck);
 		}
@@ -1246,6 +1321,7 @@ void Company::MoveMaintenanceToAvailable() {
 		if (pTruck == nullptr) break;
 
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			pTruck->SetMovingStartTime(NULL);
 			this->SpecialTrucksList->enqueue(pTruck);
 			this->SpecialMaintenanceTrucksList->dequeue(pTruck);
 		}
@@ -1258,6 +1334,7 @@ void Company::MoveMaintenanceToAvailable() {
 		if (pTruck == nullptr) break;
 
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
+			pTruck->SetMovingStartTime(NULL);
 			this->VIPTrucksList->enqueue(pTruck);
 			this->VIPMaintenanceTrucksList->dequeue(pTruck);
 		}
@@ -1352,25 +1429,26 @@ void Company::ExecuteFailure() {
 void Company::DropTruck() {
 	Truck* pTruck;
 	this->MovingTrucks->dequeue(pTruck);
+	pTruck->SetLoaded(false);
 	
 	Cargo* pCargo = nullptr;
 
 	switch (pTruck->GetCargoType())
 	{
 	case (CARGOTYPE::N):
-		while (pTruck->DequeueTopCargo_bool(pCargo)) {
+		while (pTruck->DequeueTopCargo(pCargo)) {
 			this->NormalCargoList->Insert(pCargo);
 			//pTruck->DequeueTopCargo(pCargo);
 		}
 		break;
 	case (CARGOTYPE::S):
-		while (pTruck->DequeueTopCargo_bool(pCargo)) {
+		while (pTruck->DequeueTopCargo(pCargo)) {
 			this->SpecialCargoList->enqueue(pCargo);
 			//pTruck->DequeueTopCargo(pCargo);
 		}
 		break;
 	case (CARGOTYPE::V):
-		while (pTruck->DequeueTopCargo_bool(pCargo)) {
+		while (pTruck->DequeueTopCargo(pCargo)) {
 			this->AddVIPCargo(pCargo);
 			//pTruck->DequeueTopCargo(pCargo);
 		}
