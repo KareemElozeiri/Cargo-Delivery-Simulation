@@ -303,6 +303,8 @@ public:
 
 	CARGOTYPE GetCargoType() const;
 	void SetCargoType(CARGOTYPE type);
+
+	void SetSpeed(double speed);
 };
 
 #endif

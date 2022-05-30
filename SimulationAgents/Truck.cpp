@@ -177,6 +177,10 @@ void Truck::SetCargoType(CARGOTYPE type)
 	this->cargo_type = type;
 }
 
+void Truck::SetSpeed(double speed) {
+	this->speed = speed;
+}
+
 std::ostream& operator<<(std::ostream& os , const Truck* truck)
 {
 	os << truck->GetID();
