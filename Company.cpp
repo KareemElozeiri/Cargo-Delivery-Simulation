@@ -191,25 +191,41 @@ void Company::LoadInputs() {
 	int nCheckUpHours, sCheckUpHours, vCheckUpHours;
 
 	//reading parameters from the file 
-	inputFile >> nTrucksNum >> sTrucksNum >> vTrucksNum;
-	inputFile >> nTruckSpeed >> sTruckSpeed >> vTruckSpeed;
-	inputFile >> nCapacity >> sCapacity >> vCapacity;
 
-	inputFile >> JourNum;
-	inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
+	if (true) //put this with true if you will use CONST speed and capacity-------
+	{
+		inputFile >> nTrucksNum >> sTrucksNum >> vTrucksNum;
+
+		inputFile >> nTruckSpeed >> sTruckSpeed >> vTruckSpeed;
+		inputFile >> nCapacity >> sCapacity >> vCapacity;
+
+		inputFile >> JourNum;
+		inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
 
 
-	//adding VIP trucks
-	for (int i = 0; i < vTrucksNum; i++)
-		this->AddTruck(TRUCKTYPE::VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
+		//adding VIP trucks
+		for (int i = 0; i < vTrucksNum; i++)
+			this->AddTruck(TRUCKTYPE::VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
 
-	//adding special trucks
-	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(TRUCKTYPE::ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
+		//adding special trucks
+		for (int i = 0; i < sTrucksNum; i++)
+			this->AddTruck(TRUCKTYPE::ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
 
-	//adding normal trucks
-	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(TRUCKTYPE::NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
+		//adding normal trucks
+		for (int i = 0; i < sTrucksNum; i++)
+			this->AddTruck(TRUCKTYPE::NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
+
+	}
+	else {//variant speed and capacity for bonus ----------------------------
+
+
+
+
+
+	}
+
+
+
 
 
 	////////////////// Reading Auto Promotion Limit & Maximum waiting hours ////////////////
@@ -218,7 +234,6 @@ void Company::LoadInputs() {
 
 	this->AutoPromotionLimit = Time(Apl, 0);
 	this->MaxWaitingTime = Time(MaxW);
-
 
 	///////////////// Loading events ///////////////////
 
