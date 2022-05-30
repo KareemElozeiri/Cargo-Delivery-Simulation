@@ -1193,11 +1193,13 @@ void Company::DeliverCargos() {
 		return;
 	}
 
+	// Get all the Cargos to be delievered at the current timestep.
 	TempTruck->PeekCargos(TempCargo);
-	if (TempCargo) {
-		Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime());
-
-		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() <= this->TimestepNum) {
+	while (TempCargo) {
+		Time TruckAfterMovingTime(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + 
+			TempCargo->GetLoadTime());
+		// Checking if Cargo is to be delievered (including its unloading time).
+		if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() == this->TimestepNum) {
 			TempTruck->DequeueTopCargo(TempCargo);
 			switch (TempCargo->GetType())
 			{
@@ -1212,17 +1214,21 @@ void Company::DeliverCargos() {
 				break;
 			}
 		}
+		else {
+			break;
+		}
+		TempTruck->PeekCargos(TempCargo);
 	}
 
-
-	// If the Truck Delivered All The Cargos.
+	// If the Truck delivered all the Cargos.
 	if (TempTruck->GetCargosCount() == 0) {
+		// Setting the journeys counters.
 		TempTruck->IncrementJourneysCompleted();
 		TempTruck->DecreaseJourneyBeforeCheckUp();
-
+		// Removing the truck from the MovingTrucks queue and changing its status.
 		this->MovingTrucks->dequeue(TempTruck);
 		TempTruck->SetLoaded(false);
-		
+		// Handling the truck location after delivering the cargos.
 		if (!this->CheckForCheckUp(TempTruck)) {
 			switch (TempTruck->GetTruckType())
 			{
@@ -1239,9 +1245,9 @@ void Company::DeliverCargos() {
 		}
 	}
 	else {
-		TempTruck->PeekCargos(TempCargo);
+		// Rearranging the queue after delivering the cargos.
 		this->MovingTrucks->dequeue(TempTruck);
-		TempTruck->UpdateTruckPriority(-(TempCargo->GetDeliveryDistance() / TempTruck->GetSpeed() + TempCargo->GetLoadTime()));
+		TempTruck->UpdateTruckPriority();
 		this->MovingTrucks->enqueue(TempTruck, TempTruck->GetTruckPriority());
 	}
 }

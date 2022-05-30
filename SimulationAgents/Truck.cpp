@@ -80,7 +80,7 @@ bool Truck::LoadCargo(Cargo* cargo)
 			double cargo_priority = -(cargo->GetDeliveryDistance() / this->speed + cargo->GetLoadTime());
 			this->cargos->enqueue(cargo, cargo_priority);
 			this->CalculateDeliveryInterval();
-			this->UpdateTruckPriority(cargo_priority);
+			this->UpdateTruckPriority();
 
 			if (this->cargos->getCount() == this->capacity) {
 				this->SetLoaded(true);
@@ -95,15 +95,12 @@ bool Truck::LoadCargo(Cargo* cargo)
 
 }
 
-void Truck::UpdateTruckPriority(double cargo_priority) {
-	if (this->truck_priority == NULL) {
-		this->truck_priority = cargo_priority;
-		return;
-	}
+void Truck::UpdateTruckPriority() {
+	Cargo* TempCargo;
+	this->cargos->peek(TempCargo);
 
-	if (cargo_priority > this->truck_priority) {
-		this->truck_priority = cargo_priority;
-		return;
+	if (TempCargo) {
+		this->truck_priority = -(TempCargo->GetDeliveryDistance() / this->speed + TempCargo->GetLoadTime());
 	}
 }
 

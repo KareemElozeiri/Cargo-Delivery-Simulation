@@ -166,7 +166,7 @@ public:
 	*
 	* Returns: double.
 	*/
-	void UpdateTruckPriority(double delivery_distance);
+	void UpdateTruckPriority();
 
 	/*
 	* Function: GetTruckPriority.
