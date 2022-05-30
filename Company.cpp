@@ -1232,5 +1232,4 @@ void Company::DeliverCargos() {
 	}
 }
 
-#endif 
 #endif	
