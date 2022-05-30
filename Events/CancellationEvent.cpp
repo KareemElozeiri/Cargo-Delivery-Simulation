@@ -9,7 +9,10 @@ void CancellationEvent::Execute() {
 		return;
 	}
 
+	Cargo* pCargo = nullptr;
+	pCargo = AppMngr->FindNormalCargo(ID);
 	AppMngr->DeleteNormalCargo(ID);
+	delete pCargo;
 }
 
 #endif
