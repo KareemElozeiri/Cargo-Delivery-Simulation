@@ -105,6 +105,10 @@ void Cargo::SetID(int id) {
 	this->cargoID = id;
 }
 
+void Cargo::SetTruckID(int truck_id) {
+	this->truck_ID = truck_id;
+}
+
 // Overloading the cout operator for the cargo
 std::ostream& operator<<(std::ostream& os, const Cargo* cargo)
 {
