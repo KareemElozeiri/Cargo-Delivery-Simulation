@@ -92,13 +92,12 @@ void UI::InteractiveInterfaceUpdate(string currentTime, string InteractiveData) 
     cout << InteractiveData << endl;
 }
 
-/* Not Required In Phase I */
 void UI::StepInterfaceUpdate(string currentTime, string InteractiveData) const {
     cout << "Current Time (Day:Hour) : " << currentTime << endl;
     std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(1));
     cout << InteractiveData << endl;
 }
-/* Not Required In Phase I */
+
 void UI::SilentInterfaceUpdate() const {
     return;
 }

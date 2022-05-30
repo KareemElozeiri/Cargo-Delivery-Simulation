@@ -60,6 +60,8 @@ private:
 	string CargosOutputLines;
 	string statisticsForOutput;
 
+	bool UpdateInterfaceWelcome = false;
+
 
 	/*
 	* takes a given queue whose inner values are pointers

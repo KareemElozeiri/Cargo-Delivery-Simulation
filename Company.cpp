@@ -159,7 +159,7 @@ void Company::Simulate() {
 		if (this->CheckExitStatus())
 		{
 			this->SaveOutputs();
-			this->pUI->PrintMsg("Simulation is done.");
+			this->pUI->PrintMsg("Simulation ends, Output file created.");
 			break;
 		}
 	}
@@ -548,12 +548,24 @@ void Company::UpdateInterface() {
 	switch (this->pUI->GetAppMode())
 	{
 	case MODE::INTER:
+		if (!UpdateInterfaceWelcome) {
+			pUI->PrintMsg("Interactive Mode Started.");
+			this->UpdateInterfaceWelcome = true;
+		}
 		pUI->InteractiveInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
 		break;
 	case MODE::STEP:
+		if (!UpdateInterfaceWelcome) {
+			pUI->PrintMsg("Step-By-Step Mode Started.");
+			this->UpdateInterfaceWelcome = true;
+		}
 		pUI->StepInterfaceUpdate(this->GetCurrentTime(), this->GetInteractiveModeData());
 		break;
 	case MODE::SILENT:
+		if (!UpdateInterfaceWelcome) {
+			pUI->PrintMsg("Silent Mode Started.");
+			this->UpdateInterfaceWelcome = true;
+		}
 		pUI->SilentInterfaceUpdate();
 		break;
 	}
