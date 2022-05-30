@@ -15,6 +15,7 @@
 #include "custom/customs.h" //to get split function
 #include <iostream>
 #include <fstream>
+#include <time.h>
 
 class Company
 {
@@ -295,14 +296,18 @@ public:
 	*/
 	bool CheckMaxWaitingTime(Cargo* c);
 	bool CheckForCheckUp(Truck* pTruck);
+	void MoveToCheckUp(Truck* pTruck);
+
 	void MoveCheckUpToAvailable();
 	bool CheckForMaintenance(Truck* pTruck);
 	void MoveMaintenanceToAvailable();
 	void MoveMovingToAvilable();
-	
+
 	// TODO
-	TRUCKTYPE CheckTrucksNeeded(); // get what truck type needed
-	void ForceMoveMaintenanceToAvailable(TRUCKTYPE type); // release one of the trucks in the list
+	bool ForceMoveMaintenanceToAvailable(TRUCKTYPE type); // release one of the trucks in the list
+
+	void ExecuteFailure();
+	void DropTruck();
 };
 #endif
 
