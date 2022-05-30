@@ -839,6 +839,9 @@ bool Company::LoadSpecialCargosToTruck()
 			return true;
 		}
 	}
+	else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::ST)) {
+		return this->LoadSpecialCargosToTruck();
+	}
 	return false;
 }
 
@@ -885,6 +888,9 @@ bool Company::LoadNormalCargosToTruck()
 			}
 		}
 	}
+	else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::NT)) {
+		return this->LoadNormalCargosToTruck();
+	}
 
 	if (vipTruck != nullptr) {
 		if ((!(vipTruck->IsLoading())) && (CanTruckLoad(vipTruck, this->NormalCargoList))) {
@@ -915,6 +921,9 @@ bool Company::LoadNormalCargosToTruck()
 			this->LoadTruck(vipTruck, this->NormalCargoList);
 			return true;
 		}
+	}
+	else if (this->ForceMoveMaintenanceToAvailable(TRUCKTYPE::VT)) {
+		return this->LoadNormalCargosToTruck();
 	}
 
 	return false;
