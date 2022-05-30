@@ -160,6 +160,13 @@ void Company::Simulate() {
 		{
 			this->SaveOutputs();
 			this->pUI->PrintMsg("Simulation ends, Output file created.");
+			this->pUI->PrintMsg("-------------------------------------");
+			this->pUI->PrintMsg("-------------------------------------");
+			this->pUI->PrintMsg("Here is some statistsics.");
+			this->pUI->PrintMsg(statisticsForOutput);
+			this->pUI->PrintMsg("-------------------------------------\n\n");
+			cin.get();
+
 			break;
 		}
 	}
