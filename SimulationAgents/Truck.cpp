@@ -77,12 +77,13 @@ bool Truck::LoadCargo(Cargo* cargo)
 				this->max_distance_to_deliver = cargo->GetDeliveryDistance();
 			//checking minimumm time required for delivering a cargo
 
-			double cargo_priority = -cargo->GetDeliveryDistance() / this->speed;
+			double cargo_priority = -(cargo->GetDeliveryDistance() / this->speed + cargo->GetLoadTime());
 			this->cargos->enqueue(cargo, cargo_priority);
 			this->CalculateDeliveryInterval();
 			this->UpdateTruckPriority(cargo_priority);
 
 			if (this->cargos->getCount() == this->capacity) {
+				std::cout << "done!" << std::endl;
 				this->SetLoaded(true);
 				this->SetLoading(false);
 			}
@@ -101,7 +102,7 @@ void Truck::UpdateTruckPriority(double cargo_priority) {
 		return;
 	}
 
-	if (cargo_priority < this->truck_priority) {
+	if (cargo_priority > this->truck_priority) {
 		this->truck_priority = cargo_priority;
 		return;
 	}
@@ -194,6 +195,18 @@ int Truck::GetCargosCount() {
 
 std::string Truck::GetCargosData() {
 	return this->cargos->getData();
+}
+
+void Truck::PeekCargos(Cargo*& toPeekCargo) {
+	this->cargos->peek(toPeekCargo);
+}
+
+void Truck::DequeueTopCargo(Cargo*& toDequeueCargo) {
+	this->cargos->dequeue(toDequeueCargo);
+}
+
+void Truck::IncrementJourneysCompleted() {
+	this->journeysCompleted += 1;
 }
 
 #endif

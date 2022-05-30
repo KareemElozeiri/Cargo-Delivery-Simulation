@@ -34,6 +34,8 @@ private:
 	bool Loaded = false;
 	bool Loading = false;
 	double truck_priority = NULL;
+
+	int journeysCompleted = 0;
 	
 
 	PQueue<Cargo*>* cargos = new PQueue<Cargo*>;
@@ -244,6 +246,39 @@ public:
 	* Returns: string.
 	*/
 	std::string GetCargosData();
+
+	/*
+	* Function: PeekCargos.
+	* Peek The top Cargo in The Truck.
+	*
+	* Parameters:
+	*	- NO PARAMS.
+	*
+	* Returns: void.
+	*/	
+	void PeekCargos(Cargo*& toPeekCargo);
+
+	/*
+	* Function: DequeueTopCargo.
+	* Dequeue The top Cargo in The Truck.
+	*
+	* Parameters:
+	*	- NO PARAMS.
+	*
+	* Returns: void.
+	*/
+	void DequeueTopCargo(Cargo*& toDequeueCargo);
+
+	/*
+	* Function: IncrementJourneysCompleted.
+	* Increments The Completed Journeys By The Truck.
+	*
+	* Parameters:
+	*	- NO PARAMS.
+	*
+	* Returns: void.
+	*/
+	void IncrementJourneysCompleted();
 
 
 	bool IsLoaded() const;

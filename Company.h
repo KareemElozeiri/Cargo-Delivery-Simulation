@@ -175,6 +175,15 @@ public:
 	void MoveTrucks();
 
 	/*
+	* Function: DeliverCargos.
+	* Deliver The Upcoming Cargos if applicable.
+	*
+	* Parameters:
+	*	NO PARAMS.
+	*/
+	void DeliverCargos();
+
+	/*
 	* Function: FindNormalCargo.
 	* Finds a normal cargo by ID.
 	*
