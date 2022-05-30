@@ -268,6 +268,7 @@ public:
 	* Returns: void.
 	*/
 	void DequeueTopCargo(Cargo*& toDequeueCargo);
+	bool DequeueTopCargo_bool(Cargo*& toDequeueCargo);
 
 	/*
 	* Function: IncrementJourneysCompleted.
@@ -291,6 +292,10 @@ public:
 
 
 	void ResetJourneysCount();
+	void DecreaseJourneyBeforeCheckUp();
+
+	int GetTotalCompletedJourneys();
+	int GetMaxJourneysBeforeCheckUp();
 
 	Time getCheckUpOutTime() const;
 	void setCheckUpOutTime(Time time);
