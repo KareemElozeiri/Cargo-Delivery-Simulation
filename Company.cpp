@@ -1426,6 +1426,7 @@ void Company::DeliverCargos() {
 				willDeliver = true;
 				TempTruck->DequeueTopCargo(TempCargo);
 				TempCargo->SetDeliveredTime(this->TimestepNum);
+				TempCargo->SetTruckID(TempTruck->GetID());
 				switch (TempCargo->GetType())
 				{
 				case CARGOTYPE::N:
