@@ -1304,7 +1304,32 @@ void Company::DropTruck() {
 
 bool Company::ForceMoveMaintenanceToAvailable(TRUCKTYPE type) {
 
+	Truck* pTruck;
 
+	switch (type)
+	{
+	case TRUCKTYPE::NT:
+		if (this->NormalMaintenanceTrucksList->getCount() == 0) return false;
+		this->NormalMaintenanceTrucksList->dequeue(pTruck);
+		pTruck->SetSpeed(pTruck->GetSpeed() / 2);
+		this->NormalTrucksList->enqueue(pTruck);
+		return true;
+		break;
+	case TRUCKTYPE::ST:
+		if (this->SpecialMaintenanceTrucksList->getCount() == 0) return false;
+		this->SpecialMaintenanceTrucksList->dequeue(pTruck);
+		pTruck->SetSpeed(pTruck->GetSpeed() / 2);
+		this->SpecialTrucksList->enqueue(pTruck);
+		return true;
+		break;
+	case TRUCKTYPE::VT:
+		if (this->VIPMaintenanceTrucksList->getCount() == 0) return false;
+		this->VIPMaintenanceTrucksList->dequeue(pTruck);
+		pTruck->SetSpeed(pTruck->GetSpeed() / 2);
+		this->VIPTrucksList->enqueue(pTruck);
+		return true;
+		break;
+	}
 	return false;
 }
 
