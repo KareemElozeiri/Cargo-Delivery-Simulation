@@ -477,6 +477,7 @@ string Company::OutputString() {
 	int numOfCargoss = 0;
 
 	dataToOutput += "CDT\tID\tPT\tWT\tTID\n";
+
 	while (!DeliveredNormalCargoList->isEmpty() ||
 		!DeliveredVIPCargoList->isEmpty() ||
 		!DeliveredSpecialCargoList->isEmpty())
@@ -1359,7 +1360,6 @@ bool Company::isChangeableCargo(int ID) {
 void Company::AutoPromote(Cargo* pCargo) {
 	//if a cargo wait more than auotp days from its preparation time to be assigned to a truck,
 	//it should be automatically promoted to be an vip cargo
-	this->AutoPromotedCargosNum++;
 	this->DeleteNormalCargo(pCargo->GetID());
 	this->AddVIPCargo(pCargo);
 	
