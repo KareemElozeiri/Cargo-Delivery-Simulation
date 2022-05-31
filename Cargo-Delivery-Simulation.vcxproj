@@ -180,7 +180,19 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Loads\bonus input explain.txt" />
+    <Text Include="Loads\checkup.txt" />
+    <Text Include="Loads\input.txt" />
+    <Text Include="Loads\inputOld.txt" />
+    <Text Include="Loads\test.txt" />
+    <Text Include="Loads\test1.txt" />
+    <Text Include="Loads\test2.txt" />
+    <Text Include="Loads\test3.txt" />
+    <Text Include="Loads\test4.txt" />
+    <Text Include="Loads\test5.txt" />
+    <Text Include="Loads\test6.txt" />
     <Text Include="Loads\testfile.txt" />
+    <Text Include="Outputs\test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
