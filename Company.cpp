@@ -1303,6 +1303,7 @@ void Company::MoveTrucks() {
 	if (checkingTruck != nullptr) {
 		if (checkingTruck->IsLoaded()) {
 			NormalTrucksList->dequeue(checkingTruck);
+			checkingTruck->SetLoading(false);
 			checkingTruck->SetMovingStartTime(TimestepNum);
 			checkingTruck->UpdateTruckPriority();
 			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
@@ -1313,6 +1314,7 @@ void Company::MoveTrucks() {
 	if (checkingTruck != nullptr) {
 		if (checkingTruck->IsLoaded()) {
 			SpecialTrucksList->dequeue(checkingTruck);
+			checkingTruck->SetLoading(false);
 			checkingTruck->SetMovingStartTime(TimestepNum);
 			checkingTruck->UpdateTruckPriority();
 			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
@@ -1323,6 +1325,7 @@ void Company::MoveTrucks() {
 	if (checkingTruck != nullptr) {
 		if (checkingTruck->IsLoaded()) {
 			VIPTrucksList->dequeue(checkingTruck);
+			checkingTruck->SetLoading(false);
 			checkingTruck->SetMovingStartTime(TimestepNum);
 			checkingTruck->UpdateTruckPriority();
 			MovingTrucks->enqueue(checkingTruck, checkingTruck->GetTruckPriority());
@@ -1384,6 +1387,7 @@ void Company::MoveCheckUpToAvailable() {
 
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
 			pTruck->SetMovingStartTime(NULL);
+			pTruck->SetLoading(false);
 			this->NormalTrucksList->enqueue(pTruck);
 			this->InCheckUpNormalTrucks->dequeue(pTruck);
 		}
@@ -1394,9 +1398,10 @@ void Company::MoveCheckUpToAvailable() {
 	while (true) {
 		this->InCheckUpSpecialTrucks->peek(pTruck);
 		if (pTruck == nullptr) break;
-
+		
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
 			pTruck->SetMovingStartTime(NULL);
+			pTruck->SetLoading(false);
 			this->SpecialTrucksList->enqueue(pTruck);
 			this->InCheckUpSpecialTrucks->dequeue(pTruck);
 		}
@@ -1410,6 +1415,7 @@ void Company::MoveCheckUpToAvailable() {
 
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
 			pTruck->SetMovingStartTime(NULL);
+			pTruck->SetLoading(false);
 			this->VIPTrucksList->enqueue(pTruck);
 			this->InCheckUpVIPTrucks->dequeue(pTruck);
 		}
@@ -1515,6 +1521,7 @@ void Company::DeliverCargos() {
 			TempTruck->IncrementJourneysCompleted();
 			TempTruck->DecreaseJourneyBeforeCheckUp();
 			TempTruck->SetLoaded(false);
+			TempTruck->SetLoading(false);
 			// Handling the truck location after delivering the cargos.
 			if (!this->CheckForCheckUp(TempTruck)) {
 				switch (TempTruck->GetTruckType())
