@@ -466,6 +466,7 @@ string Company::OutputString() {
 	NumOfVIPTrucks = this->VIPTrucksList->getCount();
 	NumOfTrucks = NumOfNormalTrucks + NumOfVIPTrucks + NumOfVIPTrucks;
 
+	int numOfCargoss = 0;
 
 	dataToOutput += "CDT\tID\tPT\tWT\tTID\n";
 	while (!DeliveredNormalCargoList->isEmpty() ||
@@ -499,7 +500,9 @@ string Company::OutputString() {
 
 		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
 		TotalAllTime = TotalAllTime + 1;		///////////////////////////////////need to be calc.
-		TotalActiveTime = TotalActiveTime + 1;	///////////////////////////////////need to be calc.
+		TotalActiveTime = TotalActiveTime + (cargo->GetDeliveredTime() - cargo->GetPrepTime());
+		numOfCargoss++;
+			
 
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
@@ -517,7 +520,8 @@ string Company::OutputString() {
 
 
 
-	double AvgActiveTime = TotalActiveTime.GetTotalHours() / TotalAllTime.GetTotalHours() * 100;
+	double AvgActiveTime = TotalActiveTime.GetTotalHours() / 
+		(TimestepNum.GetTotalHours() * numOfCargoss/2) * 100;
 
 	using std::to_string;
 	// Cargo statistics

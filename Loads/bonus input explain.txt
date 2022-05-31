@@ -1,4 +1,4 @@
-2 2 2		//no of cargos
+2 2 2		//no of trucks N-S-V
 1 9 8 7	//before checkup
 N 80 6	//speed and capacity for first truck
 N 85 5	//..................for second truck
