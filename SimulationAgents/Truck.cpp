@@ -224,4 +224,12 @@ void Truck::IncrementJourneysCompleted() {
 	this->journeysCompleted += 1;
 }
 
+void Truck::IncrementTotalDeliveredCargos(int DeliveredCargosInstance) {
+	this->totalDeliveredCargos += DeliveredCargosInstance;
+}
+
+int Truck::GetTotalDeliveredCargos() {
+	return this->totalDeliveredCargos;
+}
+
 #endif

@@ -36,6 +36,7 @@ private:
 	double truck_priority = NULL;
 
 	int journeysCompleted = 0;
+	int totalDeliveredCargos = 0;
 	
 
 	PQueue<Cargo*>* cargos = new PQueue<Cargo*>;
@@ -279,6 +280,28 @@ public:
 	* Returns: void.
 	*/
 	void IncrementJourneysCompleted();
+
+	/*
+	* Function: IncrementTotalDeliveredCargos.
+	* Increments the total devliered cargos by the truck.
+	*
+	* Parameters:
+	*	- DeliveredCargosInstance : The number of delivered cargos following one journey.
+	*
+	* Returns: void.
+	*/
+	void IncrementTotalDeliveredCargos(int DeliveredCargosInstance);
+
+	/*
+	* Function: GetTotalDeliveredCargos.
+	* Gets the total devliered cargos by the truck.
+	*
+	* Parameters:
+	*	- NO PARAMS.
+	*
+	* Returns: int.
+	*/
+	int GetTotalDeliveredCargos();
 
 
 	bool IsLoaded() const;

@@ -1511,6 +1511,7 @@ void Company::DeliverCargos() {
 			if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() == this->TimestepNum) {
 				willDeliver = true;
 				TempTruck->DequeueTopCargo(TempCargo);
+				TempTruck->IncrementTotalDeliveredCargos(1);
 				TempCargo->SetWaitingTime(TempTruck->GetMovingStartTime() - TempCargo->GetPrepTime());
 				TempCargo->SetDeliveredTime(this->TimestepNum);
 				TempCargo->SetTruckID(TempTruck->GetID());
