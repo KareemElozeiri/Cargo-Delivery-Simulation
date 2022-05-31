@@ -160,6 +160,13 @@ void Company::Simulate() {
 		{
 			this->SaveOutputs();
 			this->pUI->PrintMsg("Simulation ends, Output file created.");
+			this->pUI->PrintMsg("-------------------------------------");
+			this->pUI->PrintMsg("-------------------------------------");
+			this->pUI->PrintMsg("Here is some statistsics.");
+			this->pUI->PrintMsg(statisticsForOutput);
+			this->pUI->PrintMsg("-------------------------------------\n\n");
+			cin.get();
+
 			break;
 		}
 	}
@@ -182,27 +189,68 @@ void Company::LoadInputs() {
 	int nCapacity, sCapacity, vCapacity;
 	int JourNum;
 	int nCheckUpHours, sCheckUpHours, vCheckUpHours;
-
+	string truckchar;
 	//reading parameters from the file 
-	inputFile >> nTrucksNum >> sTrucksNum >> vTrucksNum;
-	inputFile >> nTruckSpeed >> sTruckSpeed >> vTruckSpeed;
-	inputFile >> nCapacity >> sCapacity >> vCapacity;
 
-	inputFile >> JourNum;
-	inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
+	if (false) //put this with true if you will use CONST speed and capacity-------
+	{
+		inputFile >> nTrucksNum >> sTrucksNum >> vTrucksNum;
+
+		inputFile >> nTruckSpeed >> sTruckSpeed >> vTruckSpeed;
+		inputFile >> nCapacity >> sCapacity >> vCapacity;
+
+		inputFile >> JourNum;
+		inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
 
 
-	//adding VIP trucks
-	for (int i = 0; i < vTrucksNum; i++)
-		this->AddTruck(TRUCKTYPE::VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
+		//adding VIP trucks
+		for (int i = 0; i < vTrucksNum; i++)
+			this->AddTruck(TRUCKTYPE::VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
 
-	//adding special trucks
-	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(TRUCKTYPE::ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
+		//adding special trucks
+		for (int i = 0; i < sTrucksNum; i++)
+			this->AddTruck(TRUCKTYPE::ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
 
-	//adding normal trucks
-	for (int i = 0; i < sTrucksNum; i++)
-		this->AddTruck(TRUCKTYPE::NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
+		//adding normal trucks
+		for (int i = 0; i < sTrucksNum; i++)
+			this->AddTruck(TRUCKTYPE::NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
+
+	}
+	else {//variant speed and capacity for bonus ----------------------------
+
+		inputFile >> nTrucksNum >> sTrucksNum >> vTrucksNum;
+
+		inputFile >> JourNum;
+		inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
+
+		//adding normal trucks
+		for (int i = 0; i < sTrucksNum; i++) {
+			inputFile >> truckchar >> nTruckSpeed >> nCapacity;
+
+			this->AddTruck(TRUCKTYPE::NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
+		}
+
+		//adding special trucks
+		for (int i = 0; i < sTrucksNum; i++) {
+			inputFile >> truckchar >> sTruckSpeed >> sCapacity;
+
+			this->AddTruck(TRUCKTYPE::ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
+		}
+
+		//adding VIP trucks
+		for (int i = 0; i < vTrucksNum; i++) {
+			inputFile >> truckchar >> vTruckSpeed >> vCapacity;
+
+			this->AddTruck(TRUCKTYPE::VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
+		}
+		
+		
+
+
+	}
+
+
+
 
 
 	////////////////// Reading Auto Promotion Limit & Maximum waiting hours ////////////////
@@ -211,7 +259,6 @@ void Company::LoadInputs() {
 
 	this->AutoPromotionLimit = Time(Apl, 0);
 	this->MaxWaitingTime = Time(MaxW);
-
 
 	///////////////// Loading events ///////////////////
 
@@ -419,6 +466,7 @@ string Company::OutputString() {
 	NumOfVIPTrucks = this->VIPTrucksList->getCount();
 	NumOfTrucks = NumOfNormalTrucks + NumOfVIPTrucks + NumOfVIPTrucks;
 
+	int numOfCargoss = 0;
 
 	dataToOutput += "CDT\tID\tPT\tWT\tTID\n";
 	while (!DeliveredNormalCargoList->isEmpty() ||
@@ -452,7 +500,9 @@ string Company::OutputString() {
 
 		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
 		TotalAllTime = TotalAllTime + 1;		///////////////////////////////////need to be calc.
-		TotalActiveTime = TotalActiveTime + 1;	///////////////////////////////////need to be calc.
+		TotalActiveTime = TotalActiveTime + (cargo->GetDeliveredTime() - cargo->GetPrepTime());
+		numOfCargoss++;
+			
 
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
@@ -470,7 +520,8 @@ string Company::OutputString() {
 
 
 
-	double AvgActiveTime = TotalActiveTime.GetTotalHours() / TotalAllTime.GetTotalHours() * 100;
+	double AvgActiveTime = TotalActiveTime.GetTotalHours() / 
+		(TimestepNum.GetTotalHours() * numOfCargoss/2) * 100;
 
 	using std::to_string;
 	// Cargo statistics
