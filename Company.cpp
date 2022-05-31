@@ -189,7 +189,7 @@ void Company::LoadInputs() {
 	int nCapacity, sCapacity, vCapacity;
 	int JourNum;
 	int nCheckUpHours, sCheckUpHours, vCheckUpHours;
-
+	string truckchar;
 	//reading parameters from the file 
 
 	if (true) //put this with true if you will use CONST speed and capacity-------
@@ -218,8 +218,33 @@ void Company::LoadInputs() {
 	}
 	else {//variant speed and capacity for bonus ----------------------------
 
+		inputFile >> nTrucksNum >> sTrucksNum >> vTrucksNum;
 
+		inputFile >> JourNum;
+		inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
 
+		//adding normal trucks
+		for (int i = 0; i < sTrucksNum; i++) {
+			inputFile >> truckchar >> nTruckSpeed >> nCapacity;
+
+			this->AddTruck(TRUCKTYPE::NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
+		}
+
+		//adding special trucks
+		for (int i = 0; i < sTrucksNum; i++) {
+			inputFile >> truckchar >> sTruckSpeed >> sCapacity;
+
+			this->AddTruck(TRUCKTYPE::ST, sCapacity, Time(sCheckUpHours), JourNum, sTruckSpeed, i);
+		}
+
+		//adding VIP trucks
+		for (int i = 0; i < vTrucksNum; i++) {
+			inputFile >> truckchar >> vTruckSpeed >> vCapacity;
+
+			this->AddTruck(TRUCKTYPE::VT, vCapacity, Time(vCheckUpHours), JourNum, vTruckSpeed, i);
+		}
+		
+		
 
 
 	}
