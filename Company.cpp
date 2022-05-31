@@ -1513,7 +1513,6 @@ void Company::DeliverCargos() {
 				TempTruck->DequeueTopCargo(TempCargo);
 				TempCargo->SetWaitingTime(TempTruck->GetMovingStartTime() - TempCargo->GetPrepTime());
 				TempCargo->SetDeliveredTime(this->TimestepNum);
-				TempCargo->SetWaitingTime(TempTruck->GetMovingStartTime() - TempCargo->GetPrepTime());
 				TempCargo->SetTruckID(TempTruck->GetID());
 				switch (TempCargo->GetType())
 				{
