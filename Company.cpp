@@ -19,7 +19,7 @@ Company::Company() {
 	this->LoadInputs();
 
 	//to calc num of auto-promoted cargos
-	AutoPromotedCargosNum = 0;
+	AutoPromotedCargosNum =0;
 }
 
 Company::~Company() {
@@ -459,12 +459,14 @@ string Company::OutputString() {
 	NumOfSpecialCargos = this->DeliveredSpecialCargoList->getCount();
 	NumOfVIPCargos = this->DeliveredVIPCargoList->getCount();
 	NumOfCargos = NumOfNormalCargos + NumOfVIPCargos + NumOfVIPCargos;
+	cout << "num:::" << AutoPromotedCargosNum <<endl<<endl<<endl;
 
 	if (NumOfCargos == 0)
 		AutoPromotedCargosPercent = 0;	//to prevent dividing by zero
 	else
-		AutoPromotedCargosPercent = AutoPromotedCargosNum / NumOfNormalCargos * 100;
+		AutoPromotedCargosPercent = (double)AutoPromotedCargosNum / NumOfNormalCargos * 100;
 
+	cout << "num:::" << AutoPromotedCargosPercent << endl << endl << endl;
 
 	//putting cargo stats data
 	NumOfNormalTrucks = this->NormalTrucksList->getCount();
@@ -507,6 +509,7 @@ string Company::OutputString() {
 		TotalWaitTime = TotalWaitTime + cargo->GetWaitingTime();
 		TotalAllTime = TotalAllTime + 1;		///////////////////////////////////need to be calc.
 		TotalActiveTime = TotalActiveTime + (cargo->GetDeliveredTime() - cargo->GetPrepTime());
+		cout <<"del" << cargo->GetDeliveredTime().StringifyTime() << endl;
 		numOfCargoss++;
 			
 
@@ -526,8 +529,12 @@ string Company::OutputString() {
 
 
 
-	double AvgActiveTime = TotalActiveTime.GetTotalHours() / 
-		(TimestepNum.GetTotalHours() * numOfCargoss/2) * 100;
+	double AvgActiveTime = (double)TotalActiveTime.GetTotalHours() / 
+		(TimestepNum.GetTotalHours() * numOfCargoss) * 100;
+
+
+	double AvgUtilization = 000;
+
 
 	using std::to_string;
 	// Cargo statistics
@@ -537,9 +544,9 @@ string Company::OutputString() {
 		", S: " + to_string(NumOfSpecialCargos) +
 		", V: " + to_string(NumOfVIPCargos) + "]\n";
 	//line 2
-	statisticsStr += "Cargo Avg Wait = " + AverageWaitTime.StringifyTime() + "\n";
+	statisticsStr += "Cargo Avg Wait = " + TotalWaitTime.StringifyTime() + "\n";
 	//line 3
-	statisticsStr += "Auto-promoted Cargos = " + to_string(00000000000000000) + "%\n";//////////calc
+	statisticsStr += "Auto-promoted Cargos = "  + to_string(AutoPromotedCargosPercent) +"%\n";//////////calc
 
 
 
@@ -558,7 +565,7 @@ string Company::OutputString() {
 	//line 2
 	statisticsStr += "Avg Active time = " + to_string(AvgActiveTime) + "%\n";
 	//line 3
-	statisticsStr += "Avg utilization = " + to_string(AutoPromotedCargosPercent) + "%";
+	statisticsStr += "Avg utilization = " + to_string(AvgUtilization) + "%";
 
 
 
@@ -1292,9 +1299,9 @@ bool Company::isChangeableCargo(int ID) {
 void Company::AutoPromote(Cargo* pCargo) {
 	//if a cargo wait more than auotp days from its preparation time to be assigned to a truck,
 	//it should be automatically promoted to be an vip cargo
-		 
-		this->DeleteNormalCargo(pCargo->GetID());
-		this->AddVIPCargo(pCargo);
+	this->AutoPromotedCargosNum++;
+	this->DeleteNormalCargo(pCargo->GetID());
+	this->AddVIPCargo(pCargo);
 	
 }
 
@@ -1478,6 +1485,7 @@ void Company::MoveMaintenanceToAvailable() {
 		this->VIPMaintenanceTrucksList->peek(pTruck);
 		if (pTruck == nullptr) break;
 
+
 		if (pTruck->getCheckUpOutTime() <= this->TimestepNum) {
 			pTruck->SetMovingStartTime(NULL);
 			this->VIPTrucksList->enqueue(pTruck);
@@ -1503,6 +1511,7 @@ void Company::DeliverCargos() {
 			if (TruckAfterMovingTime + TempTruck->GetMovingStartTime() == this->TimestepNum) {
 				willDeliver = true;
 				TempTruck->DequeueTopCargo(TempCargo);
+				TempCargo->SetWaitingTime(TempTruck->GetMovingStartTime() - TempCargo->GetPrepTime());
 				TempCargo->SetDeliveredTime(this->TimestepNum);
 				TempCargo->SetTruckID(TempTruck->GetID());
 				switch (TempCargo->GetType())
