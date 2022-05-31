@@ -1,0 +1,16 @@
+2 2 2		//no of cargos
+1 9 8 7	//before checkup
+N 80 6	//speed and capacity for first truck
+N 85 5	//..................for second truck
+S 70 4	//....
+S 80 7	//....
+V 70 5	//...
+V 70 4	//.....
+10 4		//maxW and ...
+6
+R N 0:3 1 200 5 500 
+R N 0:6 2 25 3 413
+R N 0:7 5 56 10 187
+R S 0:10 3 50 1 356
+R S 0:10 3 50 1 356
+R S 0:10 3 50 5 356
