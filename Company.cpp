@@ -138,8 +138,14 @@ void Company::Simulate() {
 			this->LoadNormalCargosToTruck();
 		}
 
+		// print current info
+		this->UpdateInterface();
+
 		// Move Trucks to the moving trucks list if applicable
 		this->MoveTrucks();
+
+		// print current info
+		this->UpdateInterface();
 
 		// applies probability for a truck to fail delivering while moving
 		this->ExecuteFailure();
@@ -147,13 +153,13 @@ void Company::Simulate() {
 		// Deliver Cargos
 		this->DeliverCargos();
 
+		// print current info
+		this->UpdateInterface();
+
 		//check for Auto Promote
 		if (this->IsWorkingHours()) {
 			this->checkForAutoPromote();
 		}
-
-		// print current info
-		this->UpdateInterface();
 
 		//check break conditions
 		if (this->CheckExitStatus())
@@ -655,22 +661,22 @@ std::string Company::GetInteractiveModeData() const {
 	string loading_trucks_line = "";
 
 	this->NormalTrucksList->peek(TempTruck);
-	if (TempTruck && TempTruck->GetCargosCount() > 0) {
-		loading_trucks_line += TempTruck->GetID();
+	if (TempTruck && TempTruck->IsLoading()) {
+		loading_trucks_line += std::to_string(TempTruck->GetID());
 		loading_trucks_line += "[" + TempTruck->GetCargosData() + "] ";
 		LoadingTrucksCount += 1;
 	}
 
 	this->SpecialTrucksList->peek(TempTruck);
-	if (TempTruck && TempTruck->GetCargosCount() > 0) {
-		loading_trucks_line += TempTruck->GetID();
+	if (TempTruck && TempTruck->IsLoading()) {
+		loading_trucks_line += std::to_string(TempTruck->GetID());
 		loading_trucks_line += "(" + TempTruck->GetCargosData() + ") ";
 		LoadingTrucksCount += 1;
 	}
 
 	this->VIPTrucksList->peek(TempTruck);
-	if (TempTruck && TempTruck->GetCargosCount() > 0) {
-		loading_trucks_line += TempTruck->GetID();
+	if (TempTruck && TempTruck->IsLoading()) {
+		loading_trucks_line += std::to_string(TempTruck->GetID());
 		loading_trucks_line += "{" + TempTruck->GetCargosData() + "} ";
 		LoadingTrucksCount += 1;
 	}
@@ -1146,7 +1152,7 @@ void Company::LoadTruck(Truck* truck, Queue<Cargo*>* cargoQueue)
 		if (c->GetLoadOnTruckTime() == Time(0, 0))
 			c->SetLoadOnTruckTime(Time(c->GetLoadTime()) + this->TimestepNum);
 
-		if (c->GetLoadOnTruckTime() == this->TimestepNum) {
+		if (c->GetLoadOnTruckTime() <= this->TimestepNum) {
 			if ((truck->LoadCargo(c)) == true)
 				cargoQueue->dequeue(c);
 		}
@@ -1194,14 +1200,17 @@ bool Company::OtherTwoNotWorkingOnThat(Truck* truck1, Truck* truck2, CARGOTYPE c
 {
 	if ((truck1 == nullptr) && (truck2 == nullptr))
 		return true;
-	else if ((truck1 == nullptr))
-		if(((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
-				return true;
-	else if ((truck2 == nullptr))
-			if ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c))
-					return true;
-	else if (((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)) && ((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
+	else if ((truck1 == nullptr)) {
+		if (((truck2->IsLoading() == false) || (truck2->GetCargoType() != c)))
+			return true;
+	}
+	else if ((truck2 == nullptr)) {
+		if ((truck1->IsLoading() == false) || (truck1->GetCargoType() != c))
+			return true;
+	}
+	else if (((truck1->IsLoading() == false) || (truck1->GetCargoType() != c)) && ((truck2->IsLoading() == false) || (truck2->GetCargoType() != c))) {
 		return true;
+	}
 
 	return false;
 }
