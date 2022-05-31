@@ -224,7 +224,7 @@ void Company::LoadInputs() {
 		inputFile >> nCheckUpHours >> sCheckUpHours >> vCheckUpHours;
 
 		//adding normal trucks
-		for (int i = 0; i < sTrucksNum; i++) {
+		for (int i = 0; i < nTrucksNum; i++) {
 			inputFile >> truckchar >> nTruckSpeed >> nCapacity;
 
 			this->AddTruck(TRUCKTYPE::NT, nCapacity, Time(nCheckUpHours), JourNum, nTruckSpeed, i);
