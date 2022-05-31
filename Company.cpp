@@ -192,7 +192,7 @@ void Company::LoadInputs() {
 	string truckchar;
 	//reading parameters from the file 
 
-	if (true) //put this with true if you will use CONST speed and capacity-------
+	if (false) //put this with true if you will use CONST speed and capacity-------
 	{
 		inputFile >> nTrucksNum >> sTrucksNum >> vTrucksNum;
 
