@@ -451,7 +451,7 @@ string Company::OutputString() {
 	int NumOfTrucks, NumOfNormalTrucks, NumOfVIPTrucks, NumOfSpecialTrucks;
 	Time TotalActiveTime;	//used to calc avg active time
 	Time TotalAllTime;		//used to calc avg active time
-	double TruckUtillization;/////////////////////////////////////////////////////////////////calc
+	double TotalTruckUtillization = 0;/////////////////////////////////////////////////////////////////calc
 
 
 	//putting cargo stats data
@@ -511,7 +511,9 @@ string Company::OutputString() {
 		TotalActiveTime = TotalActiveTime + (cargo->GetDeliveredTime() - cargo->GetPrepTime());
 		cout <<"del" << cargo->GetDeliveredTime().StringifyTime() << endl;
 		numOfCargoss++;
-			
+
+		
+		
 
 		dataToOutput += cargo->GetDeliveredTime().StringifyTime() + "\t" +
 			std::to_string(cargo->GetID()) + "\t" +
@@ -523,6 +525,60 @@ string Company::OutputString() {
 
 	dataToOutput += "-----------------------------------------\n" ;
 
+
+	while (!NormalTrucksList->isEmpty()) {
+		Truck* pTruck;
+		NormalTrucksList->dequeue(pTruck);
+		
+		if (pTruck->GetTotalCompletedJourneys() > 0) {
+			TotalTruckUtillization +=
+				(double)pTruck->GetCargosCount()
+				/
+				(pTruck->GetCapacity()
+					*
+					pTruck->GetTotalCompletedJourneys());
+		}
+
+	}
+
+	while (!SpecialTrucksList->isEmpty()) {
+		Truck* pTruck;
+		SpecialTrucksList->dequeue(pTruck);
+
+		if (pTruck->GetTotalCompletedJourneys() > 0) {
+			TotalTruckUtillization +=
+				(double)pTruck->GetCargosCount()
+				/
+				(pTruck->GetCapacity()
+					*
+					pTruck->GetTotalCompletedJourneys());
+		}
+	}
+
+	while (!VIPTrucksList->isEmpty()) {
+		Truck* pTruck;
+		VIPTrucksList->dequeue(pTruck);
+
+
+		if (pTruck->GetTotalCompletedJourneys() > 0) {
+			TotalTruckUtillization +=
+				(double)pTruck->GetCargosCount()
+				/
+				(pTruck->GetCapacity()
+					*
+					pTruck->GetTotalCompletedJourneys());
+		}
+
+		
+
+	}
+
+
+
+
+
+
+
 	//calculating statistics...
 	int totalWaitHours = TotalWaitTime.GetTotalHours();
 	Time AverageWaitTime(totalWaitHours / 24, totalWaitHours % 24);
@@ -533,7 +589,11 @@ string Company::OutputString() {
 		(TimestepNum.GetTotalHours() * numOfCargoss) * 100;
 
 
-	double AvgUtilization = 000;
+	double AvgUtilization = TotalTruckUtillization / NumOfTrucks 
+		/
+		(TotalActiveTime.GetTotalHours()/TimestepNum.GetTotalHours())
+		*100
+		;
 
 
 	using std::to_string;
